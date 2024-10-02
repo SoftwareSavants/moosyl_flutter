@@ -89,11 +89,11 @@ class PaymentMethods extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final selectedModeOfPayment = useState<PaymentMethodTypes?>(null);
+    final selectedModeOfPayment = useState<PaymentMethodTypes?>(null);
 
-    // if (selectedModeOfPayment.value == null) {
-    //   return const SizedBox();
-    // }
+    if (selectedModeOfPayment.value == null) {
+      return const SizedBox();
+    }
 
     // if (selectedModeOfPayment.value == PaymentMethodTypes.bankily) {
     //   return Container();
@@ -102,6 +102,23 @@ class PaymentMethods extends HookWidget {
       return PaymentMethodTypes.fromString(method.method) != null;
     }).toList();
 
+    return AvailableMethodPage(
+      validMethods: validMethods,
+      onSelected: (modeOfPayment) {
+        selectedModeOfPayment.value = modeOfPayment;
+      },
+    );
+  }
+}
+
+class AvailableMethodPage extends StatelessWidget {
+  final void Function(PaymentMethodTypes) onSelected;
+  final List<PaymentMethod> validMethods;
+  const AvailableMethodPage(
+      {super.key, required this.validMethods, required this.onSelected});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -129,7 +146,7 @@ class PaymentMethods extends HookWidget {
                 final methodType = PaymentMethodTypes.fromString(method.method);
 
                 return InkWell(
-                  onTap: () {},
+                  onTap: () => onSelected(methodType),
                   child: card(context, methodType!),
                 );
               },
