@@ -42,17 +42,17 @@ enum PaymentMethodTypes {
   String get toStr {
     switch (this) {
       case PaymentMethodTypes.masrivi:
-        return 'masrivi';
+        return 'Masrivi';
       case PaymentMethodTypes.bankily:
-        return 'bankily';
+        return 'Bankily';
       case PaymentMethodTypes.sedad:
         return 'Sedad';
       case PaymentMethodTypes.bimBank:
-        return 'bim_bank';
+        return 'BIM Bank';
       case PaymentMethodTypes.amanty:
-        return 'amanty';
+        return 'Amanty';
       case PaymentMethodTypes.bCIpay:
-        return 'bci_pay';
+        return 'BCI Pay';
     }
   }
 
@@ -91,13 +91,6 @@ class PaymentMethods extends HookWidget {
   Widget build(BuildContext context) {
     final selectedModeOfPayment = useState<PaymentMethodTypes?>(null);
 
-    if (selectedModeOfPayment.value == null) {
-      return const SizedBox();
-    }
-
-    // if (selectedModeOfPayment.value == PaymentMethodTypes.bankily) {
-    //   return Container();
-    // }
     final validMethods = supportedPayments.where((method) {
       return PaymentMethodTypes.fromString(method.method) != null;
     }).toList();
