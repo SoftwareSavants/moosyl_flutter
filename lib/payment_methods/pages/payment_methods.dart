@@ -102,7 +102,7 @@ class AvailableMethodPage extends StatelessWidget {
   final void Function(PaymentMethod) onSelected;
   final String apiKey;
   final Map<PaymentMethodTypes, void Function()>? customHandlers;
-  final Map<PaymentMethodTypes, Widget>? customIcons;
+  final Map<PaymentMethodTypes, String>? customIcons;
 
   const AvailableMethodPage({
     super.key,
@@ -187,11 +187,15 @@ class AvailableMethodPage extends StatelessWidget {
   }
 
   Widget card(BuildContext context, PaymentMethodTypes mode) {
-    final icon = customIcons?[mode] ?? mode.icon;
-    return AppContainer(
-      border: Border.all(),
-      padding: const EdgeInsetsDirectional.all(24),
-      child: icon,
-    );
+    //final icon = customIcons?[mode] ?? mode.icon;
+    if (customIcons?[mode] == null) {
+      return AppContainer(
+        border: Border.all(),
+        padding: const EdgeInsetsDirectional.all(24),
+        child: mode.icon,
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }
