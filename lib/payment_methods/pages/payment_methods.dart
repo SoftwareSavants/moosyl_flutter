@@ -13,8 +13,61 @@ import 'package:software_pay/widgets/error_widget.dart';
 class SoftwarePay extends HookWidget {
   final String apiKey;
   final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
+  final Widget Function(VoidCallback open)? inputBuilder;
+
+  static void show(
+    BuildContext context,
+    String apiKey,
+    Map<PaymentMethodTypes, VoidCallback>? customHandlers,
+  ) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SoftwarePayBody(
+          apiKey: apiKey,
+          customHandlers: customHandlers,
+        ),
+      ),
+    );
+  }
 
   const SoftwarePay({
+    super.key,
+    required this.apiKey,
+    this.customHandlers,
+    this.inputBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (inputBuilder != null) {
+      return inputBuilder!(
+        () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SoftwarePayBody(
+                apiKey: apiKey,
+                customHandlers: customHandlers,
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    return SoftwarePayBody(
+      apiKey: apiKey,
+      customHandlers: customHandlers,
+    );
+  }
+}
+
+class SoftwarePayBody extends HookWidget {
+  final String apiKey;
+  final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
+
+  const SoftwarePayBody({
     super.key,
     required this.apiKey,
     this.customHandlers,
