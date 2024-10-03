@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:software_pay/helpers/exception_handling/exceptions.dart';
 import 'package:software_pay/l10n/localization_helper.dart';
@@ -21,7 +20,7 @@ class ExceptionMapper {
     }
   }
 
-  static String getErrorMessage(BuildContext context, error) {
+  static String getErrorMessage(error) {
     final localizationsHelper = GetIt.I.get<LocalizationsHelper>();
     return switch (error) {
       AppException(code: AppExceptionCode code) => switch (code) {

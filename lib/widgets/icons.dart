@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:software_pay/widgets/container.dart';
 
-class AppIcon extends ConsumerWidget {
+class AppIcon extends StatelessWidget {
   final String? path;
   final IconData? iconData;
   final double size;
@@ -30,7 +30,7 @@ class AppIcon extends ConsumerWidget {
   }) : assert((path != null) ^ (iconData != null));
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     final iconColor = color ??
@@ -143,4 +143,7 @@ class AppIcons {
   );
   //error
   static const error = AppIcon(path: 'lib/assets/icons/error.png');
+
+  //closeError ,doneError
+  static const done = AppIcon(iconData: Icons.done);
 }

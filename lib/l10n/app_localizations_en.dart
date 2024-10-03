@@ -6,4 +6,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownError => 'An unknown error occurred';
+
+  @override
+  String get copiedThisText => 'Copied this text';
+
+  @override
+  String get paymentMethod => 'Payment Method';
 }

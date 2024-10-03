@@ -1,3 +1,5 @@
 {
-  "unknownError": "An unknown error occurred"
+  "unknownError": "An unknown error occurred",
+  "copiedThisText": "Copied this text",
+  "paymentMethod": "Payment Method"
 }

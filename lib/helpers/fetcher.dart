@@ -1,16 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:software_pay/helpers/exception_handling/exceptions.dart';
-
-part 'fetcher.g.dart';
-
-@riverpod
-Fetcher fetcher(FetcherRef re) => GetIt.I.get<Fetcher>();
 
 class Fetcher {
   Fetcher(this.apiKey);

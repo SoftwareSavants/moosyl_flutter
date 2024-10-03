@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:get_it/get_it.dart';
-import 'package:software_pay/helpers/fetcher.dart';
+import 'package:provider/provider.dart';
 import 'package:software_pay/l10n/localization_helper.dart';
 import 'package:software_pay/payment_methods/providers/get_payment_methods_provider.dart';
 
 import 'package:software_pay/widgets/container.dart';
 import 'package:software_pay/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/widgets/state_renderer.dart';
 
 class SoftwarePay extends HookWidget {
   final String apiKey;
@@ -24,10 +23,9 @@ class SoftwarePay extends HookWidget {
   Widget build(BuildContext context) {
     useMemoized(
       () {
-        GetIt.I.registerSingleton(Fetcher(apiKey));
         GetIt.I.registerSingleton(LocalizationsHelper(context));
       },
-      [apiKey],
+      [],
     );
 
     final selectedModeOfPayment = useState<PaymentMethod?>(null);
@@ -35,6 +33,7 @@ class SoftwarePay extends HookWidget {
     if (selectedModeOfPayment.value == null) {
       return AvailableMethodPage(
         customHandlers: customHandlers,
+        apiKey: apiKey,
         onSelected: (modeOfPayment) {
           selectedModeOfPayment.value = modeOfPayment;
         },
@@ -45,26 +44,28 @@ class SoftwarePay extends HookWidget {
   }
 }
 
-class AvailableMethodPage extends ConsumerWidget {
+class AvailableMethodPage extends StatelessWidget {
   final void Function(PaymentMethod) onSelected;
+  final String apiKey;
   final Map<PaymentMethodTypes, void Function()>? customHandlers;
 
   const AvailableMethodPage({
     super.key,
     required this.onSelected,
+    required this.apiKey,
     this.customHandlers,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final validMethodsState = ref.watch(getPaymentMethodProvider);
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => GetPaymentMethodsProvider(apiKey, context),
+      builder: (context, __) {
+        final provider = context.watch<GetPaymentMethodsProvider>();
+        final localizationsHelper = GetIt.I.get<LocalizationsHelper>();
 
-    return AsyncValueRenderer(
-      state: validMethodsState,
-      onRetry: () => ref.refresh(getPaymentMethodProvider),
-      builder: (configuredMethods) {
         final validMethods = [
-          ...configuredMethods.map((e) => e.method),
+          ...provider.methods.map((e) => e.method),
           if (customHandlers != null) ...customHandlers!.keys
         ];
 
@@ -76,7 +77,7 @@ class AvailableMethodPage extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'payment method',
+                  localizationsHelper.msgs.paymentMethod,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
@@ -100,7 +101,7 @@ class AvailableMethodPage extends ConsumerWidget {
                           return Navigator.pop(context);
                         }
 
-                        onSelected(configuredMethods.firstWhere(
+                        onSelected(provider.methods.firstWhere(
                           (element) => element.method == method,
                         ));
                       },
