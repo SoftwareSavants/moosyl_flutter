@@ -8,6 +8,7 @@ import 'package:software_pay/payment_methods/providers/get_payment_methods_provi
 
 import 'package:software_pay/widgets/container.dart';
 import 'package:software_pay/payment_methods/models/payment_method_model.dart';
+import 'package:software_pay/widgets/error_widget.dart';
 
 class SoftwarePay extends HookWidget {
   final String apiKey;
@@ -68,6 +69,19 @@ class AvailableMethodPage extends StatelessWidget {
           ...provider.methods.map((e) => e.method),
           if (customHandlers != null) ...customHandlers!.keys
         ];
+
+        if (provider.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (provider.error != null) {
+          return AppErrorWidget(
+            message: provider.error,
+            onRetry: provider.getMethods,
+          );
+        }
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),

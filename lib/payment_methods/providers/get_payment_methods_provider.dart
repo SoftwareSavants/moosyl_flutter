@@ -12,11 +12,14 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   }
 
   String? error;
-  bool isLoading = true;
+  bool isLoading = false;
 
   final List<PaymentMethod> methods = [];
 
   void getMethods() async {
+    error = null;
+    isLoading = true;
+
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentMethodsService(apiKey).get(),
       context,
