@@ -70,6 +70,22 @@ abstract class PaymentMethod {
     required this.id,
     required this.method,
   });
+
+  PaymentMethod.fromMap(Map<String, dynamic> map)
+      : id = map['id'],
+        method = PaymentMethodTypes.fromString(map['method']);
+
+  //from type
+
+  static PaymentMethod fromType(Map<String, dynamic> map) {
+    final type = PaymentMethodTypes.fromString(map['method']);
+    switch (type) {
+      case PaymentMethodTypes.bankily:
+        return BankilyConfigModel.fromMap(map);
+      default:
+        throw UnimplementedError('This payment method is not supported');
+    }
+  }
 }
 
 class BankilyConfigModel extends PaymentMethod {
@@ -80,4 +96,8 @@ class BankilyConfigModel extends PaymentMethod {
     required super.method,
     required this.bPayNumber,
   });
+
+  BankilyConfigModel.fromMap(super.map)
+      : bPayNumber = map['bpay_number'],
+        super.fromMap();
 }

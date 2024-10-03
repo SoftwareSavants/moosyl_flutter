@@ -137,9 +137,10 @@ class AppIcons {
   );
 
   //bCIpay
-
   static const bCIpay = AppIcon(
     path: 'lib/assets/icons/bci_pay.png',
     useOriginalColor: true,
   );
+  //error
+  static const error = AppIcon(path: 'lib/assets/icons/error.png');
 }

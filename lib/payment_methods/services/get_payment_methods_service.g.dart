@@ -7,7 +7,7 @@ part of 'get_payment_methods_service.dart';
 // **************************************************************************
 
 String _$getPaymentMethodsServiceHash() =>
-    r'8fedf6932355c99b082df68e8d9ada16cbe4bab3';
+    r'd42ec00106248d840ea0cf8bc354a65c47f52905';
 
 /// See also [getPaymentMethodsService].
 @ProviderFor(getPaymentMethodsService)

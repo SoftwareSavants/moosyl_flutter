@@ -3,9 +3,7 @@ class AppExceptionCode {
 
   final String _value;
 
-  static const invalidOTP = AppExceptionCode('Invalid OTP code');
   static const unknown = AppExceptionCode('Unknown error');
-  static const shiftNotPossible = AppExceptionCode('P0001');
 
   @override
   bool operator ==(covariant AppExceptionCode other) {
@@ -26,7 +24,7 @@ class AppException {
   AppException({
     required this.code,
     this.message,
-    required this.stackTrace,
+    this.stackTrace,
   });
 
   @override

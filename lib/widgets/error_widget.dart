@@ -34,7 +34,7 @@ class AppErrorWidget extends StatelessWidget {
             AppIcons.error.apply(size: 24.0),
             const SizedBox(height: 16, width: 8),
             //TODO: Add a localized text
-            const Text("context.l10n.retry"),
+            const Text("LocalizationsHelper.msgs.retry"),
           ],
         ),
       );

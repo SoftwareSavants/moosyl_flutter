@@ -5,5 +5,5 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get hello => 'hello';
+  String get unknownError => 'An unknown error occurred';
 }
