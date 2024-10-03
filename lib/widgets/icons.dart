@@ -146,4 +146,8 @@ class AppIcons {
 
   //closeError ,doneError
   static const done = AppIcon(iconData: Icons.done);
+
+  static const copy = AppIcon(iconData: Icons.copy);
+
+  static const close = AppIcon(iconData: Icons.close);
 }

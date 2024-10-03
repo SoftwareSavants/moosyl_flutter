@@ -8,7 +8,7 @@ class GetPaymentMethodsService {
 
   Future<List<PaymentMethod>> get() async {
     final methodsResult = await Fetcher(apiKey).get(Endpoints.paymentMethods);
-    return methodsResult.data
+    return List.from(methodsResult.data)
         .map<PaymentMethod>((e) => PaymentMethod.fromType(e))
         .toList();
   }

@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+import 'package:software_pay/l10n/localization_helper.dart';
 import 'package:software_pay/widgets/icons.dart';
 
 enum PaymentMethodTypes {
@@ -19,38 +21,28 @@ enum PaymentMethodTypes {
     };
   }
 
-  String get displayName {
-    switch (this) {
-      case PaymentMethodTypes.masrivi:
-        return 'Masrivi';
-      case PaymentMethodTypes.bankily:
-        return 'Bankily';
-      case PaymentMethodTypes.sedad:
-        return 'Sedad';
-      case PaymentMethodTypes.bimBank:
-        return 'BIM Bank';
-      case PaymentMethodTypes.amanty:
-        return 'Amanty';
-      case PaymentMethodTypes.bCIpay:
-        return 'BCI Pay';
-    }
+  String get title {
+    final localizationsHelper = GetIt.I.get<LocalizationsHelper>();
+
+    return switch (this) {
+      PaymentMethodTypes.masrivi => localizationsHelper.msgs.masrivi,
+      PaymentMethodTypes.bankily => localizationsHelper.msgs.bankily,
+      PaymentMethodTypes.sedad => localizationsHelper.msgs.sedad,
+      PaymentMethodTypes.bimBank => localizationsHelper.msgs.bimBank,
+      PaymentMethodTypes.amanty => localizationsHelper.msgs.amanty,
+      PaymentMethodTypes.bCIpay => localizationsHelper.msgs.bCIpay,
+    };
   }
 
   String get toStr {
-    switch (this) {
-      case PaymentMethodTypes.masrivi:
-        return 'Masrivi';
-      case PaymentMethodTypes.bankily:
-        return 'Bankily';
-      case PaymentMethodTypes.sedad:
-        return 'Sedad';
-      case PaymentMethodTypes.bimBank:
-        return 'BIM Bank';
-      case PaymentMethodTypes.amanty:
-        return 'Amanty';
-      case PaymentMethodTypes.bCIpay:
-        return 'BCI Pay';
-    }
+    return switch (this) {
+      PaymentMethodTypes.masrivi => 'masrivi',
+      PaymentMethodTypes.bankily => 'bankily',
+      PaymentMethodTypes.sedad => 'sedad',
+      PaymentMethodTypes.bimBank => 'bim_bank',
+      PaymentMethodTypes.amanty => 'amanty',
+      PaymentMethodTypes.bCIpay => 'bci_pay',
+    };
   }
 
   static PaymentMethodTypes fromString(String method) {

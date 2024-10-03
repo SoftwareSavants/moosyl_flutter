@@ -1,5 +1,23 @@
 {
   "unknownError": "An unknown error occurred",
   "copiedThisText": "Copied this text",
-  "paymentMethod": "Payment Method"
+  "paymentMethod": "Payment Method",
+  "bankily": "Bankily",
+  "sedad": "Sedad",
+  "bimBank": "Bim Bank",
+  "masrivi": "Masrivi",
+  "amanty": "Amanty",
+  "bCIpay": "BCI Pay",
+  "payUsing": "Pay using",
+  "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "Copy the code, BPay and head to Bankily to pay the amount",
+  "afterPayment": "After payment",
+  "afterMakingThePaymentFillTheFollowingInformation": "After making the payment, fill the following information",
+  "enterYourBankilyPhoneNumber": "Enter your Bankily phone number",
+  "bankilyPhoneNumber": "Bankily Phone Number",
+  "paymentPassCode": "Payment Pass Code",
+  "paymentPassCodeFromBankily": "Payment Pass Code from Bankily",
+  "sendForVerification": "Send for verification",
+  "payUsing": "Pay using {method}",
+  "codeBPay": "Code BPay",
+  "amountToPay": "Amount to pay"
 }

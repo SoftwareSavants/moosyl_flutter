@@ -102,5 +102,6 @@ class Endpoints {
   static const String baseUrl = 'https://api.example.com';
 
   static const String paymentMethods = '$baseUrl/payment-methods';
-  static const String paymentMethod = '$baseUrl/payment-methods/';
+  static String pay(String id) => '$baseUrl/pay';
+  static String operation(String id) => '$baseUrl/operation/$id';
 }

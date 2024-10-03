@@ -5,9 +5,15 @@ import 'package:software_pay/payment_methods/services/get_payment_methods_servic
 
 class GetPaymentMethodsProvider extends ChangeNotifier {
   final String apiKey;
-  final BuildContext context;
 
-  GetPaymentMethodsProvider(this.apiKey, this.context) {
+  final Map<PaymentMethodTypes, void Function()>? customHandlers;
+  final void Function(PaymentMethod) onSelected;
+
+  GetPaymentMethodsProvider(
+    this.apiKey,
+    this.customHandlers,
+    this.onSelected,
+  ) {
     getMethods();
   }
 
@@ -16,13 +22,17 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
 
   final List<PaymentMethod> methods = [];
 
+  List<PaymentMethodTypes> get validMethods => [
+        ...methods.map((e) => e.method),
+        if (customHandlers != null) ...customHandlers!.keys
+      ];
+
   void getMethods() async {
     error = null;
     isLoading = true;
 
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentMethodsService(apiKey).get(),
-      context,
       showFlashBar: false,
     );
 
@@ -37,5 +47,16 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     methods.addAll(result.result!);
 
     notifyListeners();
+  }
+
+  void onTap(PaymentMethodTypes type, BuildContext context) {
+    {
+      if (customHandlers?[type] != null) {
+        customHandlers![type]!();
+        return Navigator.pop(context);
+      }
+
+      onSelected(methods.firstWhere((element) => element.method == type));
+    }
   }
 }

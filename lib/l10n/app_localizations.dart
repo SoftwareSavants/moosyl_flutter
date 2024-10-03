@@ -108,6 +108,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payment Method'**
   String get paymentMethod;
+
+  /// No description provided for @bankily.
+  ///
+  /// In en, this message translates to:
+  /// **'Bankily'**
+  String get bankily;
+
+  /// No description provided for @sedad.
+  ///
+  /// In en, this message translates to:
+  /// **'Sedad'**
+  String get sedad;
+
+  /// No description provided for @bimBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bim Bank'**
+  String get bimBank;
+
+  /// No description provided for @masrivi.
+  ///
+  /// In en, this message translates to:
+  /// **'Masrivi'**
+  String get masrivi;
+
+  /// No description provided for @amanty.
+  ///
+  /// In en, this message translates to:
+  /// **'Amanty'**
+  String get amanty;
+
+  /// No description provided for @bCIpay.
+  ///
+  /// In en, this message translates to:
+  /// **'BCI Pay'**
+  String get bCIpay;
+
+  /// No description provided for @payUsing.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay using {method}'**
+  String payUsing(Object method);
+
+  /// No description provided for @copyTheCodeBPayAndHeadToBankilyToPayTheAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the code, BPay and head to Bankily to pay the amount'**
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount;
+
+  /// No description provided for @afterPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'After payment'**
+  String get afterPayment;
+
+  /// No description provided for @afterMakingThePaymentFillTheFollowingInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'After making the payment, fill the following information'**
+  String get afterMakingThePaymentFillTheFollowingInformation;
+
+  /// No description provided for @enterYourBankilyPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your Bankily phone number'**
+  String get enterYourBankilyPhoneNumber;
+
+  /// No description provided for @bankilyPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Bankily Phone Number'**
+  String get bankilyPhoneNumber;
+
+  /// No description provided for @paymentPassCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Pass Code'**
+  String get paymentPassCode;
+
+  /// No description provided for @paymentPassCodeFromBankily.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Pass Code from Bankily'**
+  String get paymentPassCodeFromBankily;
+
+  /// No description provided for @sendForVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Send for verification'**
+  String get sendForVerification;
+
+  /// No description provided for @codeBPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Code BPay'**
+  String get codeBPay;
+
+  /// No description provided for @amountToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to pay'**
+  String get amountToPay;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
