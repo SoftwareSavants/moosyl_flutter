@@ -14,19 +14,20 @@ class SoftwarePay extends HookWidget {
   final String apiKey;
   final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
   final Widget Function(VoidCallback open)? inputBuilder;
+  final Map<PaymentMethodTypes, Widget>? customIcons;
 
   static void show(
-    BuildContext context,
-    String apiKey,
-    Map<PaymentMethodTypes, VoidCallback>? customHandlers,
-  ) {
+      BuildContext context,
+      String apiKey,
+      Map<PaymentMethodTypes, VoidCallback>? customHandlers,
+      final Map<PaymentMethodTypes, Widget>? customIcons) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SoftwarePayBody(
-          apiKey: apiKey,
-          customHandlers: customHandlers,
-        ),
+            apiKey: apiKey,
+            customHandlers: customHandlers,
+            customIcons: customIcons),
       ),
     );
   }
@@ -35,6 +36,7 @@ class SoftwarePay extends HookWidget {
     super.key,
     required this.apiKey,
     this.customHandlers,
+    this.customIcons,
     this.inputBuilder,
   });
 
@@ -47,9 +49,9 @@ class SoftwarePay extends HookWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SoftwarePayBody(
-                apiKey: apiKey,
-                customHandlers: customHandlers,
-              ),
+                  apiKey: apiKey,
+                  customHandlers: customHandlers,
+                  customIcons: customIcons),
             ),
           );
         },
@@ -57,21 +59,19 @@ class SoftwarePay extends HookWidget {
     }
 
     return SoftwarePayBody(
-      apiKey: apiKey,
-      customHandlers: customHandlers,
-    );
+        apiKey: apiKey,
+        customHandlers: customHandlers,
+        customIcons: customIcons);
   }
 }
 
 class SoftwarePayBody extends HookWidget {
   final String apiKey;
   final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
+  final Map<PaymentMethodTypes, Widget>? customIcons;
 
-  const SoftwarePayBody({
-    super.key,
-    required this.apiKey,
-    this.customHandlers,
-  });
+  const SoftwarePayBody(
+      {super.key, required this.apiKey, this.customHandlers, this.customIcons});
 
   @override
   Widget build(BuildContext context) {
@@ -102,12 +102,14 @@ class AvailableMethodPage extends StatelessWidget {
   final void Function(PaymentMethod) onSelected;
   final String apiKey;
   final Map<PaymentMethodTypes, void Function()>? customHandlers;
+  final Map<PaymentMethodTypes, Widget>? customIcons;
 
   const AvailableMethodPage({
     super.key,
     required this.onSelected,
     required this.apiKey,
     this.customHandlers,
+    this.customIcons,
   });
 
   @override
@@ -185,10 +187,11 @@ class AvailableMethodPage extends StatelessWidget {
   }
 
   Widget card(BuildContext context, PaymentMethodTypes mode) {
+    final icon = customIcons?[mode] ?? mode.icon;
     return AppContainer(
       border: Border.all(),
       padding: const EdgeInsetsDirectional.all(24),
-      child: mode.icon,
+      child: icon,
     );
   }
 }
