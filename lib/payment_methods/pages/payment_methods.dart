@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:software_pay/software_payment/pages/software_pay_page.dart';
 import 'package:software_pay/widgets/container.dart';
-import 'package:software_pay/payment_methods/models/payment_methode_model.dart';
-import 'package:software_pay/payment_methods/models/payment_methode_types.dart';
+import 'package:software_pay/payment_methods/models/payment_method_model.dart';
+import 'package:software_pay/payment_methods/models/payment_method_types.dart';
 
 class PaymentMethods extends HookWidget {
   final List<PaymentMethod> supportedPayments;
@@ -12,13 +12,16 @@ class PaymentMethods extends HookWidget {
   final Widget Function(PaymentMethodTypes selectedPayment)?
       selectedPaymentBuilder;
 
-  PaymentMethods(
-      {required this.supportedPayments,
-      this.onManualPayment,
-      this.onBankily,
-      this.selectedPaymentBuilder})
-      : assert(onManualPayment == null || onBankily == null,
-            'onManualPayment and onBankily cannot be passed together.');
+  const PaymentMethods({
+    super.key,
+    required this.supportedPayments,
+    this.onManualPayment,
+    this.onBankily,
+    this.selectedPaymentBuilder,
+  }) : assert(
+          onManualPayment == null || onBankily == null,
+          'onManualPayment and onBankily cannot be passed together.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +83,7 @@ class AvailableMethodPage extends StatelessWidget {
 
                 return InkWell(
                   onTap: () => onSelected(methodType),
-                  child: card(context, methodType!),
+                  child: card(context, methodType),
                 );
               },
             ),
