@@ -13,7 +13,7 @@ part 'fetcher.g.dart';
 Fetcher fetcher(FetcherRef re) => GetIt.I.get<Fetcher>();
 
 class Fetcher {
-  Fetcher._(this.apiKey);
+  Fetcher(this.apiKey);
 
   String apiKey;
 

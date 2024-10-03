@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
+import 'package:software_pay/helpers/fetcher.dart';
+import 'package:software_pay/l10n/localization_helper.dart';
 import 'package:software_pay/payment_methods/providers/get_payment_methods_provider.dart';
 
 import 'package:software_pay/widgets/container.dart';
@@ -19,6 +22,14 @@ class SoftwarePay extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useMemoized(
+      () {
+        GetIt.I.registerSingleton(Fetcher(apiKey));
+        GetIt.I.registerSingleton(LocalizationsHelper(context));
+      },
+      [apiKey],
+    );
+
     final selectedModeOfPayment = useState<PaymentMethod?>(null);
 
     if (selectedModeOfPayment.value == null) {
