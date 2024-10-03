@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:software_pay/app_radius.dart';
+import 'package:software_pay/widgets/app_radius.dart';
 
 class AppContainer extends StatelessWidget {
   final Widget child;

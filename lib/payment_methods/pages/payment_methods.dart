@@ -1,95 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:software_pay/container.dart';
-import 'package:software_pay/icons.dart';
-
-enum PaymentMethodTypes {
-  masrivi,
-  bankily,
-  sedad,
-  bimBank,
-  amanty,
-  bCIpay;
-
-  AppIcon get icon {
-    return switch (this) {
-      bankily => AppIcons.bankily,
-      masrivi => AppIcons.masrivi,
-      sedad => AppIcons.sedad,
-      bimBank => AppIcons.bimBank,
-      bCIpay => AppIcons.bCIpay,
-      amanty => AppIcons.amanty,
-    };
-  }
-
-  String get displayName {
-    switch (this) {
-      case PaymentMethodTypes.masrivi:
-        return 'Masrivi';
-      case PaymentMethodTypes.bankily:
-        return 'Bankily';
-      case PaymentMethodTypes.sedad:
-        return 'Sedad';
-      case PaymentMethodTypes.bimBank:
-        return 'BIM Bank';
-      case PaymentMethodTypes.amanty:
-        return 'Amanty';
-      case PaymentMethodTypes.bCIpay:
-        return 'BCI Pay';
-    }
-  }
-
-  String get toStr {
-    switch (this) {
-      case PaymentMethodTypes.masrivi:
-        return 'Masrivi';
-      case PaymentMethodTypes.bankily:
-        return 'Bankily';
-      case PaymentMethodTypes.sedad:
-        return 'Sedad';
-      case PaymentMethodTypes.bimBank:
-        return 'BIM Bank';
-      case PaymentMethodTypes.amanty:
-        return 'Amanty';
-      case PaymentMethodTypes.bCIpay:
-        return 'BCI Pay';
-    }
-  }
-
-  static PaymentMethodTypes fromString(String method) {
-    return PaymentMethodTypes.values.firstWhere(
-      (value) => value.toStr == method,
-      orElse: () =>
-          throw UnimplementedError('This payment method is not supported'),
-    );
-  }
-}
-
-class PaymentMethod {
-  final String id;
-  final String method;
-
-  PaymentMethod({
-    required this.id,
-    required this.method,
-  });
-}
+import 'package:software_pay/software_payment/pages/software_pay_page.dart';
+import 'package:software_pay/widgets/container.dart';
+import 'package:software_pay/payment_methods/models/payment_methode_model.dart';
+import 'package:software_pay/payment_methods/models/payment_methode_types.dart';
 
 class PaymentMethods extends HookWidget {
   final List<PaymentMethod> supportedPayments;
   final VoidCallback? onManualPayment;
   final VoidCallback? onBankily;
+  final Widget Function(PaymentMethodTypes selectedPayment)?
+      selectedPaymentBuilder;
 
-  PaymentMethods({
-    required this.supportedPayments,
-    this.onManualPayment,
-    this.onBankily,
-  }) : assert(onManualPayment == null || onBankily == null,
+  PaymentMethods(
+      {required this.supportedPayments,
+      this.onManualPayment,
+      this.onBankily,
+      this.selectedPaymentBuilder})
+      : assert(onManualPayment == null || onBankily == null,
             'onManualPayment and onBankily cannot be passed together.');
 
   @override
   Widget build(BuildContext context) {
     final selectedModeOfPayment = useState<PaymentMethodTypes?>(null);
+
+    if (selectedModeOfPayment.value != null) {
+      if (selectedPaymentBuilder != null) {
+        return selectedPaymentBuilder!(selectedModeOfPayment.value!);
+      }
+      return const SoftPayPage();
+    }
 
     final validMethods = supportedPayments.where((method) {
       return PaymentMethodTypes.fromString(method.method) != null;

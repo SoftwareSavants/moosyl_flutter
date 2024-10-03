@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:software_pay/container.dart';
+import 'package:software_pay/widgets/container.dart';
 
 class AppIcon extends ConsumerWidget {
   final String? path;
