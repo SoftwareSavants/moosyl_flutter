@@ -9,6 +9,7 @@ import 'package:software_pay/payment_methods/providers/get_payment_methods_provi
 import 'package:software_pay/widgets/container.dart';
 import 'package:software_pay/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/widgets/error_widget.dart';
+import 'package:software_pay/widgets/icons.dart';
 
 class SoftwarePay extends HookWidget {
   final String apiKey;
@@ -187,15 +188,22 @@ class AvailableMethodPage extends StatelessWidget {
   }
 
   Widget card(BuildContext context, PaymentMethodTypes mode) {
-    //final icon = customIcons?[mode] ?? mode.icon;
+    final iconCard;
     if (customIcons?[mode] == null) {
-      return AppContainer(
+      iconCard = AppContainer(
         border: Border.all(),
         padding: const EdgeInsetsDirectional.all(24),
         child: mode.icon,
       );
     } else {
-      return const SizedBox();
+      return iconCard = AppContainer(
+        border: Border.all(),
+        padding: const EdgeInsetsDirectional.all(24),
+        child: AppIcon(
+          path: customIcons?[mode],
+        ),
+      );
     }
+    return iconCard;
   }
 }
