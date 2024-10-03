@@ -1,7 +1,6 @@
 name: software_pay
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
@@ -17,7 +16,8 @@ dependencies:
   get_it: ^8.0.0
   http: ^1.2.2
   provider: ^6.1.2
-
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -35,3 +35,5 @@ flutter:
   assets:
     - lib/assets/icons/
     - lib/l10n/
+
+repository: https://github.com/just-abdou/SoftwarePay.git
