@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:software_pay/widgets/app_radius.dart';
 
 class AppContainer extends StatelessWidget {
   final Widget child;
@@ -23,7 +22,7 @@ class AppContainer extends StatelessWidget {
     this.height,
     this.width,
     this.onTap,
-    this.borderRadius = AppRadius.lg,
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     this.border,
     this.constraints,
     this.shadows,
