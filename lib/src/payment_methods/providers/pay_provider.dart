@@ -5,12 +5,26 @@ import 'package:software_pay/src/payment_methods/models/payment_method_model.dar
 import 'package:software_pay/src/payment_methods/services/get_operation_service.dart';
 import 'package:software_pay/src/payment_methods/services/pay_service.dart';
 
+/// A provider class for handling payment operations.
+///
+/// This class extends [ChangeNotifier] to notify listeners about changes
+/// in the payment operation state, including loading status and errors.
 class PayProvider extends ChangeNotifier {
+  /// The API key used for authentication with the payment services.
   final String apiKey;
+
+  /// The ID of the operation being processed.
   final String operationId;
+
+  /// The payment method used for the operation.
   final PaymentMethod method;
+
+  /// Callback function that gets called on successful payment.
   final VoidCallback? onPaymentSuccess;
 
+  /// Constructs a [PayProvider].
+  ///
+  /// Initiates fetching the operation details upon creation.
   PayProvider({
     required this.apiKey,
     required this.method,
@@ -20,16 +34,28 @@ class PayProvider extends ChangeNotifier {
     getOperation();
   }
 
+  /// Text controller for inputting the passcode.
   final passCodeTextController = TextEditingController();
+
+  /// Text controller for inputting the phone number.
   final phoneNumberTextController = TextEditingController();
 
+  /// Key for the payment form.
   final formKey = GlobalKey<FormState>();
 
+  /// Holds the operation details.
   OperationModel? operation;
 
+  /// Holds any error messages that occur during payment processing.
   String? error;
+
+  /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
 
+  /// Asynchronously fetches operation details from the service.
+  ///
+  /// Updates the loading state and handles any errors that occur during
+  /// the fetching process. Notifies listeners when the data changes.
   void getOperation() async {
     error = null;
     isLoading = true;
@@ -43,17 +69,22 @@ class PayProvider extends ChangeNotifier {
 
     if (result.isError) {
       error = result.error;
-
       return notifyListeners();
     }
 
+    // Set the operation details from the result.
     operation = result.result;
 
+    // Notify listeners of the change in operation details.
     notifyListeners();
   }
 
+  /// Processes the payment for the operation.
+  ///
+  /// Validates the form, sets the loading state, and calls the payment service.
+  /// If payment is successful, it invokes the [onPaymentSuccess] callback.
   void pay(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return;
+    if (!formKey.currentState!.validate()) return; // Ensure the form is valid.
 
     error = null;
     isLoading = true;
@@ -70,5 +101,10 @@ class PayProvider extends ChangeNotifier {
     );
 
     isLoading = false;
+
+    // Call the success callback if the payment was successful.
+    if (error == null) {
+      onPaymentSuccess?.call();
+    }
   }
 }

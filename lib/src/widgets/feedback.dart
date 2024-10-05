@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:software_pay/src/l10n/localization_helper.dart';
