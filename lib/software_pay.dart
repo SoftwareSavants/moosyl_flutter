@@ -1,3 +1,1 @@
-library software_pay;
-
-export 'payment_methods/pages/payment_methods.dart';
+export 'src/payment_methods/pages/payment_methods.dart';
