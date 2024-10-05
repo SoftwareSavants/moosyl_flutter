@@ -48,7 +48,7 @@ class SoftwarePay extends HookWidget {
     VoidCallback? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
   }) {
-    showBottomSheet(
+    showModalBottomSheet(
       context: context,
       builder: (context) => SoftwarePayBody(
         apiKey: apiKey,
