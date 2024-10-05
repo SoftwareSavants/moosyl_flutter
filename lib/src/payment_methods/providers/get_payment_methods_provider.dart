@@ -11,6 +11,9 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment methods service.
   final String apiKey;
 
+  /// The context used for displaying error messages.
+  final BuildContext context;
+
   /// A map of custom handlers for specific payment method types.
   final Map<PaymentMethodTypes, void Function()>? customHandlers;
 
@@ -24,6 +27,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     this.apiKey,
     this.customHandlers,
     this.onSelected,
+    this.context,
   ) {
     getMethods();
   }
@@ -54,6 +58,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentMethodsService(apiKey).get(),
       showFlashBar: false,
+      context: context,
     );
 
     isLoading = false;

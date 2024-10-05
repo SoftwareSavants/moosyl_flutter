@@ -16,6 +16,9 @@ class PayProvider extends ChangeNotifier {
   /// The ID of the operation being processed.
   final String operationId;
 
+  /// The context used for displaying error messages.
+  final BuildContext context;
+
   /// The payment method used for the operation.
   final PaymentMethod method;
 
@@ -29,6 +32,7 @@ class PayProvider extends ChangeNotifier {
     required this.apiKey,
     required this.method,
     required this.operationId,
+    required this.context,
     this.onPaymentSuccess,
   }) {
     getOperation();
@@ -63,6 +67,7 @@ class PayProvider extends ChangeNotifier {
     final result = await ErrorHandlers.catchErrors(
       () => GetOperationService(apiKey).get(operationId),
       showFlashBar: false,
+      context: context,
     );
 
     isLoading = false;
@@ -90,7 +95,7 @@ class PayProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    await ErrorHandlers.catchErrors(
+    final result = await ErrorHandlers.catchErrors(
       () => PayService(apiKey).pay(
         operationId: operationId,
         paymentMethodId: method.id,
@@ -101,6 +106,13 @@ class PayProvider extends ChangeNotifier {
     );
 
     isLoading = false;
+
+    if (result.isError) {
+      error = result.error;
+      return notifyListeners();
+    }
+
+    notifyListeners();
 
     // Call the success callback if the payment was successful.
     if (error == null) {

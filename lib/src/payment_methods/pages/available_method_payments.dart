@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:software_pay/src/l10n/app_localizations.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/get_payment_methods_provider.dart';
 import 'package:software_pay/src/widgets/container.dart';
@@ -46,10 +46,10 @@ class AvailableMethodPage extends StatelessWidget {
         apiKey,
         customHandlers,
         onSelected,
+        context,
       ),
       builder: (context, __) {
         final provider = context.watch<GetPaymentMethodsProvider>();
-        final localizationsHelper = LocalizationsHelper();
 
         // Show loading indicator while fetching payment methods.
         if (provider.isLoading) {
@@ -77,7 +77,7 @@ class AvailableMethodPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  localizationsHelper.msgs.paymentMethod,
+                  AppLocalizations.of(context).paymentMethod,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
@@ -113,7 +113,7 @@ class AvailableMethodPage extends StatelessWidget {
   /// Takes the [context] and the selected [mode] of payment as parameters.
   /// Returns a card with an icon or custom icon depending on the availability.
   Widget card(BuildContext context, PaymentMethodTypes mode) {
-    final withIcon = customIcons?[mode] == null;
+    final withIcon = customIcons?[mode] != null;
 
     return AppContainer(
       border: Border.all(),

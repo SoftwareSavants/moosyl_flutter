@@ -48,7 +48,7 @@ class SoftwarePay extends HookWidget {
     VoidCallback? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
   }) {
-    showModalBottomSheet(
+    showBottomSheet(
       context: context,
       builder: (context) => SoftwarePayBody(
         apiKey: apiKey,
@@ -87,17 +87,15 @@ class SoftwarePay extends HookWidget {
     if (inputBuilder != null) {
       return inputBuilder!(
         () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SoftwarePayBody(
-                apiKey: apiKey,
-                customHandlers: customHandlers,
-                operationId: operationId,
-                organizationLogo: organizationLogo,
-                onPaymentSuccess: onPaymentSuccess,
-                customIcons: customIcons,
-              ),
+          showBottomSheet(
+            context: context,
+            builder: (context) => SoftwarePayBody(
+              apiKey: apiKey,
+              customHandlers: customHandlers,
+              operationId: operationId,
+              organizationLogo: organizationLogo,
+              onPaymentSuccess: onPaymentSuccess,
+              customIcons: customIcons,
             ),
           );
         },

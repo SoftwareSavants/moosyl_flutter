@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
-import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:software_pay/src/l10n/app_localizations.dart';
 
 /// A class responsible for making HTTP requests to the server.
 /// It allows for sending GET and POST requests with predefined headers.
@@ -121,12 +122,10 @@ class FetcherResponse<T> {
   ///
   /// This method extracts the error message from the server response and returns
   /// a properly formatted exception.
-  AppException get toException {
+  AppException toException(BuildContext context) {
     Map<String, dynamic> body = data as Map<String, dynamic>;
 
-    final localizationsHelper = LocalizationsHelper();
-
-    String message = localizationsHelper.msgs.unknownError;
+    String message = AppLocalizations.of(context).unknownError;
 
     if (body['_server_messages'] != null) {
       final dynamic parsedJson = jsonDecode(body['_server_messages']);
@@ -146,7 +145,7 @@ class Endpoints {
   static const String paymentMethods = '$baseUrl/configuration';
 
   /// Returns the URL for processing payment for the given [id].
-  static String pay(String id) => '$baseUrl/payment';
+  static String get pay => '$baseUrl/payment';
 
   /// Returns the URL for retrieving details of a specific operation with the given [id].
   static String operation(String id) => '$baseUrl/operation/$id';

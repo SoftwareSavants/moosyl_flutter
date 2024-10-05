@@ -8,7 +8,7 @@ class OperationModel {
   final String id;
 
   /// The phone number associated with the operation.
-  final String phoneNumber;
+  final String? phoneNumber;
 
   /// The amount involved in the operation.
   final double amount;
@@ -18,7 +18,7 @@ class OperationModel {
   /// Requires [id], [phoneNumber], and [amount] to initialize the model.
   OperationModel({
     required this.id,
-    required this.phoneNumber,
+    this.phoneNumber,
     required this.amount,
   });
 
@@ -28,6 +28,6 @@ class OperationModel {
   /// to successfully initialize the properties of the model.
   OperationModel.fromMap(Map<String, dynamic> map)
       : id = map['id'],
-        phoneNumber = map['phone_number'],
-        amount = map['amount'];
+        phoneNumber = map['phoneNumber'],
+        amount = map['amount'].toDouble();
 }

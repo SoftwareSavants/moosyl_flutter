@@ -23,6 +23,6 @@ class GetOperationService {
     );
 
     // Convert the result data to an OperationModel instance.
-    return OperationModel.fromMap(methodsResult.data);
+    return OperationModel.fromMap(methodsResult.data['data']);
   }
 }

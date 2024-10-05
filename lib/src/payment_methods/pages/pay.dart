@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
-import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:software_pay/src/l10n/app_localizations.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
 import 'package:software_pay/src/widgets/buttons.dart';
@@ -48,7 +48,7 @@ class Pay extends HookWidget {
   @override
   Widget build(BuildContext context) {
     const horizontalPadding = EdgeInsetsDirectional.symmetric(horizontal: 16);
-    final localizationHelper = LocalizationsHelper();
+    final localizationHelper = AppLocalizations.of(context);
 
     return ChangeNotifierProvider(
       create: (_) => PayProvider(
@@ -56,6 +56,7 @@ class Pay extends HookWidget {
         method: method,
         operationId: operationId,
         onPaymentSuccess: onPaymentSuccess,
+        context: context,
       ),
       builder: (context, child) {
         final provider = context.watch<PayProvider>();
@@ -75,7 +76,7 @@ class Pay extends HookWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(method.method.title),
+            title: Text(method.method.title(context)),
           ),
           body: Form(
             key: provider.formKey,
@@ -83,12 +84,12 @@ class Pay extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 InputLabel(
-                  label: localizationHelper.msgs.payUsing(
+                  label: localizationHelper.payUsing(
                     method.method.title,
                   ),
                   child: Text(
                     localizationHelper
-                        .msgs.copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
+                        .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -100,10 +101,10 @@ class Pay extends HookWidget {
                 const Divider(height: 1, thickness: 4),
                 const SizedBox(height: 16),
                 InputLabel(
-                  label: localizationHelper.msgs.afterPayment,
+                  label: localizationHelper.afterPayment,
                   child: Text(
                     localizationHelper
-                        .msgs.afterMakingThePaymentFillTheFollowingInformation,
+                        .afterMakingThePaymentFillTheFollowingInformation,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -111,14 +112,14 @@ class Pay extends HookWidget {
                   margin: horizontalPadding,
                   maxLength: 8,
                   controller: provider.phoneNumberTextController,
-                  hint: localizationHelper.msgs.enterYourBankilyPhoneNumber,
-                  label: localizationHelper.msgs.bankilyPhoneNumber,
+                  hint: localizationHelper.enterYourBankilyPhoneNumber,
+                  label: localizationHelper.bankilyPhoneNumber,
                 ),
                 AppTextInput(
                   margin: horizontalPadding,
                   controller: provider.passCodeTextController,
-                  hint: localizationHelper.msgs.paymentPassCode,
-                  label: localizationHelper.msgs.paymentPassCodeFromBankily,
+                  hint: localizationHelper.paymentPassCode,
+                  label: localizationHelper.paymentPassCodeFromBankily,
                   maxLength: 4,
                 ),
               ],
@@ -127,9 +128,8 @@ class Pay extends HookWidget {
           bottomSheet: Padding(
             padding: const EdgeInsetsDirectional.all(16),
             child: AppButton(
-              labelText: localizationHelper.msgs.sendForVerification,
+              labelText: localizationHelper.sendForVerification,
               margin: EdgeInsetsDirectional.zero,
-              disabled: provider.formKey.currentState?.validate() ?? false,
               onPressed: () => provider.pay(context),
             ),
           ),
@@ -158,7 +158,8 @@ class _ModeOfPaymentInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizationHelper = LocalizationsHelper();
+    final localizationHelper = AppLocalizations.of(context);
+
     final provider = context.watch<PayProvider>();
 
     if (mode is! BankilyConfigModel) {
@@ -182,13 +183,13 @@ class _ModeOfPaymentInfo extends StatelessWidget {
           const SizedBox(height: 24),
           card(
             context,
-            localizationHelper.msgs.codeBPay,
+            localizationHelper.codeBPay,
             bpayMethod.bPayNumber,
             copyableValue: bpayMethod.bPayNumber,
           ),
           card(
             context,
-            localizationHelper.msgs.amountToPay,
+            localizationHelper.amountToPay,
             provider.operation!.amount.toStringAsFixed(2),
           ),
         ],

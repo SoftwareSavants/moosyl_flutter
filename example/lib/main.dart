@@ -96,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SoftwarePay(
-              apiKey: '',
-              operationId: '',
+              apiKey: 'Api key',
+              operationId: 'Operation ID',
               organizationLogo: const Icon(Icons.payment),
               customHandlers: {
                 PaymentMethodTypes.masrivi: () {
@@ -105,18 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 PaymentMethodTypes.bankily: () {
                   print('bankily');
-                },
-                PaymentMethodTypes.sedad: () {
-                  print('sedad');
-                },
-                PaymentMethodTypes.bimBank: () {
-                  print('bimBank');
-                },
-                PaymentMethodTypes.amanty: () {
-                  print('amanty');
-                },
-                PaymentMethodTypes.bCIpay: () {
-                  print('bCIpay');
                 },
               },
               customIcons: const {},

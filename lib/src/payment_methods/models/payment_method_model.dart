@@ -1,4 +1,5 @@
-import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:flutter/widgets.dart';
+import 'package:software_pay/src/l10n/app_localizations.dart';
 import 'package:software_pay/src/widgets/icons.dart';
 
 /// Enum representing the different types of payment methods available.
@@ -42,16 +43,16 @@ enum PaymentMethodTypes {
   ///
   /// Uses [LocalizationsHelper] to retrieve the appropriate localized string
   /// for each payment method.
-  String get title {
-    final localizationsHelper = LocalizationsHelper();
+  String title(BuildContext context) {
+    final localizationsHelper = AppLocalizations.of(context);
 
     return switch (this) {
-      PaymentMethodTypes.masrivi => localizationsHelper.msgs.masrivi,
-      PaymentMethodTypes.bankily => localizationsHelper.msgs.bankily,
-      PaymentMethodTypes.sedad => localizationsHelper.msgs.sedad,
-      PaymentMethodTypes.bimBank => localizationsHelper.msgs.bimBank,
-      PaymentMethodTypes.amanty => localizationsHelper.msgs.amanty,
-      PaymentMethodTypes.bCIpay => localizationsHelper.msgs.bCIpay,
+      PaymentMethodTypes.masrivi => localizationsHelper.masrivi,
+      PaymentMethodTypes.bankily => localizationsHelper.bankily,
+      PaymentMethodTypes.sedad => localizationsHelper.sedad,
+      PaymentMethodTypes.bimBank => localizationsHelper.bimBank,
+      PaymentMethodTypes.amanty => localizationsHelper.amanty,
+      PaymentMethodTypes.bCIpay => localizationsHelper.bCIpay,
     };
   }
 
@@ -102,7 +103,7 @@ abstract class PaymentMethod {
   /// The [map] must contain the keys 'id' and 'method' to initialize the properties.
   PaymentMethod.fromMap(Map<String, dynamic> map)
       : id = map['id'],
-        method = PaymentMethodTypes.fromString(map['method']);
+        method = PaymentMethodTypes.fromString(map['type']);
 
   /// Creates a [PaymentMethod] instance from the provided type.
   ///
@@ -111,7 +112,7 @@ abstract class PaymentMethod {
   ///
   /// Throws an [UnimplementedError] if the payment method type is not supported.
   static PaymentMethod fromType(Map<String, dynamic> map) {
-    final type = PaymentMethodTypes.fromString(map['method']);
+    final type = PaymentMethodTypes.fromString(map['type']);
     switch (type) {
       case PaymentMethodTypes.bankily:
         return BankilyConfigModel.fromMap(map);
@@ -141,6 +142,6 @@ class BankilyConfigModel extends PaymentMethod {
   ///
   /// The [map] must contain the key 'bpay_number' to initialize the property.
   BankilyConfigModel.fromMap(super.map)
-      : bPayNumber = map['bpay_number'],
+      : bPayNumber = map['config']['code'],
         super.fromMap();
 }

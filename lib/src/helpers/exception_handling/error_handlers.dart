@@ -16,23 +16,21 @@ class ErrorHandlers {
   /// feedback messages using a flash bar.
   static Future<ResponseHandlers<T>> catchErrors<T>(
     Future<T> Function() function, {
-    BuildContext? context,
+    required BuildContext context,
     bool showFlashBar = true,
   }) async {
-    assert(!showFlashBar ||
-        context != null); // Ensure context is provided if showing flash bar.
     try {
       // Attempt to execute the provided function and return the result wrapped in ResponseHandlers.
       return ResponseHandlers(result: await function());
     } catch (error) {
       // Map the caught error to a user-friendly message.
-      String errorMsg = ExceptionMapper.getErrorMessage(error);
+      String errorMsg = ExceptionMapper.getErrorMessage(error, context);
 
       // Show feedback to the user if specified.
       if (showFlashBar) {
         Feedbacks.flushBar(
           message: errorMsg,
-          context: context!,
+          context: context,
         );
       }
       // Return the error message wrapped in ResponseHandlers.

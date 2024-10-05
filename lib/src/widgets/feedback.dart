@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:software_pay/src/l10n/app_localizations.dart';
 import 'package:software_pay/src/widgets/icons.dart';
 
 class Feedbacks {
@@ -48,12 +48,10 @@ class Feedbacks {
   }
 
   static copy(String description, BuildContext context) {
-    final localizationsHelper = LocalizationsHelper();
-
     Clipboard.setData(ClipboardData(text: description));
     Feedbacks.flushBar(
       context: context,
-      message: localizationsHelper.msgs.copiedThisText,
+      message: AppLocalizations.of(context).copiedThisText,
       error: false,
     );
   }

@@ -24,12 +24,12 @@ class PayService {
   }) async {
     // Make a POST request to the payment methods endpoint with the payment details.
     await Fetcher(apiKey).post(
-      Endpoints.paymentMethods,
+      Endpoints.pay,
       body: {
         'operationId': operationId,
         'phoneNumber': phoneNumber,
         'passCode': passCode,
-        'paymentMethodId': paymentMethodId,
+        'configurationId': paymentMethodId,
       },
     );
   }

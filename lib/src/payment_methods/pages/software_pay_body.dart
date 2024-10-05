@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/pages/available_method_payments.dart';
 import 'package:software_pay/src/payment_methods/pages/pay.dart';
@@ -45,36 +44,34 @@ class SoftwarePayBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize localization.
-    useMemoized(
-      () {
-        LocalizationsHelper(context: context);
-      },
-      [],
-    );
+    return Material(
+      child: HookBuilder(
+        builder: (_) {
+          // State to hold the selected payment method.
+          final selectedModeOfPayment = useState<PaymentMethod?>(null);
 
-    // State to hold the selected payment method.
-    final selectedModeOfPayment = useState<PaymentMethod?>(null);
+          // If no payment method is selected, show the available methods page.
+          if (selectedModeOfPayment.value == null) {
+            return AvailableMethodPage(
+              customHandlers: customHandlers,
+              apiKey: apiKey,
+              onSelected: (modeOfPayment) {
+                selectedModeOfPayment.value = modeOfPayment;
+              },
+              customIcons: customIcons,
+            );
+          }
 
-    // If no payment method is selected, show the available methods page.
-    if (selectedModeOfPayment.value == null) {
-      return AvailableMethodPage(
-        customHandlers: customHandlers,
-        apiKey: apiKey,
-        onSelected: (modeOfPayment) {
-          selectedModeOfPayment.value = modeOfPayment;
+          // If a payment method is selected, proceed to the payment page.
+          return Pay(
+            apiKey: apiKey,
+            method: selectedModeOfPayment.value!,
+            operationId: operationId,
+            organizationLogo: organizationLogo,
+            onPaymentSuccess: onPaymentSuccess,
+          );
         },
-        customIcons: customIcons,
-      );
-    }
-
-    // If a payment method is selected, proceed to the payment page.
-    return Pay(
-      apiKey: apiKey,
-      method: selectedModeOfPayment.value!,
-      operationId: operationId,
-      organizationLogo: organizationLogo,
-      onPaymentSuccess: onPaymentSuccess,
+      ),
     );
   }
 }

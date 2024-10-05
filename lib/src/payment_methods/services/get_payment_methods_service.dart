@@ -21,7 +21,7 @@ class GetPaymentMethodsService {
     final methodsResult = await Fetcher(apiKey).get(Endpoints.paymentMethods);
 
     // Convert the result data to a list of PaymentMethod instances.
-    return List.from(methodsResult.data)
+    return List.from(methodsResult.data["data"])
         .map<PaymentMethod>((e) => PaymentMethod.fromType(e))
         .toList();
   }
