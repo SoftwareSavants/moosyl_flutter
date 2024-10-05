@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/widgets/icons.dart';
 
@@ -22,7 +21,7 @@ enum PaymentMethodTypes {
   }
 
   String get title {
-    final localizationsHelper = GetIt.I.get<LocalizationsHelper>();
+    final localizationsHelper = LocalizationsHelper();
 
     return switch (this) {
       PaymentMethodTypes.masrivi => localizationsHelper.msgs.masrivi,

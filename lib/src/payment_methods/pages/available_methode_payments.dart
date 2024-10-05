@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+
 import 'package:provider/provider.dart';
 import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
@@ -32,7 +32,7 @@ class AvailableMethodPage extends StatelessWidget {
       ),
       builder: (context, __) {
         final provider = context.watch<GetPaymentMethodsProvider>();
-        final localizationsHelper = GetIt.I.get<LocalizationsHelper>();
+        final localizationsHelper = LocalizationsHelper();
 
         if (provider.isLoading) {
           return const Center(

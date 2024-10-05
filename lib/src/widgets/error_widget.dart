@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/widgets/icons.dart';
 
@@ -25,7 +24,7 @@ class AppErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizationsHelper = GetIt.I<LocalizationsHelper>();
+    final localizationsHelper = LocalizationsHelper();
 
     final Widget child;
 

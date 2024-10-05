@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
@@ -12,13 +11,16 @@ import 'package:software_pay/src/widgets/feedback.dart';
 import 'package:software_pay/src/widgets/icons.dart';
 import 'package:software_pay/src/widgets/text_input.dart';
 
+/// A widget that represents the payment process.
+///
+/// The [Pay] widget allows users to make a payment using the provided
+/// [PaymentMethod]. It manages the payment input and validation process.
 class Pay extends HookWidget {
-  final PaymentMethod method;
-  final String apiKey;
-  final String operationId;
-  final Widget organizationLogo;
-  final void Function()? onPaymentSuccess;
-
+  /// Creates a [Pay] widget.
+  ///
+  /// Requires the [method], [apiKey], [operationId], and [organizationLogo].
+  /// Optionally accepts a callback [onPaymentSuccess] to be called when
+  /// payment is successful.
   const Pay({
     super.key,
     required this.method,
@@ -28,10 +30,25 @@ class Pay extends HookWidget {
     this.onPaymentSuccess,
   });
 
+  /// The payment method selected for the payment process.
+  final PaymentMethod method;
+
+  /// The API key required for payment authentication.
+  final String apiKey;
+
+  /// The operation ID associated with the current payment.
+  final String operationId;
+
+  /// The logo of the organization processing the payment.
+  final Widget organizationLogo;
+
+  /// Callback to be executed upon successful payment.
+  final void Function()? onPaymentSuccess;
+
   @override
   Widget build(BuildContext context) {
     const horizontalPadding = EdgeInsetsDirectional.symmetric(horizontal: 16);
-    final localizationHelper = GetIt.I<LocalizationsHelper>();
+    final localizationHelper = LocalizationsHelper();
 
     return ChangeNotifierProvider(
       create: (_) => PayProvider(
@@ -122,17 +139,26 @@ class Pay extends HookWidget {
   }
 }
 
+/// A widget that displays information about the selected payment method.
+///
+/// This widget shows details specific to the payment method, such as
+/// payment codes and the amount to pay.
 class _ModeOfPaymentInfo extends StatelessWidget {
-  final PaymentMethod mode;
-  final Widget organizationLogo;
+  /// Creates a [_ModeOfPaymentInfo] widget.
   const _ModeOfPaymentInfo({
     required this.mode,
     required this.organizationLogo,
   });
 
+  /// The selected payment method.
+  final PaymentMethod mode;
+
+  /// The logo of the organization processing the payment.
+  final Widget organizationLogo;
+
   @override
   Widget build(BuildContext context) {
-    final localizationHelper = GetIt.I<LocalizationsHelper>();
+    final localizationHelper = LocalizationsHelper();
     final provider = context.watch<PayProvider>();
 
     if (mode is! BankilyConfigModel) {
@@ -170,6 +196,10 @@ class _ModeOfPaymentInfo extends StatelessWidget {
     );
   }
 
+  /// Creates a card displaying a title and description.
+  ///
+  /// The [copyableValue] parameter allows the description to be copied
+  /// when tapped, if provided.
   Widget card(
     BuildContext context,
     String title,
