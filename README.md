@@ -10,4 +10,4 @@ Easy Integration: Designed for quick integration with any Flutter app.
 Flexible Payment Handling: Offers customizable handlers and hooks for payment processing.
 Installation
 
-To install SoftwarePay, add it to your pubspec.yaml file: softwarw_pay
+To install SoftwarePay, add it to your pubspec.yaml file: software_pay
