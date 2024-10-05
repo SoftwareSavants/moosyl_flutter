@@ -1,6 +1,6 @@
 name: software_pay
 description: "SoftwarePay is a Flutter package designed to simplify and customize payment methods for organizations."
-version: 0.0.3
+version: 0.0.4
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
