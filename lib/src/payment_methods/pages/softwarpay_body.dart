@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
 import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/pages/available_methode_payments.dart';
 import 'package:software_pay/src/payment_methods/pages/pay.dart';
 
 class SoftwarePayBody extends HookWidget {
-  final String apiKey;
-  final String operationId;
+  final String apiKey, operationId;
   final Widget organizationLogo;
   final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
   final VoidCallback? onPaymentSuccess;
@@ -26,7 +24,12 @@ class SoftwarePayBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    LocalizationsHelper(context: context); // Removed useMemoized
+    useMemoized(
+      () {
+        LocalizationsHelper(context: context);
+      },
+      [],
+    );
 
     final selectedModeOfPayment = useState<PaymentMethod?>(null);
 
