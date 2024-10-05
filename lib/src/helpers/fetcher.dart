@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
+import 'package:software_pay/src/l10n/localization_helper.dart';
 
 class Fetcher {
   Fetcher(this.apiKey);
@@ -85,8 +87,9 @@ class FetcherResponse<T> {
   AppException get toException {
     Map<String, dynamic> body = data as Map<String, dynamic>;
 
-    //TODO: translate this
-    String message = "LocalizationsHelper.msgs.unknownErrorMsg";
+    final localizationsHelper = GetIt.I<LocalizationsHelper>();
+
+    String message = localizationsHelper.msgs.unknownError;
 
     if (body['_server_messages'] != null) {
       final dynamic parsedJson = jsonDecode(body['_server_messages']);

@@ -19,5 +19,6 @@
   "sendForVerification": "Send for verification",
   "payUsing": "Pay using {method}",
   "codeBPay": "Code BPay",
-  "amountToPay": "Amount to pay"
+  "amountToPay": "Amount to pay",
+  "retry": "Retry"
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:software_pay/src/l10n/localization_helper.dart';
 import 'package:software_pay/src/widgets/icons.dart';
 
 class AppErrorWidget extends StatelessWidget {
@@ -23,6 +25,8 @@ class AppErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizationsHelper = GetIt.I<LocalizationsHelper>();
+
     final Widget child;
 
     if (horizontalAxis) {
@@ -33,8 +37,7 @@ class AppErrorWidget extends StatelessWidget {
           children: [
             AppIcons.error.apply(size: 24.0),
             const SizedBox(height: 16, width: 8),
-            //TODO: Add a localized text
-            const Text("LocalizationsHelper.msgs.retry"),
+            Text(localizationsHelper.msgs.retry),
           ],
         ),
       );
@@ -69,8 +72,7 @@ class AppErrorWidget extends StatelessWidget {
             if (onRetry != null) ...[
               ElevatedButton(
                 onPressed: onRetry,
-                //TODO: Add a localized text
-                child: const Text("retry"),
+                child: Text(localizationsHelper.msgs.retry),
               ),
             ]
           ],
