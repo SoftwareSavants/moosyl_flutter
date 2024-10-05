@@ -99,9 +99,9 @@ class FetcherResponse<T> {
 }
 
 class Endpoints {
-  static const String baseUrl = 'https://api.example.com';
+  static const String baseUrl = 'http://localhost:3000';
 
-  static const String paymentMethods = '$baseUrl/payment-methods';
-  static String pay(String id) => '$baseUrl/pay';
+  static const String paymentMethods = '$baseUrl/configuration';
+  static String pay(String id) => '$baseUrl/payment';
   static String operation(String id) => '$baseUrl/operation/$id';
 }
