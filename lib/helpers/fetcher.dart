@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -12,7 +11,7 @@ class Fetcher {
 
   Map<String, String> get headers {
     final headers = <String, String>{
-      HttpHeaders.contentTypeHeader: 'application/json',
+      'content-type': 'application/json',
     };
 
     headers['api_key'] = apiKey;
