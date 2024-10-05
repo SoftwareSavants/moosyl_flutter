@@ -1,10 +1,8 @@
-// ignore_for_file: public_member_api_docs
-
 import 'app_localizations.dart';
 
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
-  AppLocalizationsEn([super.locale = 'en']);
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
   String get unknownError => 'An unknown error occurred';
@@ -39,15 +37,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
-      'Copy the code, BPay and head to Bankily to pay the amount';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'Copy the code, BPay and head to Bankily to pay the amount';
 
   @override
   String get afterPayment => 'After payment';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation =>
-      'After making the payment, fill the following information';
+  String get afterMakingThePaymentFillTheFollowingInformation => 'After making the payment, fill the following information';
 
   @override
   String get enterYourBankilyPhoneNumber => 'Enter your Bankily phone number';
