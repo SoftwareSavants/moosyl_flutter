@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:software_pay/src/widgets/container.dart';
 
 class AppIcon extends StatelessWidget {
@@ -48,24 +47,8 @@ class AppIcon extends StatelessWidget {
               width: size,
             ),
             child: isNetwork
-                ? (Uri.parse(path!).path.endsWith('.svg'))
-                    ? SvgPicture.network(
-                        path!,
-                        colorFilter: iconColor != null
-                            ? ColorFilter.mode(iconColor, BlendMode.srcIn)
-                            : null,
-                        width: size,
-                      )
-                    : Image.network(path!, width: size, color: iconColor)
-                : path!.endsWith('.svg')
-                    ? SvgPicture.asset(
-                        path!,
-                        colorFilter: iconColor != null
-                            ? ColorFilter.mode(iconColor, BlendMode.srcIn)
-                            : null,
-                        width: size,
-                      )
-                    : Image.asset(path!, color: iconColor),
+                ? Image.network(path!, width: size, color: iconColor)
+                : Image.asset(path!, color: iconColor),
           );
 
     return Padding(
