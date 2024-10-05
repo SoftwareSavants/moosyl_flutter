@@ -37,13 +37,15 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
+      'انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ';
 
   @override
   String get afterPayment => 'بعد الدفع';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation => 'بعد إتمام الدفع، املأ المعلومات التالية';
+  String get afterMakingThePaymentFillTheFollowingInformation =>
+      'بعد إتمام الدفع، املأ المعلومات التالية';
 
   @override
   String get enterYourBankilyPhoneNumber => 'أدخل رقم هاتفك الخاص ببنكيلي';

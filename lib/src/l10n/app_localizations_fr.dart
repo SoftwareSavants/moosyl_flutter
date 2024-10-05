@@ -37,16 +37,19 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
+      'Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant';
 
   @override
   String get afterPayment => 'Après paiement';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation => 'Après avoir effectué le paiement, remplissez les informations suivantes';
+  String get afterMakingThePaymentFillTheFollowingInformation =>
+      'Après avoir effectué le paiement, remplissez les informations suivantes';
 
   @override
-  String get enterYourBankilyPhoneNumber => 'Entrez votre numéro de téléphone Bankily';
+  String get enterYourBankilyPhoneNumber =>
+      'Entrez votre numéro de téléphone Bankily';
 
   @override
   String get bankilyPhoneNumber => 'Numéro de téléphone Bankily';
@@ -55,7 +58,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get paymentPassCode => 'Code de passe de paiement';
 
   @override
-  String get paymentPassCodeFromBankily => 'Code de passe de paiement de Bankily';
+  String get paymentPassCodeFromBankily =>
+      'Code de passe de paiement de Bankily';
 
   @override
   String get sendForVerification => 'Envoyer pour vérification';

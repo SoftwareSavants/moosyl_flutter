@@ -37,13 +37,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'Copy the code, BPay and head to Bankily to pay the amount';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
+      'Copy the code, BPay and head to Bankily to pay the amount';
 
   @override
   String get afterPayment => 'After payment';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation => 'After making the payment, fill the following information';
+  String get afterMakingThePaymentFillTheFollowingInformation =>
+      'After making the payment, fill the following information';
 
   @override
   String get enterYourBankilyPhoneNumber => 'Enter your Bankily phone number';
