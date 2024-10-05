@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:software_pay/l10n/localization_helper.dart';
-import 'package:software_pay/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/payment_methods/providers/pay_provider.dart';
-import 'package:software_pay/widgets/buttons.dart';
-import 'package:software_pay/widgets/container.dart';
-import 'package:software_pay/widgets/error_widget.dart';
-import 'package:software_pay/widgets/feedback.dart';
-import 'package:software_pay/widgets/icons.dart';
-import 'package:software_pay/widgets/text_input.dart';
+import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
+import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
+import 'package:software_pay/src/widgets/buttons.dart';
+import 'package:software_pay/src/widgets/container.dart';
+import 'package:software_pay/src/widgets/error_widget.dart';
+import 'package:software_pay/src/widgets/feedback.dart';
+import 'package:software_pay/src/widgets/icons.dart';
+import 'package:software_pay/src/widgets/text_input.dart';
 
 class Pay extends HookWidget {
   final PaymentMethod method;

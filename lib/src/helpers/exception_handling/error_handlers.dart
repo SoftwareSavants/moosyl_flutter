@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:software_pay/helpers/exception_handling/exception_mapper.dart';
-import 'package:software_pay/widgets/feedback.dart';
+import 'package:software_pay/src/helpers/exception_handling/exception_mapper.dart';
+import 'package:software_pay/src/widgets/feedback.dart';
 
 class ErrorHandlers {
   static Future<ResponseHandlers<T>> catchErrors<T>(

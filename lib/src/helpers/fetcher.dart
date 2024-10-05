@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'package:software_pay/helpers/exception_handling/exceptions.dart';
+import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
 
 class Fetcher {
   Fetcher(this.apiKey);

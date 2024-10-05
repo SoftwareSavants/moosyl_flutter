@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:get_it/get_it.dart';
-import 'package:software_pay/helpers/exception_handling/exceptions.dart';
-import 'package:software_pay/l10n/localization_helper.dart';
+import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
+import 'package:software_pay/src/l10n/localization_helper.dart';
 
 class ExceptionMapper {
   static String mapException(Object? e) {

@@ -1,5 +1,5 @@
-import 'package:software_pay/helpers/fetcher.dart';
-import 'package:software_pay/payment_methods/models/operation_model.dart';
+import 'package:software_pay/src/helpers/fetcher.dart';
+import 'package:software_pay/src/payment_methods/models/operation_model.dart';
 
 class GetOperationService {
   final String apiKey;

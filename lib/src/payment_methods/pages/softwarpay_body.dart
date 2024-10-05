@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
-import 'package:software_pay/l10n/localization_helper.dart';
-import 'package:software_pay/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/payment_methods/pages/available_methode_payments.dart';
-import 'package:software_pay/payment_methods/pages/pay.dart';
+import 'package:software_pay/src/l10n/localization_helper.dart';
+import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
+import 'package:software_pay/src/payment_methods/pages/available_methode_payments.dart';
+import 'package:software_pay/src/payment_methods/pages/pay.dart';
 
 class SoftwarePayBody extends HookWidget {
   final String apiKey, operationId;

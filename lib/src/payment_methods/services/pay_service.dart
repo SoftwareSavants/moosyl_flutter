@@ -1,4 +1,4 @@
-import 'package:software_pay/helpers/fetcher.dart';
+import 'package:software_pay/src/helpers/fetcher.dart';
 
 class PayService {
   final String apiKey;

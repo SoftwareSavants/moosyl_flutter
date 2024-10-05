@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:software_pay/helpers/exception_handling/error_handlers.dart';
-import 'package:software_pay/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/payment_methods/services/get_payment_methods_service.dart';
+import 'package:software_pay/src/helpers/exception_handling/error_handlers.dart';
+import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
+import 'package:software_pay/src/payment_methods/services/get_payment_methods_service.dart';
 
 class GetPaymentMethodsProvider extends ChangeNotifier {
   final String apiKey;

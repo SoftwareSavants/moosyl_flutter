@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:software_pay/widgets/container.dart';
+import 'package:software_pay/src/widgets/container.dart';
 
 class AppIcon extends StatelessWidget {
   final String? path;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'package:software_pay/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/payment_methods/pages/softwarpay_body.dart';
+import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
+import 'package:software_pay/src/payment_methods/pages/softwarpay_body.dart';
 
 class SoftwarePay extends HookWidget {
   final String apiKey;

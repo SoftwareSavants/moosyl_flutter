@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:software_pay/widgets/icons.dart';
+import 'package:software_pay/src/widgets/icons.dart';
 
 class AppErrorWidget extends StatelessWidget {
   final String? message;

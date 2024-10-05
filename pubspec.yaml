@@ -1,9 +1,5 @@
 name: software_pay
-description:
-  "SoftwarePay is a Flutter package designed to simplify and customize payment methods for organizations.
-  It supports multiple payment methods, customizable interfaces, and provides hooks for various custom
-  payment processing needs. The package integrates seamlessly with Flutter applications, and is designed
-  for developers looking for a flexible, secure, and scalable payment solution."
+description: "SoftwarePay is a Flutter package designed to simplify and customize payment methods for organizations."
 version: 0.0.3
 
 environment:
@@ -37,7 +33,7 @@ dependency_overrides:
 flutter:
   generate: true
   assets:
-    - lib/assets/icons/
-    - lib/l10n/
+    - lib/src/assets/icons/
+    - lib/src/l10n/
 
 repository: https://github.com/just-abdou/SoftwarePay.git

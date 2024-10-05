@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:software_pay/l10n/app_localizations.dart';
+import 'package:software_pay/src/l10n/app_localizations.dart';
 
 class LocalizationsHelper {
   final BuildContext context;
