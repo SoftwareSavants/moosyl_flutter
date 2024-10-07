@@ -5,7 +5,6 @@ import 'package:software_pay/l10n/generated/software_pay_localization.dart';
 
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
-import 'package:software_pay/src/widgets/buttons.dart';
 import 'package:software_pay/src/widgets/container.dart';
 import 'package:software_pay/src/widgets/error_widget.dart';
 import 'package:software_pay/src/widgets/feedback.dart';
@@ -126,12 +125,21 @@ class Pay extends HookWidget {
               ],
             ),
           ),
-          bottomSheet: Padding(
-            padding: const EdgeInsetsDirectional.all(16),
-            child: AppButton(
-              labelText: localizationHelper.sendForVerification,
-              margin: EdgeInsetsDirectional.zero,
-              onPressed: () => provider.pay(context),
+          bottomSheet: AppContainer(
+            color: Theme.of(context).colorScheme.onPrimary,
+            width: double.infinity,
+            shadows: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.12),
+                offset: const Offset(0, -4),
+                blurRadius: 16,
+              )
+            ],
+            onTap: () => provider.pay(context),
+            borderRadius: BorderRadius.zero,
+            child: Text(
+              localizationHelper.sendForVerification,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
         );

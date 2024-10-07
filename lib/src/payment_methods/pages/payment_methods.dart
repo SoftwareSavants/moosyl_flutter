@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/pages/software_pay_body.dart';
 
@@ -48,7 +49,7 @@ class SoftwarePay extends HookWidget {
     VoidCallback? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
   }) {
-    showModalBottomSheet(
+    showBarModalBottomSheet(
       context: context,
       builder: (context) => SoftwarePayBody(
         apiKey: apiKey,
@@ -87,7 +88,7 @@ class SoftwarePay extends HookWidget {
     if (inputBuilder != null) {
       return inputBuilder!(
         () {
-          showModalBottomSheet(
+          showBarModalBottomSheet(
             context: context,
             builder: (context) => SoftwarePayBody(
               apiKey: apiKey,
