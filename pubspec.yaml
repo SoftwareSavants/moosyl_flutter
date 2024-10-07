@@ -35,7 +35,6 @@ flutter:
   generate: true
   assets:
     - lib/src/assets/icons/
-    - lib/src/l10n/
 
 repository: https://github.com/just-abdou/SoftwarePay.git
 
