@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+import 'package:software_pay/src/helpers/validators.dart';
 
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
@@ -74,6 +76,7 @@ class Pay extends HookWidget {
           );
         }
 
+        var deviceBottomPadding = MediaQuery.of(context).padding.bottom;
         return Scaffold(
           appBar: AppBar(
             title: Text(method.method.title(context)),
@@ -112,12 +115,14 @@ class Pay extends HookWidget {
                   margin: horizontalPadding,
                   maxLength: 8,
                   controller: provider.phoneNumberTextController,
+                  validator: Validators.validateMauritanianPhoneNumber,
                   hint: localizationHelper.enterYourBankilyPhoneNumber,
                   label: localizationHelper.bankilyPhoneNumber,
                 ),
                 AppTextInput(
                   margin: horizontalPadding,
                   controller: provider.passCodeTextController,
+                  validator: Validators.validatePassCode,
                   hint: localizationHelper.paymentPassCode,
                   label: localizationHelper.paymentPassCodeFromBankily,
                   maxLength: 4,
@@ -128,6 +133,9 @@ class Pay extends HookWidget {
           bottomSheet: AppContainer(
             color: Theme.of(context).colorScheme.onPrimary,
             width: double.infinity,
+            padding: EdgeInsets.only(
+              bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
+            ),
             shadows: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.12),

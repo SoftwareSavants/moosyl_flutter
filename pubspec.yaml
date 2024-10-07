@@ -1,7 +1,7 @@
 name: software_pay
 description: "SoftwarePay is a Flutter package designed to simplify and customize payment methods for organizations."
 homepage: https://github.com/just-abdou/SoftwarePay.git
-version: 0.0.17
+version: 0.0.18
 
 license: MIT
 
