@@ -61,15 +61,18 @@ import 'software_pay_localization_fr.dart';
 /// be consistent with the languages listed in the SoftwarePayLocalization.supportedLocales
 /// property.
 abstract class SoftwarePayLocalization {
-  SoftwarePayLocalization(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  SoftwarePayLocalization(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
   static SoftwarePayLocalization? of(BuildContext context) {
-    return Localizations.of<SoftwarePayLocalization>(context, SoftwarePayLocalization);
+    return Localizations.of<SoftwarePayLocalization>(
+        context, SoftwarePayLocalization);
   }
 
-  static const LocalizationsDelegate<SoftwarePayLocalization> delegate = _SoftwarePayLocalizationDelegate();
+  static const LocalizationsDelegate<SoftwarePayLocalization> delegate =
+      _SoftwarePayLocalizationDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -81,7 +84,8 @@ abstract class SoftwarePayLocalization {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -222,35 +226,38 @@ abstract class SoftwarePayLocalization {
   String get retry;
 }
 
-class _SoftwarePayLocalizationDelegate extends LocalizationsDelegate<SoftwarePayLocalization> {
+class _SoftwarePayLocalizationDelegate
+    extends LocalizationsDelegate<SoftwarePayLocalization> {
   const _SoftwarePayLocalizationDelegate();
 
   @override
   Future<SoftwarePayLocalization> load(Locale locale) {
-    return SynchronousFuture<SoftwarePayLocalization>(lookupSoftwarePayLocalization(locale));
+    return SynchronousFuture<SoftwarePayLocalization>(
+        lookupSoftwarePayLocalization(locale));
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'en', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['ar', 'en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_SoftwarePayLocalizationDelegate old) => false;
 }
 
 SoftwarePayLocalization lookupSoftwarePayLocalization(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar': return SoftwarePayLocalizationAr();
-    case 'en': return SoftwarePayLocalizationEn();
-    case 'fr': return SoftwarePayLocalizationFr();
+    case 'ar':
+      return SoftwarePayLocalizationAr();
+    case 'en':
+      return SoftwarePayLocalizationEn();
+    case 'fr':
+      return SoftwarePayLocalizationFr();
   }
 
   throw FlutterError(
-    'SoftwarePayLocalization.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'SoftwarePayLocalization.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }
