@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:software_pay/src/helpers/exception_handling/error_handlers.dart';
 import 'package:software_pay/src/payment_methods/models/operation_model.dart';
@@ -23,7 +26,7 @@ class PayProvider extends ChangeNotifier {
   final PaymentMethod method;
 
   /// Callback function that gets called on successful payment.
-  final VoidCallback? onPaymentSuccess;
+  final FutureOr<void> Function()? onPaymentSuccess;
 
   /// Constructs a [PayProvider].
   ///
@@ -115,8 +118,13 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
 
     // Call the success callback if the payment was successful.
-    if (error == null) {
-      onPaymentSuccess?.call();
+    if (error != null) return;
+
+    await onPaymentSuccess.call();
+
+    if (context.mounted) {
+      Navigator.pop(context);
+      Navigator.pop(context);
     }
   }
 }

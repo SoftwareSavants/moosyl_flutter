@@ -31,7 +31,7 @@ class SoftwarePay extends HookWidget {
   final Map<PaymentMethodTypes, String>? customIcons;
 
   /// Optional callback to be triggered upon successful payment.
-  final VoidCallback? onPaymentSuccess;
+  final FutureOr<void> Function()? onPaymentSuccess;
 
   /// Displays the [SoftwarePayBody] modal sheet to start the payment process.
   ///
@@ -48,7 +48,7 @@ class SoftwarePay extends HookWidget {
     final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers,
     required String operationId,
     required Widget organizationLogo,
-    VoidCallback? onPaymentSuccess,
+    final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
   }) {
     showBarModalBottomSheet(

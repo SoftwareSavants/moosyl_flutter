@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:software_pay/l10n/generated/software_pay_localization.dart';
@@ -7,6 +9,7 @@ import 'package:software_pay/src/helpers/validators.dart';
 
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
+import 'package:software_pay/src/widgets/buttons.dart';
 import 'package:software_pay/src/widgets/container.dart';
 import 'package:software_pay/src/widgets/error_widget.dart';
 import 'package:software_pay/src/widgets/feedback.dart';
@@ -45,7 +48,7 @@ class Pay extends HookWidget {
   final Widget organizationLogo;
 
   /// Callback to be executed upon successful payment.
-  final void Function()? onPaymentSuccess;
+  final FutureOr<void> Function()? onPaymentSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -143,11 +146,10 @@ class Pay extends HookWidget {
                 blurRadius: 16,
               )
             ],
-            onTap: () => provider.pay(context),
             borderRadius: BorderRadius.zero,
-            child: Text(
-              localizationHelper.sendForVerification,
-              style: Theme.of(context).textTheme.titleSmall,
+            child: AppButton(
+              labelText: localizationHelper.sendForVerification,
+              onPressed: () => provider.pay(context),
             ),
           ),
         );

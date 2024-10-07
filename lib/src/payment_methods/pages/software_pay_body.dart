@@ -39,7 +39,7 @@ class SoftwarePayBody extends HookWidget {
   final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
 
   /// Optional callback that is invoked when the payment is successful.
-  final VoidCallback? onPaymentSuccess;
+  final FutureOr<void> Function()? onPaymentSuccess;
 
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
