@@ -1,4 +1,5 @@
 {
+  "@@locale": "ar",
   "unknownError": "حدث خطأ غير معروف",
   "copiedThisText": "تم نسخ هذا النص",
   "paymentMethod": "طريقة الدفع",

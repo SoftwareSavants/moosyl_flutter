@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
-import 'package:software_pay/src/l10n/app_localizations.dart';
+import 'package:software_pay/l10n/generated/software_pay_localization.dart';
 
 /// A utility class for mapping exceptions to user-friendly error messages.
 class ExceptionMapper {
@@ -22,8 +22,8 @@ class ExceptionMapper {
   ///
   /// This method uses [LocalizationsHelper] to fetch localized messages for known app exceptions.
   static String getErrorMessage(error, BuildContext context) {
-    final localizationsHelper = AppLocalizations.of(
-        context); // Create an instance of LocalizationsHelper.
+    final localizationsHelper = SoftwarePayLocalization.of(
+        context)!; // Create an instance of LocalizationsHelper.
 
     // Switch on the type of error to determine the appropriate message.
     return switch (error) {

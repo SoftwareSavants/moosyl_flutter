@@ -1,7 +1,6 @@
-arb-dir: lib/src/l10n
-output-dir: lib/src/l10n
-template-arb-file: app_en.arb
-output-localization-file: app_localizations.dart
-nullable-getter: false
-use-escaping: true
+arb-dir: lib/l10n
+template-arb-file: en.arb
+output-localization-file: software_pay_localization.dart
+output-class: SoftwarePayLocalization
+output-dir: lib/l10n/generated
 synthetic-package: false

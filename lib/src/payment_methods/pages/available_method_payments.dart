@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:software_pay/src/l10n/app_localizations.dart';
+import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/get_payment_methods_provider.dart';
 import 'package:software_pay/src/widgets/container.dart';
@@ -77,7 +78,7 @@ class AvailableMethodPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  AppLocalizations.of(context).paymentMethod,
+                  SoftwarePayLocalization.of(context)!.paymentMethod,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),

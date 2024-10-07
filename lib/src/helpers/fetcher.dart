@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:software_pay/l10n/generated/software_pay_localization.dart';
 
 import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
-import 'package:software_pay/src/l10n/app_localizations.dart';
 
 /// A class responsible for making HTTP requests to the server.
 /// It allows for sending GET and POST requests with predefined headers.
@@ -125,7 +125,7 @@ class FetcherResponse<T> {
   AppException toException(BuildContext context) {
     Map<String, dynamic> body = data as Map<String, dynamic>;
 
-    String message = AppLocalizations.of(context).unknownError;
+    String message = SoftwarePayLocalization.of(context)!.unknownError;
 
     if (body['_server_messages'] != null) {
       final dynamic parsedJson = jsonDecode(body['_server_messages']);

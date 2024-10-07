@@ -1,4 +1,5 @@
 {
+  "@@locale": "fr",
   "unknownError": "Une erreur inconnue s''est produite",
   "copiedThisText": "Texte copié",
   "paymentMethod": "Méthode de paiement",

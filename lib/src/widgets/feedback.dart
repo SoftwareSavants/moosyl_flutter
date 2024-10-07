@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:software_pay/src/l10n/app_localizations.dart';
+import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+
 import 'package:software_pay/src/widgets/icons.dart';
 
 class Feedbacks {
@@ -51,7 +52,7 @@ class Feedbacks {
     Clipboard.setData(ClipboardData(text: description));
     Feedbacks.flushBar(
       context: context,
-      message: AppLocalizations.of(context).copiedThisText,
+      message: SoftwarePayLocalization.of(context)!.copiedThisText,
       error: false,
     );
   }

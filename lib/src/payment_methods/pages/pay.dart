@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
-import 'package:software_pay/src/l10n/app_localizations.dart';
+import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
 import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
 import 'package:software_pay/src/widgets/buttons.dart';
@@ -48,7 +49,7 @@ class Pay extends HookWidget {
   @override
   Widget build(BuildContext context) {
     const horizontalPadding = EdgeInsetsDirectional.symmetric(horizontal: 16);
-    final localizationHelper = AppLocalizations.of(context);
+    final localizationHelper = SoftwarePayLocalization.of(context)!;
 
     return ChangeNotifierProvider(
       create: (_) => PayProvider(
@@ -158,7 +159,7 @@ class _ModeOfPaymentInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizationHelper = AppLocalizations.of(context);
+    final localizationHelper = SoftwarePayLocalization.of(context)!;
 
     final provider = context.watch<PayProvider>();
 

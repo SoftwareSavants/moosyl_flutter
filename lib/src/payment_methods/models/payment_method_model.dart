@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:software_pay/src/l10n/app_localizations.dart';
+import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+
 import 'package:software_pay/src/widgets/icons.dart';
 
 /// Enum representing the different types of payment methods available.
@@ -44,7 +45,7 @@ enum PaymentMethodTypes {
   /// Uses [LocalizationsHelper] to retrieve the appropriate localized string
   /// for each payment method.
   String title(BuildContext context) {
-    final localizationsHelper = AppLocalizations.of(context);
+    final localizationsHelper = SoftwarePayLocalization.of(context)!;
 
     return switch (this) {
       PaymentMethodTypes.masrivi => localizationsHelper.masrivi,
