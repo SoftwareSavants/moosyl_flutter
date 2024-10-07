@@ -15,6 +15,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Software Pay Demo',
+      localizationsDelegates: SoftwarePayLocalization.localizationsDelegates,
+      supportedLocales: SoftwarePayLocalization.supportedLocales,
+      locale: const Locale('en'),
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -96,16 +99,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SoftwarePay(
-              apiKey: 'Api key',
-              operationId: 'Operation ID',
+              apiKey:
+                  'BOizE6oqmfMAWAWR5e95aZ9R8svvuNB8AB4d1Ha5X_WkBxKw-uF1t5Iy3FI5N12tJpMs3oIbfiBa-HvMiawbWG8',
+              operationId: 'a24b984c-5375-45c0-a859-22a167123b26',
               organizationLogo: const Icon(Icons.payment),
               customHandlers: {
-                PaymentMethodTypes.masrivi: () {
-                  print('masrivi');
-                },
-                PaymentMethodTypes.bankily: () {
-                  print('bankily');
-                },
+                // PaymentMethodTypes.masrivi: () {
+                //   print('masrivi');
+                // },
               },
               customIcons: const {},
               inputBuilder: (onCall) {

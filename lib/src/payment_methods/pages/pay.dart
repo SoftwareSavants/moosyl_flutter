@@ -86,7 +86,7 @@ class Pay extends HookWidget {
               children: [
                 InputLabel(
                   label: localizationHelper.payUsing(
-                    method.method.title,
+                    method.method.title(context),
                   ),
                   child: Text(
                     localizationHelper

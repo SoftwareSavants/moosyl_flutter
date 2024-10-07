@@ -54,6 +54,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   void getMethods() async {
     error = null;
     isLoading = true;
+    notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentMethodsService(apiKey).get(),

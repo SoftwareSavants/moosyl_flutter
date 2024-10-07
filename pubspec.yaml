@@ -34,7 +34,7 @@ dependency_overrides:
 flutter:
   generate: true
   assets:
-    - lib/src/assets/icons/
+    - assets/icons/
 
 repository: https://github.com/just-abdou/SoftwarePay.git
 

@@ -96,37 +96,38 @@ class AppIcon extends StatelessWidget {
 class AppIcons {
   //payment methods
   static const bankily = AppIcon(
-    path: 'lib/src/assets/icons/bankily.png',
+    path: 'packages/software_pay/assets/icons/bankily.png',
     useOriginalColor: true,
   );
   //masrivi
   static const masrivi = AppIcon(
-    path: 'lib/src/assets/icons/masrivi.png',
+    path: 'packages/software_pay/assets/icons/masrivi.png',
     useOriginalColor: true,
   );
   //sedad
   static const sedad = AppIcon(
-    path: 'lib/src/assets/icons/sedad.png',
+    path: 'packages/software_pay/assets/icons/sedad.png',
     useOriginalColor: true,
   );
   //bimBank
   static const bimBank = AppIcon(
-    path: 'lib/src/assets/icons/bim_bank.png',
+    path: 'packages/software_pay/assets/icons/bim_bank.png',
     useOriginalColor: true,
   );
   //amanty
   static const amanty = AppIcon(
-    path: 'lib/src/assets/icons/amanty.png',
+    path: 'packages/software_pay/assets/icons/amanty.png',
     useOriginalColor: true,
   );
 
   //bCIpay
   static const bCIpay = AppIcon(
-    path: 'lib/src/assets/icons/bci_pay.png',
+    path: 'packages/software_pay/assets/icons/bci_pay.png',
     useOriginalColor: true,
   );
   //error
-  static const error = AppIcon(path: 'lib/src/assets/icons/error.png');
+  static const error =
+      AppIcon(path: 'packages/software_pay/assets/icons/error.png');
 
   //closeError ,doneError
   static const done = AppIcon(iconData: Icons.done);
