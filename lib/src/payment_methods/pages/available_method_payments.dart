@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -35,7 +37,7 @@ class AvailableMethodPage extends StatelessWidget {
   final String apiKey;
 
   /// Optional custom handlers for specific payment methods.
-  final Map<PaymentMethodTypes, void Function()>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
 
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;

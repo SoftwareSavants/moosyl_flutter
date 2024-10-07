@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
@@ -34,7 +36,7 @@ class SoftwarePayBody extends HookWidget {
   final Widget organizationLogo;
 
   /// Optional custom handlers for specific payment methods.
-  final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
 
   /// Optional callback that is invoked when the payment is successful.
   final VoidCallback? onPaymentSuccess;

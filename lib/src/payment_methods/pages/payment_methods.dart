@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -22,7 +24,7 @@ class SoftwarePay extends HookWidget {
 
   /// Optional map to override the default behavior of specific payment methods.
   /// The keys are [PaymentMethodTypes] and the values are the custom callback functions.
-  final Map<PaymentMethodTypes, VoidCallback>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
 
   /// Optional map to provide custom icons for each payment method type.
   /// The keys are [PaymentMethodTypes] and the values are the paths to the custom icons.
@@ -43,7 +45,7 @@ class SoftwarePay extends HookWidget {
   static void show(
     BuildContext context, {
     required String apiKey,
-    Map<PaymentMethodTypes, VoidCallback>? customHandlers,
+    final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers,
     required String operationId,
     required Widget organizationLogo,
     VoidCallback? onPaymentSuccess,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:software_pay/src/helpers/exception_handling/error_handlers.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
@@ -15,7 +17,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   final BuildContext context;
 
   /// A map of custom handlers for specific payment method types.
-  final Map<PaymentMethodTypes, void Function()>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
 
   /// A callback function that gets called when a payment method is selected.
   final void Function(PaymentMethod) onSelected;
@@ -81,10 +83,13 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// If a custom handler is defined for the tapped payment method,
   /// it invokes the handler. Otherwise, it selects the corresponding
   /// payment method from the list and calls the [onSelected] callback.
-  void onTap(PaymentMethodTypes type, BuildContext context) {
+  void onTap(PaymentMethodTypes type, BuildContext context) async {
     if (customHandlers?[type] != null) {
-      customHandlers![type]!(); // Call the custom handler if available.
-      return Navigator.pop(context); // Close the context (e.g., dialog).
+      await customHandlers![type]!(); // Call the custom handler if available.
+
+      if (context.mounted) {
+        return Navigator.pop(context); // Close the context (e.g., dialog).
+      }
     }
 
     // Find and select the payment method from the list.
