@@ -48,5 +48,5 @@ platforms:
   windows:
 
 screenshots:
-  - description: 'This screenshot show the available methods 
+  - description: "This screenshot show the available methods"
     path: SoftwarePay/assets/images/Screenshot 2024-10-07 at 4.44.50 PM.png
