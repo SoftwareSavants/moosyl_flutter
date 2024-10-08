@@ -15,10 +15,10 @@ class PayService {
   /// Processes a payment transaction.
   ///
   /// This method makes an API call to process a payment using the specified
-  /// parameters. It requires the operation ID, phone number, passcode,
+  /// parameters. It requires the Transaction ID, phone number, passcode,
   /// and payment method ID.
   Future<void> pay({
-    required String operationId,
+    required String transactionId,
     required String phoneNumber,
     required String passCode,
     required String paymentMethodId,
@@ -27,7 +27,7 @@ class PayService {
     await Fetcher(apiKey).post(
       Endpoints.pay,
       body: {
-        'operationId': operationId,
+        'transactionId': transactionId,
         'phoneNumber': phoneNumber,
         'passCode': passCode,
         'configurationId': paymentMethodId,

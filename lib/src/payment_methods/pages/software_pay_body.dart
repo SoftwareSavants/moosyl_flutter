@@ -16,13 +16,13 @@ import 'package:software_pay/src/payment_methods/providers/get_payment_methods_p
 class SoftwarePayBody extends HookWidget {
   /// Creates an instance of [SoftwarePayBody].
   ///
-  /// Requires the [apiKey] and [operationId] for the payment transaction,
+  /// Requires the [apiKey] and [transactionId] for the payment transaction,
   /// an [organizationLogo] to display, and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
   const SoftwarePayBody({
     super.key,
     required this.apiKey,
-    required this.operationId,
+    required this.transactionId,
     required this.organizationLogo,
     this.customHandlers,
     this.onPaymentSuccess,
@@ -33,8 +33,8 @@ class SoftwarePayBody extends HookWidget {
   /// The API key for authenticating the payment transaction.
   final String apiKey;
 
-  /// The operation ID for the specific payment transaction.
-  final String operationId;
+  /// The transaction ID for the specific payment transaction.
+  final String transactionId;
 
   /// A widget representing the logo of the organization.
   final Widget organizationLogo;
@@ -82,7 +82,7 @@ class SoftwarePayBody extends HookWidget {
             return ManuelPaymentPage(
               organizationLogo: organizationLogo,
               apiKey: apiKey,
-              operationId: operationId,
+              operationId: transactionId,
               method: selectedModeOfPayment as ManualConfigModel,
             );
           }
@@ -91,7 +91,7 @@ class SoftwarePayBody extends HookWidget {
           return Pay(
             apiKey: apiKey,
             method: selectedModeOfPayment,
-            operationId: operationId,
+            transactionId: transactionId,
             organizationLogo: organizationLogo,
             onPaymentSuccess: onPaymentSuccess,
           );

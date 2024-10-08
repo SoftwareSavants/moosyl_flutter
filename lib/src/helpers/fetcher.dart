@@ -147,6 +147,6 @@ class Endpoints {
   /// Returns the URL for processing payment for the given [id].
   static String get pay => '$baseUrl/payment';
 
-  /// Returns the URL for retrieving details of a specific operation with the given [id].
-  static String operation(String id) => '$baseUrl/operation/$id';
+  /// Returns the URL for retrieving details of a specific transaction with the given [id].
+  static String paymentRequest(String id) => '$baseUrl/payment_request/$id';
 }

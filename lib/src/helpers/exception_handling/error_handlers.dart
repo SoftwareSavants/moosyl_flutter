@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:software_pay/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:software_pay/src/widgets/feedback.dart';
 
-/// A utility class for handling errors during asynchronous operations.
+/// A utility class for handling errors during asynchronous transactions.
 ///
 /// This class provides methods to catch and manage errors that occur
 /// in asynchronous functions, while optionally displaying feedback to users.
@@ -39,15 +39,15 @@ class ErrorHandlers {
   }
 }
 
-/// A class to represent the result of an operation and any associated error.
+/// A class to represent the result of an transaction and any associated error.
 ///
-/// This class contains the result of a successful operation or an error message
-/// if the operation failed.
+/// This class contains the result of a successful transaction or an error message
+/// if the transaction failed.
 class ResponseHandlers<T> {
   /// Error message if an error occurred.
   final String? error;
 
-  /// Result of the operation if successful.
+  /// Result of the transaction if successful.
   final T? result;
 
   /// Indicates whether there was an error.

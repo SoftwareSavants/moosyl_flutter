@@ -12,8 +12,8 @@ class SoftwarePay extends HookWidget {
   /// The API key required to authenticate the payment process.
   final String apiKey;
 
-  /// The operation ID associated with the current payment session.
-  final String operationId;
+  /// The transaction ID associated with the current payment session.
+  final String transactionId;
 
   /// The logo of the organization processing the payment.
   final Widget organizationLogo;
@@ -40,7 +40,7 @@ class SoftwarePay extends HookWidget {
   ///
   /// * [context]: The build context.
   /// * [apiKey]: The API key to authenticate the payment.
-  /// * [operationId]: The operation ID for the current session.
+  /// * [transactionId]: The transaction ID for the current session.
   /// * [organizationLogo]: The logo widget of the organization.
   /// * [customHandlers]: Map for custom handlers for payment methods.
   /// * [customIcons]: Map for custom icons for payment methods.
@@ -49,7 +49,7 @@ class SoftwarePay extends HookWidget {
     BuildContext context, {
     required String apiKey,
     final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers,
-    required String operationId,
+    required String transactionId,
     required Widget organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
@@ -60,7 +60,7 @@ class SoftwarePay extends HookWidget {
       builder: (context) => SoftwarePayBody(
         apiKey: apiKey,
         customHandlers: customHandlers,
-        operationId: operationId,
+        transactionId: transactionId,
         organizationLogo: organizationLogo,
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
@@ -72,7 +72,7 @@ class SoftwarePay extends HookWidget {
   /// Constructor for [SoftwarePay].
   ///
   /// * [apiKey]: The API key for payment authentication.
-  /// * [operationId]: The operation ID for the current payment session.
+  /// * [transactionId]: The transaction ID for the current payment session.
   /// * [organizationLogo]: The logo of the organization handling the payment.
   /// * [customHandlers]: Optional custom handlers for specific payment methods.
   /// * [customIcons]: Optional custom icons for specific payment methods.
@@ -81,7 +81,7 @@ class SoftwarePay extends HookWidget {
   const SoftwarePay({
     super.key,
     required this.apiKey,
-    required this.operationId,
+    required this.transactionId,
     required this.organizationLogo,
     this.customHandlers,
     this.customIcons,
@@ -101,7 +101,7 @@ class SoftwarePay extends HookWidget {
             builder: (context) => SoftwarePayBody(
               apiKey: apiKey,
               customHandlers: customHandlers,
-              operationId: operationId,
+              transactionId: transactionId,
               organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
@@ -116,7 +116,7 @@ class SoftwarePay extends HookWidget {
     return SoftwarePayBody(
       apiKey: apiKey,
       customHandlers: customHandlers,
-      operationId: operationId,
+      transactionId: transactionId,
       organizationLogo: organizationLogo,
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,

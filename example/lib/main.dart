@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
             SoftwarePay(
               apiKey:
                   'BOizE6oqmfMAWAWR5e95aZ9R8svvuNB8AB4d1Ha5X_WkBxKw-uF1t5Iy3FI5N12tJpMs3oIbfiBa-HvMiawbWG8',
-              operationId: 'a24b984c-5375-45c0-a859-22a167123b26',
+              transactionId: 'a24b984c-5375-45c0-a859-22a167123b26',
               organizationLogo: const Icon(Icons.payment),
               customHandlers: {
                 // PaymentMethodTypes.masrivi: () {

@@ -4,26 +4,26 @@ import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:software_pay/src/helpers/exception_handling/error_handlers.dart';
-import 'package:software_pay/src/payment_methods/models/operation_model.dart';
+import 'package:software_pay/src/payment_methods/models/payment_request_model.dart';
 import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/src/payment_methods/services/get_operation_service.dart';
+import 'package:software_pay/src/payment_methods/services/get_payment_request_service.dart';
 import 'package:software_pay/src/payment_methods/services/pay_service.dart';
 
-/// A provider class for handling payment operations.
+/// A provider class for handling payment payment requests.
 ///
 /// This class extends [ChangeNotifier] to notify listeners about changes
-/// in the payment operation state, including loading status and errors.
+/// in the payment payment request state, including loading status and errors.
 class PayProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment services.
   final String apiKey;
 
-  /// The ID of the operation being processed.
-  final String operationId;
+  /// The ID of the payment request being processed.
+  final String transactionId;
 
   /// The context used for displaying error messages.
   final BuildContext context;
 
-  /// The payment method used for the operation.
+  /// The payment method used for the payment request.
   final PaymentMethod method;
 
   /// Callback function that gets called on successful payment.
@@ -31,15 +31,15 @@ class PayProvider extends ChangeNotifier {
 
   /// Constructs a [PayProvider].
   ///
-  /// Initiates fetching the operation details upon creation.
+  /// Initiates fetching the payment request details upon creation.
   PayProvider({
     required this.apiKey,
     required this.method,
-    required this.operationId,
+    required this.transactionId,
     required this.context,
     this.onPaymentSuccess,
   }) {
-    getOperation();
+    getPaymentRequest();
   }
 
   /// Text controller for inputting the passcode.
@@ -51,8 +51,8 @@ class PayProvider extends ChangeNotifier {
   /// Key for the payment form.
   final formKey = GlobalKey<FormState>();
 
-  /// Holds the operation details.
-  OperationModel? operation;
+  /// Holds the payment request details.
+  PaymentRequestModel? paymentRequest;
 
   /// Holds any error messages that occur during payment processing.
   String? error;
@@ -60,16 +60,16 @@ class PayProvider extends ChangeNotifier {
   /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
 
-  /// Asynchronously fetches operation details from the service.
+  /// Asynchronously fetches payment request details from the service.
   ///
   /// Updates the loading state and handles any errors that occur during
   /// the fetching process. Notifies listeners when the data changes.
-  void getOperation() async {
+  void getPaymentRequest() async {
     error = null;
     isLoading = true;
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetOperationService(apiKey).get(operationId),
+      () => GetPaymentRequestService(apiKey).get(transactionId),
       showFlashBar: false,
       context: context,
     );
@@ -81,14 +81,14 @@ class PayProvider extends ChangeNotifier {
       return notifyListeners();
     }
 
-    // Set the operation details from the result.
-    operation = result.result;
+    // Set the payment request details from the result.
+    paymentRequest = result.result;
 
-    // Notify listeners of the change in operation details.
+    // Notify listeners of the change in payment request details.
     notifyListeners();
   }
 
-  /// Processes the payment for the operation.
+  /// Processes the payment for the payment request.
   ///
   /// Validates the form, sets the loading state, and calls the payment service.
   /// If payment is successful, it invokes the [onPaymentSuccess] callback.
@@ -101,7 +101,7 @@ class PayProvider extends ChangeNotifier {
 
     final result = await ErrorHandlers.catchErrors(
       () => PayService(apiKey).pay(
-        operationId: operationId,
+        transactionId: transactionId,
         paymentMethodId: method.id,
         passCode: passCodeTextController.text,
         phoneNumber: phoneNumberTextController.text,

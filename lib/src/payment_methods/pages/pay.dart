@@ -23,14 +23,14 @@ import 'package:software_pay/src/widgets/text_input.dart';
 class Pay extends HookWidget {
   /// Creates a [Pay] widget.
   ///
-  /// Requires the [method], [apiKey], [operationId], and [organizationLogo].
+  /// Requires the [method], [apiKey], [transactionId], and [organizationLogo].
   /// Optionally accepts a callback [onPaymentSuccess] to be called when
   /// payment is successful.
   const Pay({
     super.key,
     required this.method,
     required this.apiKey,
-    required this.operationId,
+    required this.transactionId,
     required this.organizationLogo,
     this.onPaymentSuccess,
   });
@@ -41,8 +41,8 @@ class Pay extends HookWidget {
   /// The API key required for payment authentication.
   final String apiKey;
 
-  /// The operation ID associated with the current payment.
-  final String operationId;
+  /// The transaction ID associated with the current payment.
+  final String transactionId;
 
   /// The logo of the organization processing the payment.
   final Widget organizationLogo;
@@ -59,7 +59,7 @@ class Pay extends HookWidget {
       create: (_) => PayProvider(
         apiKey: apiKey,
         method: method,
-        operationId: operationId,
+        transactionId: transactionId,
         onPaymentSuccess: onPaymentSuccess,
         context: context,
       ),
@@ -75,7 +75,7 @@ class Pay extends HookWidget {
         if (provider.error != null) {
           return AppErrorWidget(
             message: provider.error,
-            onRetry: provider.getOperation,
+            onRetry: provider.getPaymentRequest,
           );
         }
 
@@ -207,7 +207,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
             card(
               context,
               localizationHelper.amountToPay,
-              provider.operation!.amount.toStringAsFixed(2),
+              provider.paymentRequest!.amount.toStringAsFixed(2),
             ),
           ],
         ),
@@ -238,7 +238,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
           card(
             context,
             localizationHelper.amountToPay,
-            provider.operation!.amount.toStringAsFixed(2),
+            provider.paymentRequest!.amount.toStringAsFixed(2),
           ),
         ],
       ),
