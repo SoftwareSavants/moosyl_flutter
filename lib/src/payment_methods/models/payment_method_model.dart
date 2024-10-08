@@ -3,6 +3,29 @@ import 'package:software_pay/l10n/generated/software_pay_localization.dart';
 
 import 'package:software_pay/src/widgets/icons.dart';
 
+enum PaymentType {
+  manual,
+  auto;
+
+  String get toStr {
+    return switch (this) {
+      PaymentType.manual => 'manual',
+      PaymentType.auto => 'auto'
+    };
+  }
+
+  bool get isManual => this == manual;
+  bool get isAuto => this == auto;
+
+  static PaymentType fromString(String type) {
+    return PaymentType.values.firstWhere(
+      (value) => value.toStr == type,
+      orElse: () =>
+          throw UnimplementedError('This payment method is not supported'),
+    );
+  }
+}
+
 /// Enum representing the different types of payment methods available.
 ///
 /// Each enum value corresponds to a specific payment method
@@ -90,6 +113,7 @@ abstract class PaymentMethod {
 
   /// The type of the payment method.
   final PaymentMethodTypes method;
+  final PaymentType type;
 
   /// Creates an instance of [PaymentMethod].
   ///
@@ -97,6 +121,7 @@ abstract class PaymentMethod {
   PaymentMethod({
     required this.id,
     required this.method,
+    required this.type,
   });
 
   /// Creates an instance of [PaymentMethod] from a map.
@@ -104,7 +129,8 @@ abstract class PaymentMethod {
   /// The [map] must contain the keys 'id' and 'method' to initialize the properties.
   PaymentMethod.fromMap(Map<String, dynamic> map)
       : id = map['id'],
-        method = PaymentMethodTypes.fromString(map['type']);
+        method = PaymentMethodTypes.fromString(map['type']),
+        type = PaymentType.fromString(map['type']);
 
   /// Creates a [PaymentMethod] instance from the provided type.
   ///
@@ -112,11 +138,23 @@ abstract class PaymentMethod {
   /// of payment method to create.
   ///
   /// Throws an [UnimplementedError] if the payment method type is not supported.
-  static PaymentMethod fromType(Map<String, dynamic> map) {
+  static PaymentMethod fromPaymentMethod(Map<String, dynamic> map) {
     final type = PaymentMethodTypes.fromString(map['type']);
     switch (type) {
       case PaymentMethodTypes.bankily:
         return BankilyConfigModel.fromMap(map);
+      default:
+        throw UnimplementedError('This payment method is not supported');
+    }
+  }
+
+  static PaymentMethod fromPaymentType(Map<String, dynamic> map) {
+    final type = PaymentType.fromString(map['configuration_type']);
+    switch (type) {
+      case PaymentType.auto:
+        return fromPaymentMethod(map);
+      case PaymentType.manual:
+        return ManualConfigModel.fromMap(map);
       default:
         throw UnimplementedError('This payment method is not supported');
     }
@@ -137,6 +175,7 @@ class BankilyConfigModel extends PaymentMethod {
     required super.id,
     required super.method,
     required this.bPayNumber,
+    required super.type,
   });
 
   /// Creates an instance of [BankilyConfigModel] from a map.
@@ -144,5 +183,30 @@ class BankilyConfigModel extends PaymentMethod {
   /// The [map] must contain the key 'bpay_number' to initialize the property.
   BankilyConfigModel.fromMap(super.map)
       : bPayNumber = map['config']['code'],
+        super.fromMap();
+}
+
+/// Model representing the configuration for the Bankily payment method.
+///
+/// Extends [PaymentMethod] to include specific properties for Bankily.
+class ManualConfigModel extends PaymentMethod {
+  /// The BPay number associated with the Bankily payment method.
+  final String merchantCode;
+
+  /// Creates an instance of [ManualConfigModel].
+  ///
+  /// Requires [id], [method], and [bPayNumber] to initialize the model.
+  ManualConfigModel({
+    required super.id,
+    required super.method,
+    required this.merchantCode,
+    required super.type,
+  });
+
+  /// Creates an instance of [ManualConfigModel] from a map.
+  ///
+  /// The [map] must contain the key 'merchant code' to initialize the property.
+  ManualConfigModel.fromMap(super.map)
+      : merchantCode = map['config']['code'],
         super.fromMap();
 }

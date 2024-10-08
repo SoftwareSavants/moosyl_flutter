@@ -19,19 +19,15 @@ import 'package:software_pay/src/widgets/icons.dart';
 class AvailableMethodPage extends StatelessWidget {
   /// Creates an instance of [AvailableMethodPage].
   ///
-  /// Requires the [onSelected] callback to handle the selected payment method,
   /// the [apiKey] for fetching available methods, and optional custom handlers
   /// and icons for different payment methods.
   const AvailableMethodPage({
     super.key,
-    required this.onSelected,
     required this.apiKey,
+    required this.enabledPayments,
     this.customHandlers,
     this.customIcons,
   });
-
-  /// Callback invoked when a payment method is selected.
-  final void Function(PaymentMethod) onSelected;
 
   /// The API key used for retrieving the available payment methods.
   final String apiKey;
@@ -42,72 +38,62 @@ class AvailableMethodPage extends StatelessWidget {
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
 
+  final List<PaymentMethodTypes> enabledPayments;
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => GetPaymentMethodsProvider(
-        apiKey,
-        customHandlers,
-        onSelected,
-        context,
-      ),
-      builder: (context, __) {
-        final provider = context.watch<GetPaymentMethodsProvider>();
+    final provider = context.watch<GetPaymentMethodsProvider>();
 
-        // Show loading indicator while fetching payment methods.
-        if (provider.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    // Show loading indicator while fetching payment methods.
+    if (provider.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-        // Display an error widget if there was an error fetching payment methods.
-        if (provider.error != null) {
-          return AppErrorWidget(
-            message: provider.error,
-            onRetry: provider.getMethods,
-          );
-        }
+    // Display an error widget if there was an error fetching payment methods.
+    if (provider.error != null) {
+      return AppErrorWidget(
+        message: provider.error,
+        onRetry: provider.getMethods,
+      );
+    }
 
-        final validMethods = provider.validMethods;
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Display the title for payment methods.
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  SoftwarePayLocalization.of(context)!.paymentMethod,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: validMethods.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.8,
-                  ),
-                  itemBuilder: (context, index) {
-                    final method = validMethods[index];
-
-                    return InkWell(
-                      onTap: () => provider.onTap(method, context),
-                      child: card(context, method),
-                    );
-                  },
-                ),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Display the title for payment methods.
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              SoftwarePayLocalization.of(context)!.paymentMethod,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ),
-        );
-      },
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: enabledPayments.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.8,
+              ),
+              itemBuilder: (context, index) {
+                final method = enabledPayments[index];
+
+                return InkWell(
+                  onTap: () => provider.onTap(method, context),
+                  child: card(context, method),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 

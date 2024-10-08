@@ -22,7 +22,7 @@ class GetPaymentMethodsService {
 
     // Convert the result data to a list of PaymentMethod instances.
     return List.from(methodsResult.data["data"])
-        .map<PaymentMethod>((e) => PaymentMethod.fromType(e))
+        .map<PaymentMethod>((e) => PaymentMethod.fromPaymentType(e))
         .toList();
   }
 }

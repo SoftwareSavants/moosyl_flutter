@@ -33,6 +33,9 @@ class SoftwarePay extends HookWidget {
   /// Optional callback to be triggered upon successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
+  /// manuel payment
+  final List<PaymentMethodTypes> enabledPayments;
+
   /// Displays the [SoftwarePayBody] modal sheet to start the payment process.
   ///
   /// * [context]: The build context.
@@ -50,6 +53,7 @@ class SoftwarePay extends HookWidget {
     required Widget organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
+    List<PaymentMethodTypes> enabledPayments = PaymentMethodTypes.values,
   }) {
     showBarModalBottomSheet(
       context: context,
@@ -60,6 +64,7 @@ class SoftwarePay extends HookWidget {
         organizationLogo: organizationLogo,
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
+        enabledPayments: enabledPayments,
       ),
     );
   }
@@ -82,6 +87,7 @@ class SoftwarePay extends HookWidget {
     this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
+    this.enabledPayments = PaymentMethodTypes.values,
   });
 
   @override
@@ -99,6 +105,7 @@ class SoftwarePay extends HookWidget {
               organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
+              enabledPayments: enabledPayments,
             ),
           );
         },
@@ -113,6 +120,7 @@ class SoftwarePay extends HookWidget {
       organizationLogo: organizationLogo,
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,
+      enabledPayments: enabledPayments,
     );
   }
 }

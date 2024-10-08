@@ -20,7 +20,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
 
   /// A callback function that gets called when a payment method is selected.
-  final void Function(PaymentMethod) onSelected;
+  PaymentMethod? selected;
 
   /// Constructs a [GetPaymentMethodsProvider].
   ///
@@ -28,7 +28,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   GetPaymentMethodsProvider(
     this.apiKey,
     this.customHandlers,
-    this.onSelected,
     this.context,
   ) {
     getMethods();
@@ -93,6 +92,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     }
 
     // Find and select the payment method from the list.
-    onSelected(methods.firstWhere((element) => element.method == type));
+    selected = methods.firstWhere((element) => element.method == type);
+    notifyListeners();
   }
 }
