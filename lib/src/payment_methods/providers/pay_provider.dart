@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -121,7 +120,7 @@ class PayProvider extends ChangeNotifier {
     // Call the success callback if the payment was successful.
     if (error != null) return;
 
-    await onPaymentSuccess.call();
+    await onPaymentSuccess?.call();
 
     if (context.mounted) {
       Navigator.pop(context);
@@ -241,7 +240,7 @@ class ManuelPayProvider extends ChangeNotifier {
     // Call the success callback if the payment was successful.
     if (error != null) return;
 
-    await onPaymentSuccess.call();
+    await onPaymentSuccess?.call();
 
     if (context.mounted) {
       Navigator.pop(context);
