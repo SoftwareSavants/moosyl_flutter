@@ -72,4 +72,12 @@ class SoftwarePayLocalizationFr extends SoftwarePayLocalization {
 
   @override
   String get retry => 'Réessayer';
+
+  @override
+  String get merchantCode => 'Code marchand';
+
+  @override
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
+      'Copiez le code marchand et rendez-vous sur Sedad pour payer le montant et faire une capture d'
+      'écran';
 }

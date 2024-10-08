@@ -224,6 +224,18 @@ abstract class SoftwarePayLocalization {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get merchantCode;
+
+  /// No description provided for @copyTheCodeBPayAndHeadToBankilyToPayTheAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount;
 }
 
 class _SoftwarePayLocalizationDelegate

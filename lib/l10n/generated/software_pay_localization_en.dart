@@ -70,4 +70,11 @@ class SoftwarePayLocalizationEn extends SoftwarePayLocalization {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get merchantCode => 'Merchant Code';
+
+  @override
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
+      'Copy the merchant code and head to Sedad to pay the amount and make a screenshot';
 }

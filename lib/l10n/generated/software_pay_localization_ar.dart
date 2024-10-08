@@ -70,4 +70,11 @@ class SoftwarePayLocalizationAr extends SoftwarePayLocalization {
 
   @override
   String get retry => 'إعادة المحاولة';
+
+  @override
+  String get merchantCode => 'رمز التاجر';
+
+  @override
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
+      'انسخ كود التاجر وتوجه إلى سداد لدفع المبلغ وخذ لقطة شاشة';
 }

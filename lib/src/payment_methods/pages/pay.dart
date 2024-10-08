@@ -80,6 +80,73 @@ class Pay extends HookWidget {
         }
 
         var deviceBottomPadding = MediaQuery.of(context).padding.bottom;
+        if (method is! BankilyConfigModel) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(method.method.title(context)),
+            ),
+            body: Form(
+              key: provider.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  InputLabel(
+                    label: localizationHelper.payUsing(
+                      method.method.title(context),
+                    ),
+                    child: Text(
+                      localizationHelper
+                          .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _ModeOfPaymentInfo(
+                    mode: method,
+                    organizationLogo: organizationLogo,
+                  ),
+                  const SizedBox(height: 6),
+                  const Divider(height: 1, thickness: 4),
+                  const SizedBox(height: 16),
+                  InputLabel(
+                    label: localizationHelper.afterPayment,
+                    child: Text(
+                      localizationHelper
+                          .afterMakingThePaymentFillTheFollowingInformation,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const AppContainer(
+                      child: Row(
+                    children: [
+                      AppButton(labelText: 'upload'),
+                      AppButton(labelText: 'capture')
+                    ],
+                  ))
+                ],
+              ),
+            ),
+            bottomSheet: AppContainer(
+              color: Theme.of(context).colorScheme.onPrimary,
+              width: double.infinity,
+              padding: EdgeInsets.only(
+                bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
+              ),
+              shadows: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.12),
+                  offset: const Offset(0, -4),
+                  blurRadius: 16,
+                )
+              ],
+              borderRadius: BorderRadius.zero,
+              child: AppButton(
+                labelText: localizationHelper.sendForVerification,
+                onPressed: () => provider.pay(context),
+              ),
+            ),
+          );
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: Text(method.method.title(context)),
@@ -182,7 +249,34 @@ class _ModeOfPaymentInfo extends StatelessWidget {
     final provider = context.watch<PayProvider>();
 
     if (mode is! BankilyConfigModel) {
-      return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: organizationLogo),
+                const SizedBox(width: 32),
+                AppIcons.close,
+                const SizedBox(width: 32),
+                Expanded(child: mode.method.icon.apply(size: 80)),
+              ],
+            ),
+            const SizedBox(height: 24),
+            card(
+              context,
+              localizationHelper.merchantCode,
+              mode.id,
+              copyableValue: mode.id,
+            ),
+            card(
+              context,
+              localizationHelper.amountToPay,
+              provider.operation!.amount.toStringAsFixed(2),
+            ),
+          ],
+        ),
+      );
     }
     final bpayMethod = mode as BankilyConfigModel;
 
