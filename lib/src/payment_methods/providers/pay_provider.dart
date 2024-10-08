@@ -166,14 +166,14 @@ class ManuelPayProvider extends ChangeNotifier {
 //// uploaded image
   XFile? selectedImage;
 
-  // Method to set the selected image
+  /// Method to set the selected image
   void setSelectedImage(XFile? image) {
     selectedImage = image;
     notifyListeners();
   }
 
   /// Holds the operation details.
-  OperationModel? operation;
+  PaymentRequestModel? paymentRequest;
 
   /// Holds any error messages that occur during payment processing.
   String? error;
@@ -190,7 +190,7 @@ class ManuelPayProvider extends ChangeNotifier {
     isLoading = true;
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetOperationService(apiKey).get(operationId),
+      () => GetPaymentRequestService(apiKey).get(operationId),
       showFlashBar: false,
       context: context,
     );
@@ -203,7 +203,7 @@ class ManuelPayProvider extends ChangeNotifier {
     }
 
     // Set the operation details from the result.
-    operation = result.result;
+    paymentRequest = result.result;
 
     // Notify listeners of the change in operation details.
     notifyListeners();
