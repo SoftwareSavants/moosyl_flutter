@@ -21,5 +21,9 @@
   "payUsing": "Pay using {method}",
   "codeBPay": "Code BPay",
   "amountToPay": "Amount to pay",
-  "retry": "Retry"
+  "retry": "Retry",
+  "upload": "Upload",
+  "capture": "Capture",
+  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copy the merchant code and head to Sedad to pay the amount",
+  "merchantCode": "Merchant Code"
 }

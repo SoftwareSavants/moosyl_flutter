@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moosyl/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 
 import 'package:moosyl/src/widgets/icons.dart';
 
@@ -52,7 +52,7 @@ class Feedbacks {
     Clipboard.setData(ClipboardData(text: description));
     Feedbacks.flushBar(
       context: context,
-      message: SoftwarePayLocalization.of(context)!.copiedThisText,
+      message: MoosylLocalization.of(context)!.copiedThisText,
       error: false,
     );
   }

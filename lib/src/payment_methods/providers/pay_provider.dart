@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
 import 'package:moosyl/src/payment_methods/models/payment_request_model.dart';
 import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
@@ -23,7 +23,6 @@ class PayProvider extends ChangeNotifier {
   final BuildContext context;
 
   /// The payment method used for the payment request.
-  final PaymentMethod method;
 
   /// Callback function that gets called on successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
@@ -33,11 +32,10 @@ class PayProvider extends ChangeNotifier {
   /// Initiates fetching the payment request details upon creation.
   PayProvider({
     required this.apiKey,
-    required this.method,
     required this.transactionId,
     required this.context,
     this.onPaymentSuccess,
-  }) {
+  }) : service = PayService(apiKey) {
     getPaymentRequest();
   }
 
@@ -53,11 +51,15 @@ class PayProvider extends ChangeNotifier {
   /// Holds the payment request details.
   PaymentRequestModel? paymentRequest;
 
+  PlatformFile? selectedFile;
+
   /// Holds any error messages that occur during payment processing.
   String? error;
 
   /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
+
+  final PayService service;
 
   /// Asynchronously fetches payment request details from the service.
   ///
@@ -87,23 +89,18 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Processes the payment for the payment request.
-  ///
-  /// Validates the form, sets the loading state, and calls the payment service.
-  /// If payment is successful, it invokes the [onPaymentSuccess] callback.
-  void pay(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return; // Ensure the form is valid.
+  void manualPay(BuildContext context, PaymentMethod method) async {
+    if (selectedFile == null) return; // Ensure the form is valid.
 
     error = null;
     isLoading = true;
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => PayService(apiKey).pay(
+      () => service.manualPay(
         transactionId: transactionId,
         paymentMethodId: method.id,
-        passCode: passCodeTextController.text,
-        phoneNumber: phoneNumberTextController.text,
+        selectedImage: selectedFile!,
       ),
       context: context,
     );
@@ -127,103 +124,29 @@ class PayProvider extends ChangeNotifier {
       Navigator.pop(context);
     }
   }
-}
 
-/// A provider class for handling payment operations.
-///
-/// This class extends [ChangeNotifier] to notify listeners about changes
-/// in the payment operation state, including loading status and errors.
-class ManuelPayProvider extends ChangeNotifier {
-  /// The API key used for authentication with the payment services.
-  final String apiKey;
-
-  /// The ID of the operation being processed.
-  final String operationId;
-
-  /// The context used for displaying error messages.
-  final BuildContext context;
-
-  /// The payment method used for the operation.
-  final PaymentMethod method;
-
-  /// Callback function that gets called on successful payment.
-  final FutureOr<void> Function()? onPaymentSuccess;
-
-  /// Constructs a [PayProvider].
-  ///
-  /// Initiates fetching the operation details upon creation.
-  ManuelPayProvider({
-    required this.apiKey,
-    required this.method,
-    required this.operationId,
-    required this.context,
-    this.onPaymentSuccess,
-  }) {
-    getOperation();
-  }
-
-//// uploaded image
-  XFile? selectedImage;
-
-  /// Method to set the selected image
-  void setSelectedImage(XFile? image) {
-    selectedImage = image;
+  void setSelectedImage(PlatformFile? file) {
+    selectedFile = file;
     notifyListeners();
   }
 
-  /// Holds the operation details.
-  PaymentRequestModel? paymentRequest;
-
-  /// Holds any error messages that occur during payment processing.
-  String? error;
-
-  /// Indicates whether the provider is currently loading data.
-  bool isLoading = false;
-
-  /// Asynchronously fetches operation details from the service.
-  ///
-  /// Updates the loading state and handles any errors that occur during
-  /// the fetching process. Notifies listeners when the data changes.
-  void getOperation() async {
-    error = null;
-    isLoading = true;
-
-    final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentRequestService(apiKey).get(operationId),
-      showFlashBar: false,
-      context: context,
-    );
-
-    isLoading = false;
-
-    if (result.isError) {
-      error = result.error;
-      return notifyListeners();
-    }
-
-    // Set the operation details from the result.
-    paymentRequest = result.result;
-
-    // Notify listeners of the change in operation details.
-    notifyListeners();
-  }
-
-  /// Processes the payment for the operation.
+  /// Processes the payment for the payment request.
   ///
   /// Validates the form, sets the loading state, and calls the payment service.
   /// If payment is successful, it invokes the [onPaymentSuccess] callback.
-  void pay(BuildContext context) async {
-    if (selectedImage == null) return; // Ensure the form is valid.
+  void pay(BuildContext context, PaymentMethod method) async {
+    if (!formKey.currentState!.validate()) return; // Ensure the form is valid.
 
     error = null;
     isLoading = true;
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => ManuelPayService(apiKey).pay(
-        transactionId: operationId,
+      () => service.pay(
+        transactionId: transactionId,
         paymentMethodId: method.id,
-        selectedImage: selectedImage!,
+        passCode: passCodeTextController.text,
+        phoneNumber: phoneNumberTextController.text,
       ),
       context: context,
     );

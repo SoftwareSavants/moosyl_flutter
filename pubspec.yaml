@@ -1,5 +1,6 @@
 name: moosyl
-description: "SoftwarePay is a Flutter package designed to simplify and customize payment methods for organizations."
+description: "Moosyl is a Flutter package designed to simplify and customize payment methods for organizations."
+# TODO: rename the package to moosyl
 homepage: https://github.com/just-abdou/SoftwarePay.git
 version: 0.0.21
 
@@ -20,7 +21,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   modal_bottom_sheet: ^3.0.0
-  image_picker: ^1.1.2
+  file_picker: ^8.1.2
+  
 
 dev_dependencies:
   flutter_test:

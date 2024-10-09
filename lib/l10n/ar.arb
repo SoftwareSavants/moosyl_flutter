@@ -21,5 +21,10 @@
   "payUsing": "ادفع باستخدام {method}",
   "codeBPay": "رمز BPay",
   "amountToPay": "المبلغ الواجب دفعه",
-  "retry": "إعادة المحاولة"
+  "retry": "إعادة المحاولة",
+  "upload": "رفع",
+  "capture": "التقاط",
+  "merchantCode": "رمز التاجر",
+  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ",
+  "merchantCode": "رمز التاجر"
 }

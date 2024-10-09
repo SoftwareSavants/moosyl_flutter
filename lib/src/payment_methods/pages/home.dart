@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
-import 'package:moosyl/src/payment_methods/pages/software_pay_body.dart';
+import 'package:moosyl/src/payment_methods/pages/moosyl_body.dart';
 
-/// [SoftwarePay] provides a widget that handles the payment process.
+/// [Moosyl] provides a widget that handles the payment process.
 /// It allows you to customize the payment methods, icons, and success callbacks.
-class SoftwarePay extends HookWidget {
+class Moosyl extends HookWidget {
   /// The API key required to authenticate the payment process.
   final String apiKey;
 
@@ -24,7 +24,7 @@ class SoftwarePay extends HookWidget {
 
   /// Optional map to override the default behavior of specific payment methods.
   /// The keys are [PaymentMethodTypes] and the values are the custom callback functions.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
 
   /// Optional map to provide custom icons for each payment method type.
   /// The keys are [PaymentMethodTypes] and the values are the paths to the custom icons.
@@ -36,7 +36,7 @@ class SoftwarePay extends HookWidget {
   /// manuel payment
   final List<PaymentMethodTypes> enabledPayments;
 
-  /// Displays the [SoftwarePayBody] modal sheet to start the payment process.
+  /// Displays the [MoosylBody] modal sheet to start the payment process.
   ///
   /// * [context]: The build context.
   /// * [apiKey]: The API key to authenticate the payment.
@@ -48,7 +48,8 @@ class SoftwarePay extends HookWidget {
   static void show(
     BuildContext context, {
     required String apiKey,
-    final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers,
+    final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
+        const {},
     required String transactionId,
     required Widget organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
@@ -57,7 +58,7 @@ class SoftwarePay extends HookWidget {
   }) {
     showBarModalBottomSheet(
       context: context,
-      builder: (context) => SoftwarePayBody(
+      builder: (context) => MoosylBody(
         apiKey: apiKey,
         customHandlers: customHandlers,
         transactionId: transactionId,
@@ -69,7 +70,7 @@ class SoftwarePay extends HookWidget {
     );
   }
 
-  /// Constructor for [SoftwarePay].
+  /// Constructor for [Moosyl].
   ///
   /// * [apiKey]: The API key for payment authentication.
   /// * [transactionId]: The transaction ID for the current payment session.
@@ -78,12 +79,12 @@ class SoftwarePay extends HookWidget {
   /// * [customIcons]: Optional custom icons for specific payment methods.
   /// * [inputBuilder]: A function to build a custom input widget.
   /// * [onPaymentSuccess]: Callback when the payment is successful.
-  const SoftwarePay({
+  const Moosyl({
     super.key,
     required this.apiKey,
     required this.transactionId,
     required this.organizationLogo,
-    this.customHandlers,
+    this.customHandlers = const {},
     this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
@@ -98,7 +99,7 @@ class SoftwarePay extends HookWidget {
         () {
           showBarModalBottomSheet(
             context: context,
-            builder: (context) => SoftwarePayBody(
+            builder: (context) => MoosylBody(
               apiKey: apiKey,
               customHandlers: customHandlers,
               transactionId: transactionId,
@@ -112,8 +113,8 @@ class SoftwarePay extends HookWidget {
       );
     }
 
-    // Otherwise, return the default SoftwarePayBody widget.
-    return SoftwarePayBody(
+    // Otherwise, return the default MoosylBody widget.
+    return MoosylBody(
       apiKey: apiKey,
       customHandlers: customHandlers,
       transactionId: transactionId,

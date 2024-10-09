@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:moosyl/software_pay.dart';
+import 'package:moosyl/moosyl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Software Pay Demo',
-      localizationsDelegates: SoftwarePayLocalization.localizationsDelegates,
-      supportedLocales: SoftwarePayLocalization.supportedLocales,
+      localizationsDelegates: MoosylLocalization.localizationsDelegates,
+      supportedLocales: MoosylLocalization.supportedLocales,
       locale: const Locale('en'),
       theme: ThemeData(
         // This is the theme of your application.
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SoftwarePay(
+            Moosyl(
               apiKey:
                   'BOizE6oqmfMAWAWR5e95aZ9R8svvuNB8AB4d1Ha5X_WkBxKw-uF1t5Iy3FI5N12tJpMs3oIbfiBa-HvMiawbWG8',
               transactionId: 'a24b984c-5375-45c0-a859-22a167123b26',

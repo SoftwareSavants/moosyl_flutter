@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'software_pay_localization_ar.dart';
-import 'software_pay_localization_en.dart';
-import 'software_pay_localization_fr.dart';
+import 'moosyl_localization_ar.dart';
+import 'moosyl_localization_en.dart';
+import 'moosyl_localization_fr.dart';
 
 /// Callers can lookup localized strings with an instance of MoosylLocalization
 /// returned by `MoosylLocalization.of(context)`.
@@ -17,7 +17,7 @@ import 'software_pay_localization_fr.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'generated/software_pay_localization.dart';
+/// import 'generated/moosyl_localization.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: MoosylLocalization.localizationsDelegates,
@@ -71,7 +71,7 @@ abstract class MoosylLocalization {
   }
 
   static const LocalizationsDelegate<MoosylLocalization> delegate =
-      _SoftwarePayLocalizationDelegate();
+      _MoosylLocalizationDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -249,14 +249,14 @@ abstract class MoosylLocalization {
   String get merchantCode;
 }
 
-class _SoftwarePayLocalizationDelegate
+class _MoosylLocalizationDelegate
     extends LocalizationsDelegate<MoosylLocalization> {
-  const _SoftwarePayLocalizationDelegate();
+  const _MoosylLocalizationDelegate();
 
   @override
   Future<MoosylLocalization> load(Locale locale) {
     return SynchronousFuture<MoosylLocalization>(
-        lookupSoftwarePayLocalization(locale));
+        lookupMoosylLocalization(locale));
   }
 
   @override
@@ -264,18 +264,18 @@ class _SoftwarePayLocalizationDelegate
       <String>['ar', 'en', 'fr'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_SoftwarePayLocalizationDelegate old) => false;
+  bool shouldReload(_MoosylLocalizationDelegate old) => false;
 }
 
-MoosylLocalization lookupSoftwarePayLocalization(Locale locale) {
+MoosylLocalization lookupMoosylLocalization(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'ar':
-      return SoftwarePayLocalizationAr();
+      return MoosylLocalizationAr();
     case 'en':
-      return SoftwarePayLocalizationEn();
+      return MoosylLocalizationEn();
     case 'fr':
-      return SoftwarePayLocalizationFr();
+      return MoosylLocalizationFr();
   }
 
   throw FlutterError(

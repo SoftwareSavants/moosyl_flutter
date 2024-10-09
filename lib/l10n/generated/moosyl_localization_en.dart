@@ -1,8 +1,8 @@
-import 'software_pay_localization.dart';
+import 'moosyl_localization.dart';
 
 /// The translations for English (`en`).
-class SoftwarePayLocalizationEn extends MoosylLocalization {
-  SoftwarePayLocalizationEn([String locale = 'en']) : super(locale);
+class MoosylLocalizationEn extends MoosylLocalization {
+  MoosylLocalizationEn([String locale = 'en']) : super(locale);
 
   @override
   String get unknownError => 'An unknown error occurred';

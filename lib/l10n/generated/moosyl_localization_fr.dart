@@ -1,8 +1,8 @@
-import 'software_pay_localization.dart';
+import 'moosyl_localization.dart';
 
 /// The translations for French (`fr`).
-class SoftwarePayLocalizationFr extends MoosylLocalization {
-  SoftwarePayLocalizationFr([String locale = 'fr']) : super(locale);
+class MoosylLocalizationFr extends MoosylLocalization {
+  MoosylLocalizationFr([String locale = 'fr']) : super(locale);
 
   @override
   String get unknownError => 'Une erreur inconnue s\'\'est produite';

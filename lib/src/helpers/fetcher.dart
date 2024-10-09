@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:moosyl/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 
 import 'package:moosyl/src/helpers/exception_handling/exceptions.dart';
 
@@ -125,7 +125,7 @@ class FetcherResponse<T> {
   AppException toException(BuildContext context) {
     Map<String, dynamic> body = data as Map<String, dynamic>;
 
-    String message = SoftwarePayLocalization.of(context)!.unknownError;
+    String message = MoosylLocalization.of(context)!.unknownError;
 
     if (body['_server_messages'] != null) {
       final dynamic parsedJson = jsonDecode(body['_server_messages']);

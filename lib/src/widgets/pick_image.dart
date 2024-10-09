@@ -1,40 +1,47 @@
-import 'dart:io';
-
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:moosyl/src/payment_methods/models/selected_file_model.dart';
+import 'package:moosyl/l10n/generated/moosyl_localization.dart';
+import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl/src/widgets/icons.dart';
 
 class PickImageCard extends StatefulWidget {
   final String? label;
-  final ValueChanged<List<SelectedFile>> onChanged;
+  final void Function(PlatformFile?) onChanged;
 
   const PickImageCard({super.key, this.label, required this.onChanged});
 
   @override
-  _PickImageCardState createState() => _PickImageCardState();
+  State<PickImageCard> createState() => _PickImageCardState();
 }
 
 class _PickImageCardState extends State<PickImageCard> {
-  List<SelectedFile> selectedFiles = [];
+  PlatformFile? selectedFile;
 
-  Future<void> _pickImage({required bool isCamera}) async {
-    final picker = ImagePicker();
-    final XFile? pickedFile = isCamera
-        ? await picker.pickImage(source: ImageSource.camera)
-        : await picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage({
+    required bool isCamera,
+    required BuildContext context,
+  }) async {
+    final response = await ErrorHandlers.catchErrors(
+      () => FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.image,
+      ),
+      context: context,
+    );
 
-    if (pickedFile != null) {
-      setState(() {
-        selectedFiles = [SelectedFileImage(file: pickedFile)];
-      });
-      widget.onChanged(selectedFiles);
-    }
+    if (response.isError) return null;
+
+    selectedFile = response.result!.files.first;
+    widget.onChanged(selectedFile!);
   }
 
   @override
   Widget build(BuildContext context) {
-    const iconSized = 116.0;
+    const size = 156.0;
     final textTheme = Theme.of(context).textTheme;
+    final style = ElevatedButton.styleFrom(
+      minimumSize: const Size(200, 60), // Fixed size (width, height)
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -55,49 +62,51 @@ class _PickImageCardState extends State<PickImageCard> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    icon: Icon(Icons.cloud_upload),
-                    label: Text('Upload'),
-                    onPressed: () => _pickImage(isCamera: false),
+                    style: style,
+                    icon: AppIcons.upload,
+                    label: Text(MoosylLocalization.of(context)!.upload),
+                    onPressed: () => _pickImage(
+                      isCamera: false,
+                      context: context,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton.icon(
-                    icon: Icon(Icons.camera),
-                    label: Text('Capture'),
-                    onPressed: () => _pickImage(isCamera: true),
+                    icon: AppIcons.camera,
+                    style: style,
+                    label: Text(MoosylLocalization.of(context)!.capture),
+                    onPressed: () => _pickImage(
+                      isCamera: true,
+                      context: context,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          if (selectedFiles.isNotEmpty)
+          if (selectedFile != null)
             Container(
               padding: const EdgeInsets.only(top: 16),
-              height: iconSized,
+              height: size,
               child: Stack(
                 children: [
                   Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: selectedFiles.first.isVideo
-                          ? const SizedBox.shrink()
-                          : Image.file(
-                              File(selectedFiles.first.file!.path),
-                              width: 116,
-                              height: 116,
-                              fit: BoxFit.cover,
-                            ),
+                      child: AppPlatformFileView(file: selectedFile!),
                     ),
                   ),
                   Center(
                     child: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: AppIcons.delete.apply(
+                        size: 44,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
                       onPressed: () {
-                        setState(() {
-                          selectedFiles = [];
-                        });
-                        widget.onChanged(selectedFiles);
+                        selectedFile = null;
+                        widget.onChanged(selectedFile);
                       },
                     ),
                   ),
@@ -107,5 +116,32 @@ class _PickImageCardState extends State<PickImageCard> {
         ],
       ),
     );
+  }
+}
+
+class AppPlatformFileView extends StatelessWidget {
+  final PlatformFile file;
+
+  const AppPlatformFileView({super.key, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    if (file.bytes != null) {
+      return Image.memory(
+        file.bytes!,
+        fit: BoxFit.fill,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } else if (file.path != null) {
+      return Image.asset(
+        file.path!,
+        fit: BoxFit.fill,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } else {
+      return const Center(child: Text('No image available'));
+    }
   }
 }

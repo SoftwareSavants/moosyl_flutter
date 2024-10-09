@@ -1,8 +1,8 @@
-import 'software_pay_localization.dart';
+import 'moosyl_localization.dart';
 
 /// The translations for Arabic (`ar`).
-class SoftwarePayLocalizationAr extends MoosylLocalization {
-  SoftwarePayLocalizationAr([String locale = 'ar']) : super(locale);
+class MoosylLocalizationAr extends MoosylLocalization {
+  MoosylLocalizationAr([String locale = 'ar']) : super(locale);
 
   @override
   String get unknownError => 'حدث خطأ غير معروف';

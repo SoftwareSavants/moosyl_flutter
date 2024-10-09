@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
-import 'package:moosyl/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
 
 import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
@@ -53,108 +53,100 @@ class Pay extends HookWidget {
   @override
   Widget build(BuildContext context) {
     const horizontalPadding = EdgeInsetsDirectional.symmetric(horizontal: 16);
-    final localizationHelper = SoftwarePayLocalization.of(context)!;
+    final localizationHelper = MoosylLocalization.of(context)!;
 
-    return ChangeNotifierProvider(
-      create: (_) => PayProvider(
-        apiKey: apiKey,
-        method: method,
-        transactionId: transactionId,
-        onPaymentSuccess: onPaymentSuccess,
-        context: context,
+    final provider = context.watch<PayProvider>();
+
+    if (provider.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (provider.error != null) {
+      return AppErrorWidget(
+        message: provider.error,
+        onRetry: provider.getPaymentRequest,
+      );
+    }
+
+    final deviceBottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(method.method.title(context)),
       ),
-      builder: (context, child) {
-        final provider = context.watch<PayProvider>();
-
-        if (provider.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        if (provider.error != null) {
-          return AppErrorWidget(
-            message: provider.error,
-            onRetry: provider.getPaymentRequest,
-          );
-        }
-
-        final deviceBottomPadding = MediaQuery.of(context).padding.bottom;
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(method.method.title(context)),
-          ),
-          body: Form(
-            key: provider.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                InputLabel(
-                  label: localizationHelper.payUsing(
-                    method.method.title(context),
-                  ),
-                  child: Text(
-                    localizationHelper
-                        .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ModeOfPaymentInfo(
-                  mode: method,
-                  organizationLogo: organizationLogo,
-                ),
-                const SizedBox(height: 6),
-                const Divider(height: 1, thickness: 4),
-                const SizedBox(height: 16),
-                InputLabel(
-                  label: localizationHelper.afterPayment,
-                  child: Text(
-                    localizationHelper
-                        .afterMakingThePaymentFillTheFollowingInformation,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                AppTextInput(
-                  margin: horizontalPadding,
-                  maxLength: 8,
-                  controller: provider.phoneNumberTextController,
-                  validator: Validators.validateMauritanianPhoneNumber,
-                  hint: localizationHelper.enterYourBankilyPhoneNumber,
-                  label: localizationHelper.bankilyPhoneNumber,
-                ),
-                AppTextInput(
-                  margin: horizontalPadding,
-                  controller: provider.passCodeTextController,
-                  validator: Validators.validatePassCode,
-                  hint: localizationHelper.paymentPassCode,
-                  label: localizationHelper.paymentPassCodeFromBankily,
-                  maxLength: 4,
-                ),
-              ],
+      body: Form(
+        key: provider.formKey,
+        child: ListView(
+          padding: const EdgeInsets.only(bottom: 200),
+          children: [
+            InputLabel(
+              label: localizationHelper.payUsing(
+                method.method.title(context),
+              ),
+              child: Text(
+                localizationHelper
+                    .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
+              ),
             ),
-          ),
-          bottomSheet: AppContainer(
-            color: Theme.of(context).colorScheme.onPrimary,
-            width: double.infinity,
-            padding: EdgeInsets.only(
-              bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
+            const SizedBox(height: 8),
+            ModeOfPaymentInfo(
+              mode: method,
+              organizationLogo: organizationLogo,
             ),
-            shadows: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.12),
-                offset: const Offset(0, -4),
-                blurRadius: 16,
-              )
-            ],
-            borderRadius: BorderRadius.zero,
-            child: AppButton(
-              labelText: localizationHelper.sendForVerification,
-              onPressed: () => provider.pay(context),
+            const SizedBox(height: 6),
+            const Divider(height: 1, thickness: 4),
+            const SizedBox(height: 16),
+            InputLabel(
+              label: localizationHelper.afterPayment,
+              child: Text(
+                localizationHelper
+                    .afterMakingThePaymentFillTheFollowingInformation,
+              ),
             ),
+            const SizedBox(height: 20),
+            AppTextInput(
+              margin: horizontalPadding,
+              maxLength: 8,
+              controller: provider.phoneNumberTextController,
+              validator: Validators.validateMauritanianPhoneNumber,
+              hint: localizationHelper.enterYourBankilyPhoneNumber,
+              label: localizationHelper.bankilyPhoneNumber,
+            ),
+            AppTextInput(
+              margin: horizontalPadding,
+              controller: provider.passCodeTextController,
+              validator: Validators.validatePassCode,
+              hint: localizationHelper.paymentPassCode,
+              label: localizationHelper.paymentPassCodeFromBankily,
+              maxLength: 4,
+            ),
+          ],
+        ),
+      ),
+      bottomSheet: AppContainer(
+        color: Theme.of(context).colorScheme.onPrimary,
+        width: double.infinity,
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16).copyWith(
+          bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
+        ),
+        shadows: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.12),
+            offset: const Offset(0, -4),
+            blurRadius: 16,
+          )
+        ],
+        borderRadius: BorderRadius.zero,
+        child: AppButton(
+          labelText: localizationHelper.sendForVerification,
+          onPressed: () => provider.pay(
+            context,
+            method,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -179,11 +171,20 @@ class ModeOfPaymentInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizationHelper = SoftwarePayLocalization.of(context)!;
+    final localizationHelper = MoosylLocalization.of(context)!;
 
     final provider = context.watch<PayProvider>();
 
-    if (mode is! BankilyConfigModel) {
+    if (provider.paymentRequest == null) {
+      return const SizedBox(
+        height: 100,
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (mode is ManualConfigModel) {
+      final manualMethod = mode as ManualConfigModel;
+
       return Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -194,15 +195,15 @@ class ModeOfPaymentInfo extends StatelessWidget {
                 const SizedBox(width: 32),
                 AppIcons.close,
                 const SizedBox(width: 32),
-                Expanded(child: mode.method.icon.apply(size: 80)),
+                Expanded(child: manualMethod.method.icon.apply(size: 80)),
               ],
             ),
             const SizedBox(height: 24),
             card(
               context,
               localizationHelper.merchantCode,
-              mode.id,
-              copyableValue: mode.id,
+              manualMethod.merchantCode,
+              copyableValue: manualMethod.id,
             ),
             card(
               context,
@@ -213,6 +214,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
         ),
       );
     }
+
     final bpayMethod = mode as BankilyConfigModel;
 
     return Padding(

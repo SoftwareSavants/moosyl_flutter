@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:moosyl/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 
 import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
 import 'package:moosyl/src/payment_methods/providers/get_payment_methods_provider.dart';
@@ -25,7 +25,7 @@ class AvailableMethodPage extends StatelessWidget {
     super.key,
     required this.apiKey,
     required this.enabledPayments,
-    this.customHandlers,
+    this.customHandlers = const {},
     this.customIcons,
   });
 
@@ -33,7 +33,7 @@ class AvailableMethodPage extends StatelessWidget {
   final String apiKey;
 
   /// Optional custom handlers for specific payment methods.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
 
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
@@ -59,23 +59,30 @@ class AvailableMethodPage extends StatelessWidget {
       );
     }
 
+    final methods = {
+      ...provider.methods.map(
+        (method) => method.method,
+      ),
+      ...customHandlers.keys
+    };
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Display the title for payment methods.
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              SoftwarePayLocalization.of(context)!.paymentMethod,
+              MoosylLocalization.of(context)!.paymentMethod,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: enabledPayments.length,
+              itemCount: methods.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
@@ -83,7 +90,7 @@ class AvailableMethodPage extends StatelessWidget {
                 childAspectRatio: 1.8,
               ),
               itemBuilder: (context, index) {
-                final method = enabledPayments[index];
+                final method = methods.elementAt(index);
 
                 return InkWell(
                   onTap: () => provider.onTap(method, context),
@@ -105,7 +112,7 @@ class AvailableMethodPage extends StatelessWidget {
     final withIcon = customIcons?[mode] != null;
 
     return AppContainer(
-      border: Border.all(),
+      border: Border.all(width: 1),
       padding: const EdgeInsetsDirectional.all(24),
       child: withIcon ? AppIcon(path: customIcons?[mode]) : mode.icon,
     );

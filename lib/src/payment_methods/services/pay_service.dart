@@ -1,4 +1,4 @@
-import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:moosyl/src/helpers/fetcher.dart';
 
 /// A service class for processing payments.
@@ -34,30 +34,11 @@ class PayService {
       },
     );
   }
-}
 
-/// A service class for processing payments.
-///
-/// This class provides methods to interact with the backend and
-/// execute payment transactions.
-class ManuelPayService {
-  /// The API key used for authentication with the backend.
-  final String apiKey;
-
-  /// Constructs a [ManuelPayService] with the provided [apiKey].
-  ManuelPayService(
-    this.apiKey,
-  );
-
-  /// Processes a payment transaction.
-  ///
-  /// This method makes an API call to process a payment using the specified
-  /// parameters. It requires the operation ID, phone number, passcode,
-  /// and payment method ID.
-  Future<void> pay({
+  Future<void> manualPay({
     required String transactionId,
     required String paymentMethodId,
-    required XFile selectedImage,
+    required PlatformFile selectedImage,
   }) async {
     // Make a POST request to the payment methods endpoint with the payment details.
     await Fetcher(apiKey).post(

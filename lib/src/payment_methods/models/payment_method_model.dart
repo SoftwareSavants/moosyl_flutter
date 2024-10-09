@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:moosyl/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 
 import 'package:moosyl/src/widgets/icons.dart';
 
@@ -68,7 +68,7 @@ enum PaymentMethodTypes {
   /// Uses [LocalizationsHelper] to retrieve the appropriate localized string
   /// for each payment method.
   String title(BuildContext context) {
-    final localizationsHelper = SoftwarePayLocalization.of(context)!;
+    final localizationsHelper = MoosylLocalization.of(context)!;
 
     return switch (this) {
       PaymentMethodTypes.masrivi => localizationsHelper.masrivi,
@@ -130,7 +130,7 @@ abstract class PaymentMethod {
   PaymentMethod.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         method = PaymentMethodTypes.fromString(map['type']),
-        type = PaymentType.fromString(map['type']);
+        type = PaymentType.fromString(map['configurationType']);
 
   /// Creates a [PaymentMethod] instance from the provided type.
   ///
@@ -149,7 +149,7 @@ abstract class PaymentMethod {
   }
 
   static PaymentMethod fromPaymentType(Map<String, dynamic> map) {
-    final type = PaymentType.fromString(map['configuration_type']);
+    final type = PaymentType.fromString(map['configurationType']);
     switch (type) {
       case PaymentType.auto:
         return fromPaymentMethod(map);

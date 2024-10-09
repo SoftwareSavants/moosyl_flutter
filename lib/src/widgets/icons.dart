@@ -96,38 +96,37 @@ class AppIcon extends StatelessWidget {
 class AppIcons {
   //payment methods
   static const bankily = AppIcon(
-    path: 'packages/software_pay/assets/icons/bankily.png',
+    path: 'packages/moosyl/assets/icons/bankily.png',
     useOriginalColor: true,
   );
   //masrivi
   static const masrivi = AppIcon(
-    path: 'packages/software_pay/assets/icons/masrivi.png',
+    path: 'packages/moosyl/assets/icons/masrivi.png',
     useOriginalColor: true,
   );
   //sedad
   static const sedad = AppIcon(
-    path: 'packages/software_pay/assets/icons/sedad.png',
+    path: 'packages/moosyl/assets/icons/sedad.png',
     useOriginalColor: true,
   );
   //bimBank
   static const bimBank = AppIcon(
-    path: 'packages/software_pay/assets/icons/bim_bank.png',
+    path: 'packages/moosyl/assets/icons/bim_bank.png',
     useOriginalColor: true,
   );
   //amanty
   static const amanty = AppIcon(
-    path: 'packages/software_pay/assets/icons/amanty.png',
+    path: 'packages/moosyl/assets/icons/amanty.png',
     useOriginalColor: true,
   );
 
   //bCIpay
   static const bCIpay = AppIcon(
-    path: 'packages/software_pay/assets/icons/bci_pay.png',
+    path: 'packages/moosyl/assets/icons/bci_pay.png',
     useOriginalColor: true,
   );
   //error
-  static const error =
-      AppIcon(path: 'packages/software_pay/assets/icons/error.png');
+  static const error = AppIcon(path: 'packages/moosyl/assets/icons/error.png');
 
   //closeError ,doneError
   static const done = AppIcon(iconData: Icons.done);
@@ -135,4 +134,10 @@ class AppIcons {
   static const copy = AppIcon(iconData: Icons.copy);
 
   static const close = AppIcon(iconData: Icons.close);
+
+  static const camera = AppIcon(iconData: Icons.camera);
+
+  static const upload = AppIcon(iconData: Icons.cloud_upload);
+
+  static const delete = AppIcon(iconData: Icons.delete);
 }

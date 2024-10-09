@@ -38,7 +38,7 @@ class AppButton extends StatelessWidget {
       foregroundColor: textColor ?? Theme.of(context).colorScheme.onPrimary,
       textStyle: Theme.of(context).textTheme.titleSmall,
       elevation: 0,
-      minimumSize: const Size(0, 90),
+      minimumSize: const Size(0, 40),
       padding: padding,
     );
 
