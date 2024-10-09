@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:software_pay/software_pay.dart';
+import 'package:moosyl/software_pay.dart';
 
 void main() {
   runApp(const MyApp());
