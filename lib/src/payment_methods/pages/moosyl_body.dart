@@ -96,7 +96,7 @@ class MoosylBody extends HookWidget {
               return ManuelPaymentPage(
                 organizationLogo: organizationLogo,
                 apiKey: apiKey,
-                operationId: transactionId,
+                transactionId: transactionId,
                 method: selectedModeOfPayment as ManualConfigModel,
               );
             }

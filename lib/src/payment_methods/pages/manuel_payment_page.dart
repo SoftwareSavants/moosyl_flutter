@@ -15,7 +15,7 @@ class ManuelPaymentPage extends StatelessWidget {
     super.key,
     required this.organizationLogo,
     required this.apiKey,
-    required this.operationId,
+    required this.transactionId,
     required this.method,
   });
 
@@ -28,8 +28,8 @@ class ManuelPaymentPage extends StatelessWidget {
   /// The API key for authenticating the payment transaction.
   final String apiKey;
 
-  /// The operation ID associated with the current payment.
-  final String operationId;
+  /// The transaction ID associated with the current payment.
+  final String transactionId;
 
   @override
   Widget build(BuildContext context) {

@@ -58,7 +58,7 @@ class PayService {
       Endpoints.manualPayment,
       files: [selectedImage],
       body: {
-        'operationId': transactionId,
+        'transactionId': transactionId,
         'configurationId': paymentMethodId,
       },
     );
