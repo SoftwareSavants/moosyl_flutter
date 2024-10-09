@@ -35,18 +35,31 @@ class PayService {
     );
   }
 
+  /// Manually processes a payment by making a POST request to the payment methods endpoint.
+  ///
+  /// This method sends the payment details including the transaction ID, payment method ID,
+  /// and a screenshot of the payment to the server for processing.
+  ///
+  /// Parameters:
+  /// - `transactionId` (required): The unique identifier for the transaction.
+  /// - `paymentMethodId` (required): The identifier for the selected payment method.
+  /// - `selectedImage` (required): A screenshot of the payment as a `PlatformFile`.
+  ///
+  /// Returns:
+  /// - A `Future<void>` that completes when the payment has been processed.
+
   Future<void> manualPay({
     required String transactionId,
     required String paymentMethodId,
     required PlatformFile selectedImage,
   }) async {
     // Make a POST request to the payment methods endpoint with the payment details.
-    await Fetcher(apiKey).post(
+    await Fetcher(apiKey).multipartPost(
       Endpoints.pay,
+      files: [selectedImage],
       body: {
         'operationId': transactionId,
         'configurationId': paymentMethodId,
-        'screenShot': selectedImage
       },
     );
   }

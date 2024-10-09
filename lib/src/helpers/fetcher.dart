@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
@@ -57,6 +58,59 @@ class Fetcher {
         .timeout(const Duration(minutes: 1));
 
     final res = FetcherResponse.fromHttpResponse(response);
+
+    if (!res.success) throw res.toException;
+
+    return res;
+  }
+
+  /// Sends a POST request to the given [url] with a [body] and [files].
+
+  Future<FetcherResponse> multipartPost(
+    String url, {
+    required Map<String, String> body,
+    List<PlatformFile> files = const [],
+  }) async {
+    // Create a multipart request
+    final request = http.MultipartRequest('POST', Uri.parse(url));
+
+    // Add the headers
+    request.headers.addAll(headers);
+
+    // Attach the body fields (optional)
+
+    request.fields.addAll(
+      body.map((key, value) => MapEntry(key, value.toString())),
+    );
+
+    // Attach the files (optional)
+
+    Future.wait(
+      files.map((file) async {
+        if (file.bytes != null) {
+          request.files.add(
+            http.MultipartFile.fromBytes(
+              file.name,
+              file.bytes!.toList(),
+            ),
+          );
+        } else if (file.path != null) {
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              file.name,
+              file.path!,
+            ),
+          );
+        }
+      }),
+    );
+
+    // Send the request
+    final response = await request.send();
+
+    // Convert the streamed response into a regular response
+    final responseBody = await http.Response.fromStream(response);
+    final res = FetcherResponse.fromHttpResponse(responseBody);
 
     if (!res.success) throw res.toException;
 
