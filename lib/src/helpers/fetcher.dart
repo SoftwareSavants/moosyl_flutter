@@ -201,6 +201,9 @@ class Endpoints {
   /// Returns the URL for processing payment for the given [id].
   static String get pay => '$baseUrl/payment';
 
+  /// Returns the URL for processing manual payment.
+  static String get manualPayment => '$baseUrl/payment/manual';
+
   /// Returns the URL for retrieving details of a specific transaction with the given [id].
   static String paymentRequest(String id) => '$baseUrl/payment_request/$id';
 }

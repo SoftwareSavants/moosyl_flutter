@@ -55,7 +55,7 @@ class PayService {
   }) async {
     // Make a POST request to the payment methods endpoint with the payment details.
     await Fetcher(apiKey).multipartPost(
-      Endpoints.pay,
+      Endpoints.manualPayment,
       files: [selectedImage],
       body: {
         'operationId': transactionId,
