@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Software Pay Demo',
+      title: 'Moosyl  Demo',
       localizationsDelegates: MoosylLocalization.localizationsDelegates,
       supportedLocales: MoosylLocalization.supportedLocales,
       locale: const Locale('en'),
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Software Pay Demo Home Page'),
+      home: const MyHomePage(title: 'Moosyl Demo Home Page'),
     );
   }
 }
