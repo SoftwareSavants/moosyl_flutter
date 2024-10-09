@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
-import 'package:software_pay/l10n/generated/software_pay_localization.dart';
-import 'package:software_pay/src/helpers/validators.dart';
+import 'package:moosyl/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/src/helpers/validators.dart';
 
-import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
-import 'package:software_pay/src/widgets/buttons.dart';
-import 'package:software_pay/src/widgets/container.dart';
-import 'package:software_pay/src/widgets/error_widget.dart';
-import 'package:software_pay/src/widgets/feedback.dart';
-import 'package:software_pay/src/widgets/icons.dart';
-import 'package:software_pay/src/widgets/text_input.dart';
+import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
+import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
+import 'package:moosyl/src/widgets/buttons.dart';
+import 'package:moosyl/src/widgets/container.dart';
+import 'package:moosyl/src/widgets/error_widget.dart';
+import 'package:moosyl/src/widgets/feedback.dart';
+import 'package:moosyl/src/widgets/icons.dart';
+import 'package:moosyl/src/widgets/text_input.dart';
 
 /// A widget that represents the payment process.
 ///

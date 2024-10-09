@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/software_pay_localization.dart';
 
-import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
+import 'package:moosyl/src/helpers/exception_handling/exceptions.dart';
 
 /// A class responsible for making HTTP requests to the server.
 /// It allows for sending GET and POST requests with predefined headers.

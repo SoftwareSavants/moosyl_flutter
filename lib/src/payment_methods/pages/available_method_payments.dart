@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/software_pay_localization.dart';
 
-import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/src/payment_methods/providers/get_payment_methods_provider.dart';
-import 'package:software_pay/src/widgets/container.dart';
-import 'package:software_pay/src/widgets/error_widget.dart';
-import 'package:software_pay/src/widgets/icons.dart';
+import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
+import 'package:moosyl/src/payment_methods/providers/get_payment_methods_provider.dart';
+import 'package:moosyl/src/widgets/container.dart';
+import 'package:moosyl/src/widgets/error_widget.dart';
+import 'package:moosyl/src/widgets/icons.dart';
 
 /// A widget that displays the available payment methods for selection.
 ///

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:software_pay/src/helpers/exception_handling/exception_mapper.dart';
-import 'package:software_pay/src/widgets/feedback.dart';
+import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
+import 'package:moosyl/src/widgets/feedback.dart';
 
 /// A utility class for handling errors during asynchronous transactions.
 ///

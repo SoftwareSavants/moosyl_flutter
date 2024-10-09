@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:software_pay/software_pay.dart';
-import 'package:software_pay/src/payment_methods/pages/pay.dart';
-import 'package:software_pay/src/payment_methods/providers/pay_provider.dart';
-import 'package:software_pay/src/widgets/buttons.dart';
-import 'package:software_pay/src/widgets/container.dart';
-import 'package:software_pay/src/widgets/pick_image.dart';
-import 'package:software_pay/src/widgets/text_input.dart';
+import 'package:moosyl/software_pay.dart';
+import 'package:moosyl/src/payment_methods/pages/pay.dart';
+import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
+import 'package:moosyl/src/widgets/buttons.dart';
+import 'package:moosyl/src/widgets/container.dart';
+import 'package:moosyl/src/widgets/pick_image.dart';
+import 'package:moosyl/src/widgets/text_input.dart';
 
 class ManuelPaymentPage extends StatelessWidget {
   ManuelPaymentPage({

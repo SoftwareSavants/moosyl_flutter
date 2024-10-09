@@ -1,5 +1,5 @@
-import 'package:software_pay/src/helpers/fetcher.dart';
-import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
+import 'package:moosyl/src/helpers/fetcher.dart';
+import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
 
 /// A service class for fetching available payment methods.
 ///

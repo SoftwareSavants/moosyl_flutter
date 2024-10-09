@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:software_pay/src/helpers/exception_handling/error_handlers.dart';
-import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/src/payment_methods/services/get_payment_methods_service.dart';
+import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
+import 'package:moosyl/src/payment_methods/services/get_payment_methods_service.dart';
 
 /// A provider class for managing and retrieving payment methods.
 ///

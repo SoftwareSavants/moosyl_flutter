@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:software_pay/src/payment_methods/models/selected_file_model.dart';
+import 'package:moosyl/src/payment_methods/models/selected_file_model.dart';
 
 class PickImageCard extends StatefulWidget {
   final String? label;

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/software_pay_localization.dart';
 
-import 'package:software_pay/src/widgets/icons.dart';
+import 'package:moosyl/src/widgets/icons.dart';
 
 enum PaymentType {
   manual,

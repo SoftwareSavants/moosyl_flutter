@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:software_pay/src/helpers/exception_handling/error_handlers.dart';
-import 'package:software_pay/src/payment_methods/models/payment_request_model.dart';
-import 'package:software_pay/src/payment_methods/models/payment_method_model.dart';
-import 'package:software_pay/src/payment_methods/services/get_payment_request_service.dart';
-import 'package:software_pay/src/payment_methods/services/pay_service.dart';
+import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl/src/payment_methods/models/payment_request_model.dart';
+import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
+import 'package:moosyl/src/payment_methods/services/get_payment_request_service.dart';
+import 'package:moosyl/src/payment_methods/services/pay_service.dart';
 
 /// A provider class for handling payment payment requests.
 ///

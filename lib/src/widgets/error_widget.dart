@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
-import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/l10n/generated/software_pay_localization.dart';
 
-import 'package:software_pay/src/widgets/icons.dart';
+import 'package:moosyl/src/widgets/icons.dart';
 
 class AppErrorWidget extends StatelessWidget {
   final String? message;

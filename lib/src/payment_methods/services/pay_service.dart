@@ -1,5 +1,5 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:software_pay/src/helpers/fetcher.dart';
+import 'package:moosyl/src/helpers/fetcher.dart';
 
 /// A service class for processing payments.
 ///

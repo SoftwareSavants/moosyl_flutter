@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:software_pay/src/helpers/exception_handling/exceptions.dart';
-import 'package:software_pay/l10n/generated/software_pay_localization.dart';
+import 'package:moosyl/src/helpers/exception_handling/exceptions.dart';
+import 'package:moosyl/l10n/generated/software_pay_localization.dart';
 
 /// A utility class for mapping exceptions to user-friendly error messages.
 class ExceptionMapper {

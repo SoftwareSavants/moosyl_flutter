@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 
-import 'package:software_pay/src/widgets/container.dart';
+import 'package:moosyl/src/widgets/container.dart';
 
 class AppIcon extends StatelessWidget {
   final String? path;

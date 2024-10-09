@@ -325,6 +325,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  moosyl:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.21"
   nested:
     dependency: transitive
     description:
@@ -450,13 +457,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  software_pay:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.21"
   source_span:
     dependency: transitive
     description:

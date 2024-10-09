@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
-import 'package:software_pay/src/widgets/icons.dart';
+import 'package:moosyl/src/widgets/icons.dart';
 
 class AppTextInput extends StatelessWidget {
   final String label;
