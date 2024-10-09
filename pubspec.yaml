@@ -2,7 +2,7 @@ name: moosyl
 description: "Moosyl is a Flutter package designed to simplify and customize payment methods for organizations."
 # TODO: rename the package to moosyl
 homepage: https://github.com/just-abdou/SoftwarePay.git
-version: 0.0.21
+version: 0.0.22
 
 license: MIT
 
@@ -22,7 +22,6 @@ dependencies:
     sdk: flutter
   modal_bottom_sheet: ^3.0.0
   file_picker: ^8.1.2
-  
 
 dev_dependencies:
   flutter_test:
