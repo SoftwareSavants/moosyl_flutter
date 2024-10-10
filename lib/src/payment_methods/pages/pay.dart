@@ -177,9 +177,10 @@ class ModeOfPaymentInfo extends StatelessWidget {
 
     if (provider.paymentRequest == null) {
       return const SizedBox(
-        height: 100,
-        child: CircularProgressIndicator(),
-      );
+          height: 100,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ));
     }
 
     if (mode is ManualConfigModel) {

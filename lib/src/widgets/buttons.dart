@@ -12,6 +12,7 @@ class AppButton extends StatelessWidget {
   final Color? background;
   final Color? textColor;
   final double? minWidth;
+  final double? minHeight;
   final EdgeInsetsGeometry? padding;
 
   const AppButton({
@@ -26,6 +27,7 @@ class AppButton extends StatelessWidget {
     this.textColor,
     this.minWidth = 132,
     this.padding,
+    this.minHeight = 60,
   });
 
   @override
@@ -42,11 +44,18 @@ class AppButton extends StatelessWidget {
       padding: padding,
     );
 
-    final button = ElevatedButton(
-      onPressed: disabled ? () {} : onPressed ?? () {},
-      style: buttonStyle,
-      child: Text(labelText),
-    );
+    final button = leading != null
+        ? ElevatedButton.icon(
+            onPressed: disabled ? () {} : onPressed ?? () {},
+            icon: leading,
+            style: buttonStyle,
+            label: Text(labelText),
+          )
+        : ElevatedButton(
+            onPressed: disabled ? () {} : onPressed ?? () {},
+            style: buttonStyle,
+            child: Text(labelText),
+          );
 
     return Padding(
       padding: margin,
@@ -54,7 +63,7 @@ class AppButton extends StatelessWidget {
           ? ConstrainedBox(
               constraints: BoxConstraints(
                 minWidth: minWidth!,
-                minHeight: 80,
+                minHeight: minHeight!,
               ),
               child: button,
             )

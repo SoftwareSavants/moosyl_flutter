@@ -9,6 +9,16 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static const colorScheme = ColorScheme.light(
+    primary: Color(0xFF4445F4),
+    onPrimary: Color(0xFFFFFFFF),
+    surface: Color(0xFFF0F0F0),
+    onSurface: Color(0xFF000000),
+    secondary: Color(0xFFEAF1FF),
+    onSecondary: Color(0xFF000000),
+    error: Color(0xFFCE2C2C),
+    tertiary: Color(0xFF01D066),
+  );
 
   // This widget is the root of your application.
   @override
@@ -34,7 +44,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: colorScheme,
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Moosyl Demo Home Page'),

@@ -57,40 +57,45 @@ class _PickImageCardState extends State<PickImageCard> {
             ),
             const SizedBox(height: 16),
           ],
-          AppContainer(
-            padding: const EdgeInsets.all(16),
-            color: Theme.of(context).colorScheme.surface,
-            child: Row(
-              children: [
-                Expanded(
-                    child: AppButton(
-                  background: const Color(0xFFF9F9F9),
-                  labelText: MoosylLocalization.of(context)!.upload,
-                  onPressed: () => _pickImage(
-                    isCamera: false,
-                    context: context,
-                  ),
-                  leading: AppIcons.cloud,
-                )),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: AppButton(
-                    background: const Color(0xFFF9F9F9),
-                    labelText: MoosylLocalization.of(context)!.capture,
+          if (selectedFile == null)
+            AppContainer(
+              padding: const EdgeInsets.all(16),
+              color: Theme.of(context).colorScheme.surface,
+              child: Row(
+                children: [
+                  Expanded(
+                      child: AppButton(
+                    minHeight: 40,
+                    textColor: Theme.of(context).colorScheme.onSurface,
+                    leading: AppIcons.cloud,
+                    background: Theme.of(context).colorScheme.onPrimary,
+                    labelText: MoosylLocalization.of(context)!.upload,
                     onPressed: () => _pickImage(
-                      isCamera: true,
+                      isCamera: false,
                       context: context,
                     ),
-                    leading: AppIcons.pic,
-                  ),
-                )
-              ],
+                  )),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: AppButton(
+                      minHeight: 40,
+                      textColor: Theme.of(context).colorScheme.onSurface,
+                      leading: AppIcons.pic,
+                      background: Theme.of(context).colorScheme.onPrimary,
+                      labelText: MoosylLocalization.of(context)!.capture,
+                      onPressed: () => _pickImage(
+                        isCamera: true,
+                        context: context,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
           if (selectedFile != null)
             Container(
               padding: const EdgeInsets.only(top: 16),
-              height: size,
+              height: 200,
               child: Stack(
                 children: [
                   Center(

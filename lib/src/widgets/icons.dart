@@ -141,6 +141,6 @@ class AppIcons {
 
   static const delete = AppIcon(iconData: Icons.delete);
 
-  static const cloud = AppIcon(path: 'assets/icons/cloud.png');
-  static const pic = AppIcon(path: 'assets/icons/camera.png');
+  static const cloud = AppIcon(path: 'packages/moosyl/assets/icons/cloud.png');
+  static const pic = AppIcon(path: 'packages/moosyl/assets/icons/camera.png');
 }
