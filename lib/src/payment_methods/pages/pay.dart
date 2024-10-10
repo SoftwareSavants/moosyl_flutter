@@ -96,7 +96,11 @@ class Pay extends HookWidget {
               organizationLogo: organizationLogo,
             ),
             const SizedBox(height: 6),
-            const Divider(height: 1, thickness: 4),
+            Divider(
+              height: 1,
+              thickness: 4,
+              color: Theme.of(context).colorScheme.surface,
+            ),
             const SizedBox(height: 16),
             InputLabel(
               label: localizationHelper.afterPayment,

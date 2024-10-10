@@ -39,6 +39,7 @@ class _PickImageCardState extends State<PickImageCard> {
 
   @override
   Widget build(BuildContext context) {
+    const size = 300.0;
     final textTheme = Theme.of(context).textTheme;
     // final style = ElevatedButton.styleFrom(
     //   minimumSize: const Size(200, 60), // Fixed size (width, height)
@@ -94,15 +95,17 @@ class _PickImageCardState extends State<PickImageCard> {
           if (selectedFile != null)
             Container(
               padding: const EdgeInsets.only(top: 16),
-              height: 200,
+              height: size,
               child: Stack(
                 children: [
                   Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
+                      child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: SizedBox(
+                      width: 215,
                       child: AppPlatformFileView(file: selectedFile!),
                     ),
-                  ),
+                  )),
                   Center(
                     child: IconButton(
                       icon: AppIcons.delete.apply(

@@ -41,6 +41,9 @@ class ManuelPaymentPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(method.method.title(context)),
+        leading: BackButton(
+          onPressed: () {},
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 200),
