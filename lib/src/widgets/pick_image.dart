@@ -31,7 +31,7 @@ class _PickImageCardState extends State<PickImageCard> {
       context: context,
     );
 
-    if (response.isError) return null;
+    if (response.isError) return;
 
     selectedFile = response.result!.files.first;
     widget.onChanged(selectedFile!);
