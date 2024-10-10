@@ -39,12 +39,23 @@ class AppTextInput extends StatelessWidget {
     final suffixIcon = this.suffixIcon;
 
     return InputLabel(
+      style: Theme.of(context).textTheme.titleMedium,
       label: label,
       child: TextFormField(
         controller: controller,
         readOnly: readOnly,
         textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.surface,
+              width: 2.0,
+            ),
+          ),
           hintText: hint,
           suffixIcon: suffixIcon is AppIcon
               ? suffixIcon.resizeForInputField()
@@ -69,10 +80,12 @@ class InputLabel extends StatelessWidget {
     super.key,
     required this.label,
     required this.child,
+    this.style,
   });
 
   final String label;
   final Widget child;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +100,7 @@ class InputLabel extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
               label,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: style,
             ),
           ),
           child,

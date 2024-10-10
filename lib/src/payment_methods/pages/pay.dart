@@ -75,11 +75,12 @@ class Pay extends HookWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(method.method.title(context)),
+        leading: const BackButton(),
       ),
       body: Form(
         key: provider.formKey,
         child: ListView(
-          padding: const EdgeInsets.only(bottom: 200),
+          padding: const EdgeInsets.only(bottom: 200, top: 16),
           children: [
             InputLabel(
               label: localizationHelper.payUsing(
@@ -103,6 +104,7 @@ class Pay extends HookWidget {
             ),
             const SizedBox(height: 16),
             InputLabel(
+              style: Theme.of(context).textTheme.titleLarge,
               label: localizationHelper.afterPayment,
               child: Text(
                 localizationHelper
