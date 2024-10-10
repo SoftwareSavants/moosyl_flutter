@@ -193,7 +193,7 @@ class FetcherResponse<T> {
 /// A static class containing the URLs for various API endpoints.
 class Endpoints {
   /// The base URL of the API.
-  static const String baseUrl = 'https://efff-41-188-105-108.ngrok-free.app.';
+  static const String baseUrl = 'https://efff-41-188-105-108.ngrok-free.app';
 
   /// The URL for retrieving payment method configurations.
   static const String paymentMethods = '$baseUrl/configuration';
