@@ -140,4 +140,7 @@ class AppIcons {
   static const upload = AppIcon(iconData: Icons.cloud_upload);
 
   static const delete = AppIcon(iconData: Icons.delete);
+
+  static const cloud = AppIcon(path: 'assets/icons/cloud.png');
+  static const pic = AppIcon(path: 'assets/icons/camera.png');
 }

@@ -34,7 +34,7 @@ class AppButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ?? BorderRadius.circular(8),
       ),
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: background ?? Theme.of(context).colorScheme.primary,
       foregroundColor: textColor ?? Theme.of(context).colorScheme.onPrimary,
       textStyle: Theme.of(context).textTheme.titleSmall,
       elevation: 0,

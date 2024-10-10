@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl/src/widgets/buttons.dart';
+import 'package:moosyl/src/widgets/container.dart';
 import 'package:moosyl/src/widgets/icons.dart';
 
 class PickImageCard extends StatefulWidget {
@@ -55,34 +57,33 @@ class _PickImageCardState extends State<PickImageCard> {
             ),
             const SizedBox(height: 16),
           ],
-          Container(
+          AppContainer(
             padding: const EdgeInsets.all(16),
             color: Theme.of(context).colorScheme.surface,
             child: Row(
               children: [
                 Expanded(
-                  child: ElevatedButton.icon(
-                    style: style,
-                    icon: AppIcons.upload,
-                    label: Text(MoosylLocalization.of(context)!.upload),
-                    onPressed: () => _pickImage(
-                      isCamera: false,
-                      context: context,
-                    ),
+                    child: AppButton(
+                  background: const Color(0xFFF9F9F9),
+                  labelText: MoosylLocalization.of(context)!.upload,
+                  onPressed: () => _pickImage(
+                    isCamera: false,
+                    context: context,
                   ),
-                ),
+                  leading: AppIcons.cloud,
+                )),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: ElevatedButton.icon(
-                    icon: AppIcons.camera,
-                    style: style,
-                    label: Text(MoosylLocalization.of(context)!.capture),
+                  child: AppButton(
+                    background: const Color(0xFFF9F9F9),
+                    labelText: MoosylLocalization.of(context)!.capture,
                     onPressed: () => _pickImage(
                       isCamera: true,
                       context: context,
                     ),
+                    leading: AppIcons.pic,
                   ),
-                ),
+                )
               ],
             ),
           ),
