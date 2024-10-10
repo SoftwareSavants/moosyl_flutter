@@ -41,9 +41,9 @@ class _PickImageCardState extends State<PickImageCard> {
   Widget build(BuildContext context) {
     const size = 156.0;
     final textTheme = Theme.of(context).textTheme;
-    final style = ElevatedButton.styleFrom(
-      minimumSize: const Size(200, 60), // Fixed size (width, height)
-    );
+    // final style = ElevatedButton.styleFrom(
+    //   minimumSize: const Size(200, 60), // Fixed size (width, height)
+    // );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
