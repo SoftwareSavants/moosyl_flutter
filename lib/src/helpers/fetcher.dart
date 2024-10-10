@@ -78,32 +78,29 @@ class Fetcher {
     request.headers.addAll(headers);
 
     // Attach the body fields (optional)
-
     request.fields.addAll(
       body.map((key, value) => MapEntry(key, value.toString())),
     );
 
     // Attach the files (optional)
-
-    Future.wait(
-      files.map((file) async {
-        if (file.bytes != null) {
-          request.files.add(
-            http.MultipartFile.fromBytes(
-              file.name,
-              file.bytes!.toList(),
-            ),
-          );
-        } else if (file.path != null) {
-          request.files.add(
-            await http.MultipartFile.fromPath(
-              file.name,
-              file.path!,
-            ),
-          );
-        }
-      }),
-    );
+    for (final file in files) {
+      if (file.bytes != null) {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'attachments', // make sure this key matches the API's expected field name
+            file.bytes!,
+            filename: file.name,
+          ),
+        );
+      } else if (file.path != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'attachments', // make sure this key matches the API's expected field name
+            file.path!,
+          ),
+        );
+      }
+    }
 
     // Send the request
     final response = await request.send();
