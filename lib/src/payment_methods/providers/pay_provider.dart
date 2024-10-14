@@ -121,7 +121,6 @@ class PayProvider extends ChangeNotifier {
 
     if (context.mounted) {
       Navigator.pop(context);
-      Navigator.pop(context);
     }
   }
 
@@ -166,7 +165,6 @@ class PayProvider extends ChangeNotifier {
     await onPaymentSuccess?.call();
 
     if (context.mounted) {
-      Navigator.pop(context);
       Navigator.pop(context);
     }
   }

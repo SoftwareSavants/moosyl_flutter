@@ -112,11 +112,11 @@ class _MyHomePageState extends State<MyHomePage> {
               apiKey:
                   'BOizE6oqmfMAWAWR5e95aZ9R8svvuNB8AB4d1Ha5X_WkBxKw-uF1t5Iy3FI5N12tJpMs3oIbfiBa-HvMiawbWG8',
               transactionId: 'e8a38423-c106-4e97-800f-922cb7d819db',
-              organizationLogo: const Icon(Icons.payment),
+              organizationLogo: const Text('Moosyl'),
               customHandlers: {
-                // PaymentMethodTypes.masrivi: () {
-                //   print('masrivi');
-                // },
+                PaymentMethodTypes.bimBank: () {
+                  print('masrivi');
+                },
               },
               customIcons: const {},
               inputBuilder: (onCall) {
