@@ -190,7 +190,7 @@ class FetcherResponse<T> {
 /// A static class containing the URLs for various API endpoints.
 class Endpoints {
   /// The base URL of the API.
-  static const String baseUrl = 'https://api.moosyl.com';
+  static const String baseUrl = 'https://moosyl.moosyl.workers.dev';
 
   /// The URL for retrieving payment method configurations.
   static const String paymentMethods = '$baseUrl/configuration';
