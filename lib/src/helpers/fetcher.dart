@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 
 import 'package:moosyl/src/helpers/exception_handling/exceptions.dart';
 
@@ -173,17 +171,11 @@ class FetcherResponse<T> {
   ///
   /// This method extracts the error message from the server response and returns
   /// a properly formatted exception.
-  AppException toException(BuildContext context) {
-    Map<String, dynamic> body = data as Map<String, dynamic>;
-
-    String message = MoosylLocalization.of(context)!.unknownError;
-
-    if (body['_server_messages'] != null) {
-      final dynamic parsedJson = jsonDecode(body['_server_messages']);
-      message = stripHtmlIfNeeded(jsonDecode(parsedJson.first)['message']);
-    }
-
-    return AppException(code: AppExceptionCode.unknown, message: message);
+  AppException get toException {
+    return AppException(
+      code: AppExceptionCode.unknown,
+      message: (data is String) ? data as String : 'An error occurred',
+    );
   }
 }
 
