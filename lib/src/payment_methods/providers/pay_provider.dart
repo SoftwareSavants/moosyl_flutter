@@ -151,16 +151,9 @@ class PayProvider extends ChangeNotifier {
     );
 
     isLoading = false;
-
-    if (result.isError) {
-      error = result.error;
-      return notifyListeners();
-    }
-
     notifyListeners();
 
-    // Call the success callback if the payment was successful.
-    if (error != null) return;
+    if (result.isError) return;
 
     await onPaymentSuccess?.call();
 

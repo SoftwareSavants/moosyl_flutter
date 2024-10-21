@@ -110,12 +110,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Moosyl(
               apiKey:
-                  'BOizE6oqmfMAWAWR5e95aZ9R8svvuNB8AB4d1Ha5X_WkBxKw-uF1t5Iy3FI5N12tJpMs3oIbfiBa-HvMiawbWG8',
-              transactionId: 'e8a38423-c106-4e97-800f-922cb7d819db',
+                  'hjafbhawbfj3bhj232i23jd2bmdhaggd737732jvgmdbvvajd721yiejhddadcnkc338',
+              transactionId: '507876',
               organizationLogo: const Text('Moosyl'),
               customHandlers: {
                 PaymentMethodTypes.bimBank: () {
-                  print('masrivi');
+                  print('Moosyl');
                 },
               },
               customIcons: const {},
