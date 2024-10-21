@@ -127,6 +127,7 @@ class Pay extends HookWidget {
               hint: localizationHelper.paymentPassCode,
               label: localizationHelper.paymentPassCodeFromBankily,
               maxLength: 4,
+              errorText: provider.error,
             ),
           ],
         ),

@@ -8,6 +8,7 @@ class AppTextInput extends StatelessWidget {
   final String? initialValue;
   final int? maxLength;
   final int? minLines;
+  final String? errorText;
   final TextInputType? keyboardType;
   final VoidCallback? onTap;
   final FormFieldValidator<String>? validator;
@@ -33,6 +34,7 @@ class AppTextInput extends StatelessWidget {
     this.readOnly = false,
     this.controller,
     this.minLines,
+    this.errorText,
   });
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class AppTextInput extends StatelessWidget {
         readOnly: readOnly,
         textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
+          errorText: errorText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),

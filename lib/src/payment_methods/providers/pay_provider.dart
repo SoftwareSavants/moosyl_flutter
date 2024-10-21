@@ -51,6 +51,7 @@ class PayProvider extends ChangeNotifier {
   /// Holds the payment request details.
   PaymentRequestModel? paymentRequest;
 
+  /// The selected file for manual payment.
   PlatformFile? selectedFile;
 
   /// Holds any error messages that occur during payment processing.
@@ -59,6 +60,7 @@ class PayProvider extends ChangeNotifier {
   /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
 
+  /// The payment service used for processing payments.
   final PayService service;
 
   /// Asynchronously fetches payment request details from the service.
@@ -89,6 +91,7 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Processes the payment for the payment request.
   void manualPay(BuildContext context, PaymentMethod method) async {
     if (selectedFile == null) return; // Ensure the form is valid.
 
@@ -124,6 +127,7 @@ class PayProvider extends ChangeNotifier {
     }
   }
 
+  /// A provider class for handling payment payment requests.
   void setSelectedImage(PlatformFile? file) {
     selectedFile = file;
     notifyListeners();
