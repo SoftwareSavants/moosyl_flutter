@@ -9,6 +9,9 @@ import 'package:moosyl/src/payment_methods/pages/moosyl_body.dart';
 /// [Moosyl] provides a widget that handles the payment process.
 /// It allows you to customize the payment methods, icons, and success callbacks.
 class Moosyl extends HookWidget {
+  /// when this bool is true return main widget Material
+  final bool withScaffold;
+
   /// The API key required to authenticate the payment process.
   final String apiKey;
 
@@ -48,18 +51,17 @@ class Moosyl extends HookWidget {
   /// * [customHandlers]: Map for custom handlers for payment methods.
   /// * [customIcons]: Map for custom icons for payment methods.
   /// * [onPaymentSuccess]: Callback for when payment is successful.
-  static void show(
-    BuildContext context, {
-    required String apiKey,
-    final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
-        const {},
-    required String transactionId,
-    required Widget organizationLogo,
-    final FutureOr<void> Function()? onPaymentSuccess,
-    Map<PaymentMethodTypes, String>? customIcons,
-    List<PaymentMethodTypes> enabledPayments = PaymentMethodTypes.values,
-    bool isTestingMode = false,
-  }) {
+  static void show(BuildContext context,
+      {required String apiKey,
+      final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
+          const {},
+      required String transactionId,
+      required Widget organizationLogo,
+      final FutureOr<void> Function()? onPaymentSuccess,
+      Map<PaymentMethodTypes, String>? customIcons,
+      List<PaymentMethodTypes> enabledPayments = PaymentMethodTypes.values,
+      bool isTestingMode = false,
+      bool withBottomSheet = true}) {
     showBarModalBottomSheet(
       context: context,
       builder: (context) => MoosylBody(
@@ -92,6 +94,7 @@ class Moosyl extends HookWidget {
     this.customHandlers = const {},
     this.customIcons,
     this.inputBuilder,
+    this.withScaffold = true,
     this.onPaymentSuccess,
     this.enabledPayments = PaymentMethodTypes.values,
     this.isTestingMode = false,
@@ -106,15 +109,15 @@ class Moosyl extends HookWidget {
           showBarModalBottomSheet(
             context: context,
             builder: (context) => MoosylBody(
-              apiKey: apiKey,
-              customHandlers: customHandlers,
-              transactionId: transactionId,
-              organizationLogo: organizationLogo,
-              onPaymentSuccess: onPaymentSuccess,
-              customIcons: customIcons,
-              enabledPayments: enabledPayments,
-              isTestingMode: isTestingMode,
-            ),
+                apiKey: apiKey,
+                customHandlers: customHandlers,
+                transactionId: transactionId,
+                organizationLogo: organizationLogo,
+                onPaymentSuccess: onPaymentSuccess,
+                customIcons: customIcons,
+                enabledPayments: enabledPayments,
+                isTestingMode: isTestingMode,
+                withScaffold: withScaffold),
           );
         },
       );
@@ -122,14 +125,14 @@ class Moosyl extends HookWidget {
 
     // Otherwise, return the default MoosylBody widget.
     return MoosylBody(
-      apiKey: apiKey,
-      customHandlers: customHandlers,
-      transactionId: transactionId,
-      organizationLogo: organizationLogo,
-      onPaymentSuccess: onPaymentSuccess,
-      customIcons: customIcons,
-      enabledPayments: enabledPayments,
-      isTestingMode: isTestingMode,
-    );
+        apiKey: apiKey,
+        customHandlers: customHandlers,
+        transactionId: transactionId,
+        organizationLogo: organizationLogo,
+        onPaymentSuccess: onPaymentSuccess,
+        customIcons: customIcons,
+        enabledPayments: enabledPayments,
+        isTestingMode: isTestingMode,
+        withScaffold: withScaffold);
   }
 }

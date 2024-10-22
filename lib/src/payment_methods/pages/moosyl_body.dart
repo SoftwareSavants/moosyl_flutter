@@ -16,21 +16,23 @@ import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
 /// It handles localization and manages the state of the selected payment method.
 class MoosylBody extends HookWidget {
   /// Creates an instance of [MoosylBody].
-  ///
+  /// when this bool is true return main widget Material
+  final bool withScaffold;
+
   /// Requires the [apiKey] and [transactionId] for the payment transaction,
   /// an [organizationLogo] to display, and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
-  const MoosylBody({
-    super.key,
-    required this.apiKey,
-    required this.transactionId,
-    required this.organizationLogo,
-    this.customHandlers = const {},
-    this.onPaymentSuccess,
-    this.customIcons,
-    this.enabledPayments = const [],
-    this.isTestingMode = false,
-  });
+  const MoosylBody(
+      {super.key,
+      required this.apiKey,
+      required this.transactionId,
+      required this.organizationLogo,
+      this.customHandlers = const {},
+      this.onPaymentSuccess,
+      this.customIcons,
+      this.enabledPayments = const [],
+      this.isTestingMode = false,
+      this.withScaffold = true});
 
   /// The API key for authenticating the payment transaction.
   final String apiKey;
@@ -58,65 +60,70 @@ class MoosylBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => PayProvider(
-              apiKey: apiKey,
-              transactionId: transactionId,
-              onPaymentSuccess: onPaymentSuccess,
-              context: context,
-            ),
+    final body = MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => PayProvider(
+            apiKey: apiKey,
+            transactionId: transactionId,
+            onPaymentSuccess: onPaymentSuccess,
+            context: context,
           ),
-          ChangeNotifierProvider(
-            create: (_) => GetPaymentMethodsProvider(
-              apiKey,
-              customHandlers,
-              context,
-              isTestingMode,
-            ),
-          ),
-        ],
-        child: Builder(
-          builder: (context) {
-            final provider = context.watch<GetPaymentMethodsProvider>();
-
-            final selectedModeOfPayment = provider.selected;
-            // State to hold the selected payment method.
-
-            // If no payment method is selected, show the available methods page.
-            if (selectedModeOfPayment == null) {
-              return AvailableMethodPage(
-                customHandlers: customHandlers,
-                apiKey: apiKey,
-                customIcons: customIcons,
-                enabledPayments: enabledPayments.where((payment) {
-                  return PaymentMethodTypes.values.contains(payment);
-                }).toList(),
-              );
-            }
-
-            if (provider.selected!.type.isManual) {
-              return ManuelPaymentPage(
-                organizationLogo: organizationLogo,
-                apiKey: apiKey,
-                transactionId: transactionId,
-                method: selectedModeOfPayment as ManualConfigModel,
-              );
-            }
-
-            // If a payment method is selected, proceed to the payment page.
-            return Pay(
-              apiKey: apiKey,
-              method: selectedModeOfPayment,
-              transactionId: transactionId,
-              organizationLogo: organizationLogo,
-              onPaymentSuccess: onPaymentSuccess,
-            );
-          },
         ),
+        ChangeNotifierProvider(
+          create: (_) => GetPaymentMethodsProvider(
+            apiKey,
+            customHandlers,
+            context,
+            isTestingMode,
+          ),
+        ),
+      ],
+      child: Builder(
+        builder: (context) {
+          final provider = context.watch<GetPaymentMethodsProvider>();
+          final selectedModeOfPayment = provider.selected;
+
+          // If no payment method is selected, show the available methods page
+          if (selectedModeOfPayment == null) {
+            return AvailableMethodPage(
+              customHandlers: customHandlers,
+              apiKey: apiKey,
+              customIcons: customIcons,
+              enabledPayments: enabledPayments.where((payment) {
+                return PaymentMethodTypes.values.contains(payment);
+              }).toList(),
+            );
+          }
+
+          // Handle manual payment
+          if (selectedModeOfPayment!.type.isManual) {
+            return ManuelPaymentPage(
+              organizationLogo: organizationLogo,
+              apiKey: apiKey,
+              transactionId: transactionId,
+              method: selectedModeOfPayment as ManualConfigModel,
+            );
+          }
+
+          // Proceed to the payment page if a method is selected
+          return Pay(
+            withScaffold: withScaffold,
+            apiKey: apiKey,
+            method: selectedModeOfPayment,
+            transactionId: transactionId,
+            organizationLogo: organizationLogo,
+            onPaymentSuccess: onPaymentSuccess,
+          );
+        },
       ),
     );
+
+    // Conditionally return the body wrapped in Material based on `withBottomSheet`
+    if (withScaffold) {
+      return Material(child: body);
+    } else {
+      return body;
+    }
   }
 }
