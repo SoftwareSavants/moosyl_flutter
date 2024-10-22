@@ -6,7 +6,7 @@ class AppButton extends StatelessWidget {
   final Widget? leading;
   final VoidCallback? onPressed;
   final EdgeInsetsGeometry margin;
-  final bool disabled;
+  final bool disabled, loading;
 
   final BorderRadius? borderRadius;
   final Color? background;
@@ -22,6 +22,7 @@ class AppButton extends StatelessWidget {
     this.leading,
     this.margin = const EdgeInsets.only(top: 16),
     this.disabled = false,
+    this.loading = false,
     this.borderRadius,
     this.background,
     this.textColor,
@@ -44,15 +45,15 @@ class AppButton extends StatelessWidget {
       padding: padding,
     );
 
-    final button = leading != null
+    final button = loading || leading != null
         ? ElevatedButton.icon(
-            onPressed: disabled ? () {} : onPressed ?? () {},
-            icon: leading,
+            onPressed: disabled || loading ? () {} : onPressed ?? () {},
+            icon: loading ? const CircularProgressIndicator() : leading,
             style: buttonStyle,
             label: Text(labelText),
           )
         : ElevatedButton(
-            onPressed: disabled ? () {} : onPressed ?? () {},
+            onPressed: disabled || loading ? () {} : onPressed ?? () {},
             style: buttonStyle,
             child: Text(labelText),
           );

@@ -63,7 +63,7 @@ class Pay extends HookWidget {
       );
     }
 
-    if (provider.error != null) {
+    if (provider.error != null && provider.paymentRequest == null) {
       return AppErrorWidget(
         message: provider.error,
         onRetry: provider.getPaymentRequest,
@@ -148,7 +148,7 @@ class Pay extends HookWidget {
         borderRadius: BorderRadius.zero,
         child: AppButton(
           labelText: localizationHelper.sendForVerification,
-          disabled: provider.isLoading,
+          loading: provider.isLoading,
           onPressed: () => provider.pay(
             context,
             method,
