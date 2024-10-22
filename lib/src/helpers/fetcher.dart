@@ -185,7 +185,8 @@ class Endpoints {
   static const String baseUrl = 'https://moosyl.moosyl.workers.dev';
 
   /// The URL for retrieving payment method configurations.
-  static const String paymentMethods = '$baseUrl/configuration';
+  static String paymentMethods(bool isTestingMode) =>
+      '$baseUrl/configuration?isTestingMode=$isTestingMode';
 
   /// Returns the URL for processing payment for the given [id].
   static String get pay => '$baseUrl/payment';

@@ -22,6 +22,9 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// A callback function that gets called when a payment method is selected.
   PaymentMethod? selected;
 
+  /// The payment method selected for the payment process.
+  final bool isTestingMode;
+
   /// Constructs a [GetPaymentMethodsProvider].
   ///
   /// Initiates fetching payment methods upon creation.
@@ -29,6 +32,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     this.apiKey,
     this.customHandlers,
     this.context,
+    this.isTestingMode,
   ) {
     getMethods();
   }
@@ -58,7 +62,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentMethodsService(apiKey).get(),
+      () => GetPaymentMethodsService(apiKey).get(isTestingMode),
       showFlashBar: false,
       context: context,
     );

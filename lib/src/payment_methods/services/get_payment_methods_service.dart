@@ -16,9 +16,11 @@ class GetPaymentMethodsService {
   ///
   /// Makes an API call to retrieve the payment methods.
   /// Returns a list of [PaymentMethod] objects.
-  Future<List<PaymentMethod>> get() async {
+  Future<List<PaymentMethod>> get(bool isTestingMode) async {
     // Fetch the payment methods from the backend.
-    final methodsResult = await Fetcher(apiKey).get(Endpoints.paymentMethods);
+    final methodsResult = await Fetcher(apiKey).get(
+      Endpoints.paymentMethods(isTestingMode),
+    );
 
     // Convert the result data to a list of PaymentMethod instances.
     return List.from(methodsResult.data["data"])

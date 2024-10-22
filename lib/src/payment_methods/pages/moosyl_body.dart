@@ -29,6 +29,7 @@ class MoosylBody extends HookWidget {
     this.onPaymentSuccess,
     this.customIcons,
     this.enabledPayments = const [],
+    this.isTestingMode = false,
   });
 
   /// The API key for authenticating the payment transaction.
@@ -52,6 +53,9 @@ class MoosylBody extends HookWidget {
   /// manuel pay
   final List<PaymentMethodTypes> enabledPayments;
 
+  /// A flag to indicate whether the widget is in testing mode.
+  final bool isTestingMode;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -70,6 +74,7 @@ class MoosylBody extends HookWidget {
               apiKey,
               customHandlers,
               context,
+              isTestingMode,
             ),
           ),
         ],
