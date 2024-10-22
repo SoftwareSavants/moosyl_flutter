@@ -57,7 +57,7 @@ class Pay extends HookWidget {
 
     final provider = context.watch<PayProvider>();
 
-    if (provider.isLoading) {
+    if (provider.isLoading && provider.paymentRequest == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -148,6 +148,7 @@ class Pay extends HookWidget {
         borderRadius: BorderRadius.zero,
         child: AppButton(
           labelText: localizationHelper.sendForVerification,
+          disabled: provider.isLoading,
           onPressed: () => provider.pay(
             context,
             method,
