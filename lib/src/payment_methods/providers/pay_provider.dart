@@ -115,11 +115,6 @@ class PayProvider extends ChangeNotifier {
       return notifyListeners();
     }
 
-    notifyListeners();
-
-    // Call the success callback if the payment was successful.
-    if (error != null) return;
-
     await onPaymentSuccess?.call();
 
     if (context.mounted) {
@@ -155,9 +150,11 @@ class PayProvider extends ChangeNotifier {
     );
 
     isLoading = false;
-    notifyListeners();
 
-    if (result.isError) return;
+    if (result.isError) {
+      error = result.error;
+      return notifyListeners();
+    }
 
     await onPaymentSuccess?.call();
 
