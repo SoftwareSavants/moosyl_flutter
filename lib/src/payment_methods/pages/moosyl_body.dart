@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
@@ -16,23 +15,21 @@ import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
 /// It handles localization and manages the state of the selected payment method.
 class MoosylBody extends HookWidget {
   /// Creates an instance of [MoosylBody].
-  /// when this bool is true return main widget Material
-  final bool withScaffold;
 
   /// Requires the [apiKey] and [transactionId] for the payment transaction,
   /// an [organizationLogo] to display, and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
-  const MoosylBody(
-      {super.key,
-      required this.apiKey,
-      required this.transactionId,
-      required this.organizationLogo,
-      this.customHandlers = const {},
-      this.onPaymentSuccess,
-      this.customIcons,
-      this.enabledPayments = const [],
-      this.isTestingMode = false,
-      this.withScaffold = true});
+  const MoosylBody({
+    super.key,
+    required this.apiKey,
+    required this.transactionId,
+    required this.organizationLogo,
+    this.customHandlers = const {},
+    this.onPaymentSuccess,
+    this.customIcons,
+    this.enabledPayments = const [],
+    this.isTestingMode = false,
+  });
 
   /// The API key for authenticating the payment transaction.
   final String apiKey;
