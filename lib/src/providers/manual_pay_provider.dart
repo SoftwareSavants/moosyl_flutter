@@ -104,11 +104,11 @@ class ManualPayProvider extends ChangeNotifier {
       return notifyListeners();
     }
 
-    await onPaymentSuccess?.call();
-
     if (context.mounted) {
       Navigator.pop(context);
     }
+
+    await onPaymentSuccess?.call();
   }
 
   /// A provider class for handling payment payment requests.

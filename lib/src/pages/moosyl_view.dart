@@ -91,6 +91,7 @@ class MoosylView extends HookWidget {
                 transactionId: transactionId,
                 method: selectedModeOfPayment,
                 fullPage: fullPage,
+                onPaymentSuccess: onPaymentSuccess,
               );
             }
 

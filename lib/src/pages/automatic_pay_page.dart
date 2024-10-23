@@ -67,6 +67,7 @@ class AutomaticPayPage extends HookWidget {
         apiKey: apiKey,
         transactionId: transactionId,
         method: method,
+        onPaymentSuccess: onPaymentSuccess,
       ),
       child: _AutomaticPayBody(organizationLogo, fullPage),
     );

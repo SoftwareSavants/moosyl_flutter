@@ -111,10 +111,10 @@ class AutomaticPayProvider extends ChangeNotifier {
       return notifyListeners();
     }
 
-    await onPaymentSuccess?.call();
-
     if (context.mounted) {
       Navigator.pop(context);
     }
+
+    await onPaymentSuccess?.call();
   }
 }
