@@ -9,9 +9,6 @@ import 'package:moosyl/src/payment_methods/pages/moosyl_body.dart';
 /// [Moosyl] provides a widget that handles the payment process.
 /// It allows you to customize the payment methods, icons, and success callbacks.
 class Moosyl extends HookWidget {
-  /// when this bool is true return main widget Material
-  final bool withScaffold;
-
   /// The API key required to authenticate the payment process.
   final String apiKey;
 
@@ -36,7 +33,7 @@ class Moosyl extends HookWidget {
   /// Optional callback to be triggered upon successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
-  /// manuel payment
+  /// manual payment
   final List<PaymentMethodTypes> enabledPayments;
 
   /// The payment method selected for the payment process.
@@ -94,7 +91,6 @@ class Moosyl extends HookWidget {
     this.customHandlers = const {},
     this.customIcons,
     this.inputBuilder,
-    this.withScaffold = true,
     this.onPaymentSuccess,
     this.enabledPayments = PaymentMethodTypes.values,
     this.isTestingMode = false,
@@ -109,15 +105,15 @@ class Moosyl extends HookWidget {
           showBarModalBottomSheet(
             context: context,
             builder: (context) => MoosylBody(
-                apiKey: apiKey,
-                customHandlers: customHandlers,
-                transactionId: transactionId,
-                organizationLogo: organizationLogo,
-                onPaymentSuccess: onPaymentSuccess,
-                customIcons: customIcons,
-                enabledPayments: enabledPayments,
-                isTestingMode: isTestingMode,
-                withScaffold: withScaffold),
+              apiKey: apiKey,
+              customHandlers: customHandlers,
+              transactionId: transactionId,
+              organizationLogo: organizationLogo,
+              onPaymentSuccess: onPaymentSuccess,
+              customIcons: customIcons,
+              enabledPayments: enabledPayments,
+              isTestingMode: isTestingMode,
+            ),
           );
         },
       );
@@ -125,14 +121,14 @@ class Moosyl extends HookWidget {
 
     // Otherwise, return the default MoosylBody widget.
     return MoosylBody(
-        apiKey: apiKey,
-        customHandlers: customHandlers,
-        transactionId: transactionId,
-        organizationLogo: organizationLogo,
-        onPaymentSuccess: onPaymentSuccess,
-        customIcons: customIcons,
-        enabledPayments: enabledPayments,
-        isTestingMode: isTestingMode,
-        withScaffold: withScaffold);
+      apiKey: apiKey,
+      customHandlers: customHandlers,
+      transactionId: transactionId,
+      organizationLogo: organizationLogo,
+      onPaymentSuccess: onPaymentSuccess,
+      customIcons: customIcons,
+      enabledPayments: enabledPayments,
+      isTestingMode: isTestingMode,
+    );
   }
 }

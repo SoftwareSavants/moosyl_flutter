@@ -9,9 +9,9 @@ import 'package:moosyl/src/widgets/pick_image.dart';
 import 'package:moosyl/src/widgets/text_input.dart';
 
 /// The manual payment method
-class ManuelPaymentPage extends StatelessWidget {
+class ManualPaymentPage extends StatelessWidget {
   /// The manual payment method contractor
-  const ManuelPaymentPage({
+  const ManualPaymentPage({
     super.key,
     required this.organizationLogo,
     required this.apiKey,

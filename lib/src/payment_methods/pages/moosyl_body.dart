@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
 import 'package:moosyl/src/payment_methods/pages/available_method_payments.dart';
-import 'package:moosyl/src/payment_methods/pages/manuel_payment_page.dart';
+import 'package:moosyl/src/payment_methods/pages/manual_payment_page.dart';
 import 'package:moosyl/src/payment_methods/pages/pay.dart';
 import 'package:moosyl/src/payment_methods/providers/get_payment_methods_provider.dart';
 import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
@@ -52,7 +52,7 @@ class MoosylBody extends HookWidget {
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
 
-  /// manuel pay
+  /// manual pay
   final List<PaymentMethodTypes> enabledPayments;
 
   /// A flag to indicate whether the widget is in testing mode.
@@ -60,70 +60,65 @@ class MoosylBody extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final body = MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => PayProvider(
-            apiKey: apiKey,
-            transactionId: transactionId,
-            onPaymentSuccess: onPaymentSuccess,
-            context: context,
-          ),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => GetPaymentMethodsProvider(
-            apiKey,
-            customHandlers,
-            context,
-            isTestingMode,
-          ),
-        ),
-      ],
-      child: Builder(
-        builder: (context) {
-          final provider = context.watch<GetPaymentMethodsProvider>();
-          final selectedModeOfPayment = provider.selected;
-
-          // If no payment method is selected, show the available methods page
-          if (selectedModeOfPayment == null) {
-            return AvailableMethodPage(
-              customHandlers: customHandlers,
-              apiKey: apiKey,
-              customIcons: customIcons,
-              enabledPayments: enabledPayments.where((payment) {
-                return PaymentMethodTypes.values.contains(payment);
-              }).toList(),
-            );
-          }
-
-          // Handle manual payment
-          if (selectedModeOfPayment!.type.isManual) {
-            return ManuelPaymentPage(
-              organizationLogo: organizationLogo,
+    return Material(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => PayProvider(
               apiKey: apiKey,
               transactionId: transactionId,
-              method: selectedModeOfPayment as ManualConfigModel,
-            );
-          }
+              onPaymentSuccess: onPaymentSuccess,
+              context: context,
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => GetPaymentMethodsProvider(
+              apiKey,
+              customHandlers,
+              context,
+              isTestingMode,
+            ),
+          ),
+        ],
+        child: Builder(
+          builder: (context) {
+            final provider = context.watch<GetPaymentMethodsProvider>();
 
-          // Proceed to the payment page if a method is selected
-          return Pay(
-            withScaffold: withScaffold,
-            apiKey: apiKey,
-            method: selectedModeOfPayment,
-            transactionId: transactionId,
-            organizationLogo: organizationLogo,
-            onPaymentSuccess: onPaymentSuccess,
-          );
-        },
+            final selectedModeOfPayment = provider.selected;
+            // State to hold the selected payment method.
+
+            // If no payment method is selected, show the available methods page.
+            if (selectedModeOfPayment == null) {
+              return AvailableMethodPage(
+                customHandlers: customHandlers,
+                apiKey: apiKey,
+                customIcons: customIcons,
+                enabledPayments: enabledPayments.where((payment) {
+                  return PaymentMethodTypes.values.contains(payment);
+                }).toList(),
+              );
+            }
+
+            if (provider.selected!.type.isManual) {
+              return ManualPaymentPage(
+                organizationLogo: organizationLogo,
+                apiKey: apiKey,
+                transactionId: transactionId,
+                method: selectedModeOfPayment as ManualConfigModel,
+              );
+            }
+
+            // If a payment method is selected, proceed to the payment page.
+            return Pay(
+              apiKey: apiKey,
+              method: selectedModeOfPayment,
+              transactionId: transactionId,
+              organizationLogo: organizationLogo,
+              onPaymentSuccess: onPaymentSuccess,
+            );
+          },
+        ),
       ),
     );
-
-    // Conditionally return the body wrapped in Material based on `withBottomSheet`
-    if (withScaffold) {
-      return Material(child: body);
-    } else {
-      return body;
-    }
   }
 }

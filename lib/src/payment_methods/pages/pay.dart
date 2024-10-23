@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:moosyl/src/payment_methods/pages/moosyl_body.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
@@ -27,17 +26,15 @@ class Pay extends HookWidget {
   /// Requires the [method], [apiKey], [transactionId], and [organizationLogo].
   /// Optionally accepts a callback [onPaymentSuccess] to be called when
   /// payment is successful.
-  /// when this bool is true return main widget Material
-  final bool withScaffold;
 
-  const Pay(
-      {super.key,
-      required this.method,
-      required this.apiKey,
-      required this.transactionId,
-      required this.organizationLogo,
-      this.onPaymentSuccess,
-      this.withScaffold = true});
+  const Pay({
+    super.key,
+    required this.method,
+    required this.apiKey,
+    required this.transactionId,
+    required this.organizationLogo,
+    this.onPaymentSuccess,
+  });
 
   /// The payment method selected for the payment process.
   final PaymentMethod method;
