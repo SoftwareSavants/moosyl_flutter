@@ -13,11 +13,11 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment methods service.
   final String apiKey;
 
-  /// The context used for displaying error messages.
-  final BuildContext context;
-
   /// A map of custom handlers for specific payment method types.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()>? customHandlers;
+  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
+
+  /// A map of custom icons for specific payment method types.
+  final Map<PaymentMethodTypes, String>? customIcons;
 
   /// A callback function that gets called when a payment method is selected.
   PaymentMethod? selected;
@@ -25,15 +25,18 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The payment method selected for the payment process.
   final bool isTestingMode;
 
+  final BuildContext context;
+
   /// Constructs a [GetPaymentMethodsProvider].
-  ///
+
   /// Initiates fetching payment methods upon creation.
-  GetPaymentMethodsProvider(
-    this.apiKey,
-    this.customHandlers,
-    this.context,
-    this.isTestingMode,
-  ) {
+  GetPaymentMethodsProvider({
+    required this.customHandlers,
+    required this.apiKey,
+    required this.isTestingMode,
+    required this.customIcons,
+    required this.context,
+  }) {
     getMethods();
   }
 
@@ -46,11 +49,14 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// List of available payment methods.
   final List<PaymentMethod> methods = [];
 
+  /// Retrieves the list of supported payment method types.
+  List<PaymentMethodTypes> get supportedTypes {
+    return [...methods.map((method) => method.method), ...customHandlers.keys];
+  }
+
   /// Retrieves the list of valid payment method types, including custom handlers.
-  List<PaymentMethodTypes> get validMethods => [
-        ...methods.map((e) => e.method),
-        if (customHandlers != null) ...customHandlers!.keys
-      ];
+  List<PaymentMethodTypes> get validMethods =>
+      [...methods.map((e) => e.method), ...customHandlers.keys];
 
   /// Asynchronously fetches available payment methods from the service.
   ///
@@ -87,8 +93,8 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// it invokes the handler. Otherwise, it selects the corresponding
   /// payment method from the list and calls the [onSelected] callback.
   void onTap(PaymentMethodTypes type, BuildContext context) async {
-    if (customHandlers?[type] != null) {
-      await customHandlers![type]!(); // Call the custom handler if available.
+    if (customHandlers[type] != null) {
+      await customHandlers[type]!(); // Call the custom handler if available.
 
       if (context.mounted) {
         return Navigator.pop(context); // Close the context (e.g., dialog).

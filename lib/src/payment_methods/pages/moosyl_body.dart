@@ -27,7 +27,6 @@ class MoosylBody extends HookWidget {
     this.customHandlers = const {},
     this.onPaymentSuccess,
     this.customIcons,
-    this.enabledPayments = const [],
     this.isTestingMode = false,
   });
 
@@ -49,9 +48,6 @@ class MoosylBody extends HookWidget {
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
 
-  /// manual pay
-  final List<PaymentMethodTypes> enabledPayments;
-
   /// A flag to indicate whether the widget is in testing mode.
   final bool isTestingMode;
 
@@ -70,10 +66,11 @@ class MoosylBody extends HookWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
-              apiKey,
-              customHandlers,
-              context,
-              isTestingMode,
+              context: context,
+              customHandlers: customHandlers,
+              apiKey: apiKey,
+              isTestingMode: isTestingMode,
+              customIcons: customIcons,
             ),
           ),
         ],
@@ -86,22 +83,19 @@ class MoosylBody extends HookWidget {
 
             // If no payment method is selected, show the available methods page.
             if (selectedModeOfPayment == null) {
-              return AvailableMethodPage(
-                customHandlers: customHandlers,
-                apiKey: apiKey,
-                customIcons: customIcons,
-                enabledPayments: enabledPayments.where((payment) {
-                  return PaymentMethodTypes.values.contains(payment);
-                }).toList(),
-              );
+              return const AvailableMethodPage();
             }
 
-            if (provider.selected!.type.isManual) {
+            if (selectedModeOfPayment.type.isManual) {
+              if (selectedModeOfPayment is! ManualConfigModel) {
+                throw Exception('Invalid payment method selected');
+              }
+
               return ManualPaymentPage(
                 organizationLogo: organizationLogo,
                 apiKey: apiKey,
                 transactionId: transactionId,
-                method: selectedModeOfPayment as ManualConfigModel,
+                method: selectedModeOfPayment,
               );
             }
 

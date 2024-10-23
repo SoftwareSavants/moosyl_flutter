@@ -34,7 +34,6 @@ class Moosyl extends HookWidget {
   final FutureOr<void> Function()? onPaymentSuccess;
 
   /// manual payment
-  final List<PaymentMethodTypes> enabledPayments;
 
   /// The payment method selected for the payment process.
   final bool isTestingMode;
@@ -56,7 +55,6 @@ class Moosyl extends HookWidget {
       required Widget organizationLogo,
       final FutureOr<void> Function()? onPaymentSuccess,
       Map<PaymentMethodTypes, String>? customIcons,
-      List<PaymentMethodTypes> enabledPayments = PaymentMethodTypes.values,
       bool isTestingMode = false,
       bool withBottomSheet = true}) {
     showBarModalBottomSheet(
@@ -68,7 +66,6 @@ class Moosyl extends HookWidget {
         organizationLogo: organizationLogo,
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
-        enabledPayments: enabledPayments,
         isTestingMode: isTestingMode,
       ),
     );
@@ -92,7 +89,6 @@ class Moosyl extends HookWidget {
     this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
-    this.enabledPayments = PaymentMethodTypes.values,
     this.isTestingMode = false,
   });
 
@@ -111,7 +107,6 @@ class Moosyl extends HookWidget {
               organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
-              enabledPayments: enabledPayments,
               isTestingMode: isTestingMode,
             ),
           );
@@ -127,7 +122,6 @@ class Moosyl extends HookWidget {
       organizationLogo: organizationLogo,
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,
-      enabledPayments: enabledPayments,
       isTestingMode: isTestingMode,
     );
   }

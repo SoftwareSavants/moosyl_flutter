@@ -1,11 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
-
-import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
 import 'package:moosyl/src/payment_methods/providers/get_payment_methods_provider.dart';
 import 'package:moosyl/src/widgets/container.dart';
 import 'package:moosyl/src/widgets/error_widget.dart';
@@ -23,22 +18,7 @@ class AvailableMethodPage extends StatelessWidget {
   /// and icons for different payment methods.
   const AvailableMethodPage({
     super.key,
-    required this.apiKey,
-    required this.enabledPayments,
-    this.customHandlers = const {},
-    this.customIcons,
   });
-
-  /// The API key used for retrieving the available payment methods.
-  final String apiKey;
-
-  /// Optional custom handlers for specific payment methods.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
-
-  /// Optional custom icons for different payment methods.
-  final Map<PaymentMethodTypes, String>? customIcons;
-
-  final List<PaymentMethodTypes> enabledPayments;
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +39,7 @@ class AvailableMethodPage extends StatelessWidget {
       );
     }
 
-    final methods = {
-      ...provider.methods.map(
-        (method) => method.method,
-      ),
-      ...customHandlers.keys
-    };
+    final methods = provider.supportedTypes;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -94,27 +69,19 @@ class AvailableMethodPage extends StatelessWidget {
 
                 return InkWell(
                   onTap: () => provider.onTap(method, context),
-                  child: card(context, method),
+                  child: AppContainer(
+                    border: Border.all(width: 1),
+                    padding: const EdgeInsetsDirectional.all(24),
+                    child: provider.customIcons?[method] != null
+                        ? AppIcon(path: provider.customIcons?[method])
+                        : method.icon,
+                  ),
                 );
               },
             ),
           ),
         ],
       ),
-    );
-  }
-
-  /// Builds a card widget for displaying a payment method.
-  ///
-  /// Takes the [context] and the selected [mode] of payment as parameters.
-  /// Returns a card with an icon or custom icon depending on the availability.
-  Widget card(BuildContext context, PaymentMethodTypes mode) {
-    final withIcon = customIcons?[mode] != null;
-
-    return AppContainer(
-      border: Border.all(width: 1),
-      padding: const EdgeInsetsDirectional.all(24),
-      child: withIcon ? AppIcon(path: customIcons?[mode]) : mode.icon,
     );
   }
 }
