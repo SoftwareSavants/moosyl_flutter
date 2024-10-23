@@ -1,9 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
-import 'package:moosyl/src/widgets/feedback.dart';
-
 /// A utility class for handling errors during asynchronous transactions.
 ///
 /// This class provides methods to catch and manage errors that occur
@@ -16,25 +12,14 @@ class ErrorHandlers {
   /// feedback messages using a flash bar.
   static Future<ResponseHandlers<T>> catchErrors<T>(
     Future<T> Function() function, {
-    required BuildContext context,
     bool showFlashBar = true,
   }) async {
     try {
       // Attempt to execute the provided function and return the result wrapped in ResponseHandlers.
       return ResponseHandlers(result: await function());
     } catch (error) {
-      // Map the caught error to a user-friendly message.
-      String errorMsg = ExceptionMapper.getErrorMessage(error, context);
-
-      // Show feedback to the user if specified.
-      if (showFlashBar) {
-        Feedbacks.flushBar(
-          message: errorMsg,
-          context: context,
-        );
-      }
       // Return the error message wrapped in ResponseHandlers.
-      return ResponseHandlers(error: errorMsg);
+      return ResponseHandlers(error: error);
     }
   }
 }
@@ -45,7 +30,7 @@ class ErrorHandlers {
 /// if the transaction failed.
 class ResponseHandlers<T> {
   /// Error message if an error occurred.
-  final String? error;
+  final Object? error;
 
   /// Result of the transaction if successful.
   final T? result;

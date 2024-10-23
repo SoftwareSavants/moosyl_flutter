@@ -61,7 +61,6 @@ class MoosylBody extends HookWidget {
               apiKey: apiKey,
               transactionId: transactionId,
               onPaymentSuccess: onPaymentSuccess,
-              context: context,
             ),
           ),
           ChangeNotifierProvider(

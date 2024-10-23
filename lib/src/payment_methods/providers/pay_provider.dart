@@ -18,8 +18,7 @@ class PayProvider extends ChangeNotifier {
   /// The ID of the payment request being processed.
   final String transactionId;
 
-  /// The context used for displaying error messages.
-  final BuildContext context;
+  PaymentMethodTypes? selectedPaymentMethodType;
 
   /// The payment method used for the payment request.
 
@@ -32,7 +31,6 @@ class PayProvider extends ChangeNotifier {
   PayProvider({
     required this.apiKey,
     required this.transactionId,
-    required this.context,
     this.onPaymentSuccess,
   }) : service = PayService(apiKey) {
     getPaymentRequest();
@@ -54,7 +52,7 @@ class PayProvider extends ChangeNotifier {
   PlatformFile? selectedFile;
 
   /// Holds any error messages that occur during payment processing.
-  String? error;
+  Object? error;
 
   /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
@@ -74,7 +72,6 @@ class PayProvider extends ChangeNotifier {
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentRequestService(apiKey).get(transactionId),
       showFlashBar: false,
-      context: context,
     );
 
     isLoading = false;
@@ -105,7 +102,6 @@ class PayProvider extends ChangeNotifier {
         paymentMethodId: method.id,
         selectedImage: selectedFile!,
       ),
-      context: context,
     );
 
     isLoading = false;
@@ -146,7 +142,6 @@ class PayProvider extends ChangeNotifier {
         passCode: passCodeTextController.text,
         phoneNumber: phoneNumberTextController.text,
       ),
-      context: context,
     );
 
     isLoading = false;

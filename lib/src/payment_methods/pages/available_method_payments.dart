@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
+
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/payment_methods/providers/get_payment_methods_provider.dart';
@@ -34,7 +36,7 @@ class AvailableMethodPage extends StatelessWidget {
     // Display an error widget if there was an error fetching payment methods.
     if (provider.error != null) {
       return AppErrorWidget(
-        message: provider.error,
+        message: ExceptionMapper.getErrorMessage(provider.error, context),
         onRetry: provider.getMethods,
       );
     }

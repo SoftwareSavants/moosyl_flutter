@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:moosyl/src/payment_methods/pages/manual_payment_page.dart';
 
+import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
@@ -67,7 +68,7 @@ class Pay extends HookWidget {
 
     if (provider.error != null && provider.paymentRequest == null) {
       return AppErrorWidget(
-        message: provider.error,
+        message: ExceptionMapper.getErrorMessage(provider.error, context),
         onRetry: provider.getPaymentRequest,
       );
     }
@@ -129,14 +130,13 @@ class Pay extends HookWidget {
               hint: localizationHelper.paymentPassCode,
               label: localizationHelper.paymentPassCodeFromBankily,
               maxLength: 4,
-              errorText: provider.error,
             ),
           ],
         ),
       ),
       bottomSheet: BottomSheetButton(
         disabled: !provider.formKey.currentState!.validate(),
-        error: provider.error,
+        error: ExceptionMapper.getErrorMessage(provider.error, context),
         loading: provider.isLoading,
         onTap: () => provider.pay(context, method),
       ),

@@ -41,7 +41,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   }
 
   /// Holds any error messages that occur during method retrieval.
-  String? error;
+  Object? error;
 
   /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
@@ -70,13 +70,13 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentMethodsService(apiKey).get(isTestingMode),
       showFlashBar: false,
-      context: context,
     );
 
     isLoading = false;
 
     if (result.isError) {
       error = result.error;
+
       return notifyListeners();
     }
 

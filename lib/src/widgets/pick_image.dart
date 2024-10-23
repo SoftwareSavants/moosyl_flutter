@@ -28,7 +28,6 @@ class _PickImageCardState extends State<PickImageCard> {
         allowMultiple: false,
         type: FileType.image,
       ),
-      context: context,
     );
 
     if (response.isError) return;

@@ -47,16 +47,17 @@ class Moosyl extends HookWidget {
   /// * [customHandlers]: Map for custom handlers for payment methods.
   /// * [customIcons]: Map for custom icons for payment methods.
   /// * [onPaymentSuccess]: Callback for when payment is successful.
-  static void show(BuildContext context,
-      {required String apiKey,
-      final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
-          const {},
-      required String transactionId,
-      required Widget organizationLogo,
-      final FutureOr<void> Function()? onPaymentSuccess,
-      Map<PaymentMethodTypes, String>? customIcons,
-      bool isTestingMode = false,
-      bool withBottomSheet = true}) {
+  static void show(
+    BuildContext context, {
+    required String apiKey,
+    final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
+        const {},
+    required String transactionId,
+    required Widget organizationLogo,
+    final FutureOr<void> Function()? onPaymentSuccess,
+    Map<PaymentMethodTypes, String>? customIcons,
+    bool isTestingMode = false,
+  }) {
     showBarModalBottomSheet(
       context: context,
       builder: (context) => MoosylBody(

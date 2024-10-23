@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/moosyl.dart';
@@ -46,7 +47,7 @@ class ManualPaymentPage extends StatelessWidget {
 
     if (provider.error != null && provider.paymentRequest == null) {
       return AppErrorWidget(
-        message: provider.error,
+        message: ExceptionMapper.getErrorMessage(provider.error, context),
         onRetry: provider.getPaymentRequest,
       );
     }
@@ -95,7 +96,7 @@ class ManualPaymentPage extends StatelessWidget {
       ),
       bottomSheet: BottomSheetButton(
         disabled: provider.selectedFile == null,
-        error: provider.error,
+        error: ExceptionMapper.getErrorMessage(provider.error, context),
         loading: provider.isLoading,
         onTap: () => provider.manualPay(context, method),
       ),
