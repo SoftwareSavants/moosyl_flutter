@@ -26,5 +26,18 @@
   "capture": "التقاط",
   "merchantCode": "رمز التاجر",
   "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ",
-  "merchantCode": "رمز التاجر"
+  "merchantCode": "رمز التاجر",
+    "existingPaymentWasFound": "تم العثور على دفعة معلقة موجودة. يرجى الانتظار حتى يتم معالجة الدفعة السابقة.",
+  "apiKeyRequired": "مطلوب مفتاح API",
+  "invalidApiKeyOrganizationNotFound": "مفتاح API غير صالح، لم يتم العثور على المؤسسة",
+  "fileNotFound": "الملف غير موجود",
+  "authenticationBPayFailed": "فشل مصادقة BPay",
+  "configurationNotFound": "لم يتم العثور على الإعدادات",
+  "paymentRequestNotFound": "لم يتم العثور على طلب الدفع",
+  "paymentNotFound": "لم يتم العثور على الدفعة",
+  "errorWhileCreatingPayment": "حدث خطأ أثناء إنشاء الدفعة",
+  "errorWhileCreatingPaymentRequest": "حدث خطأ أثناء إنشاء طلب الدفع",
+  "organizationNotFound": "لم يتم العثور على المؤسسة",
+  "invalidApiKey": "مفتاح API غير صالح"
+
 }

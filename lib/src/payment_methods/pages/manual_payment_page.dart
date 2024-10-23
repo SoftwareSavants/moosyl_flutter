@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl/src/payment_methods/pages/pay.dart';
@@ -33,10 +34,22 @@ class ManualPaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceBottomPadding = MediaQuery.of(context).padding.bottom;
     final localizationHelper = MoosylLocalization.of(context)!;
 
     final provider = context.watch<PayProvider>();
+
+    if (provider.isLoading && provider.paymentRequest == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (provider.error != null && provider.paymentRequest == null) {
+      return AppErrorWidget(
+        message: provider.error,
+        onRetry: provider.getPaymentRequest,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -77,30 +90,84 @@ class ManualPaymentPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          PickImageCard(
-            onChanged: provider.setSelectedImage,
-          )
+          PickImageCard(onChanged: provider.setSelectedImage),
         ],
       ),
-      bottomSheet: AppContainer(
-        color: Theme.of(context).colorScheme.onPrimary,
-        width: double.infinity,
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16).copyWith(
-          bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
-        ),
-        shadows: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.12),
-            offset: const Offset(0, -4),
-            blurRadius: 16,
-          )
+      bottomSheet: BottomSheetButton(
+        disabled: provider.selectedFile == null,
+        error: provider.error,
+        loading: provider.isLoading,
+        onTap: () => provider.manualPay(context, method),
+      ),
+    );
+  }
+}
+
+/// A widget that displays the mode of payment information.
+class BottomSheetButton extends StatelessWidget {
+  /// Loading state of the button.
+  final bool loading;
+
+  /// Disabled state of the button.
+  final bool disabled;
+
+  /// Callback function for the button.
+  final VoidCallback onTap;
+
+  /// Error message to display.
+  final String? error;
+
+  /// A widget that displays the mode of payment information.
+  const BottomSheetButton({
+    super.key,
+    required this.loading,
+    required this.disabled,
+    required this.onTap,
+    this.error,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceBottomPadding = MediaQuery.of(context).padding.bottom;
+    final localizationHelper = MoosylLocalization.of(context)!;
+
+    return AppContainer(
+      color: Theme.of(context).colorScheme.onPrimary,
+      width: double.infinity,
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 16).copyWith(
+        bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
+      ),
+      shadows: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.12),
+          offset: const Offset(0, -4),
+          blurRadius: 16,
+        )
+      ],
+      borderRadius: BorderRadius.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (error != null)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(top: 16),
+              child: AppErrorWidget(
+                message: error,
+                horizontalAxis: true,
+              ),
+            ),
+          AppButton(
+            loading: loading,
+            disabled: disabled,
+            labelText: error != null
+                ? localizationHelper.retry
+                : localizationHelper.sendForVerification,
+            background:
+                error != null ? Theme.of(context).colorScheme.error : null,
+            onPressed: onTap,
+          ),
         ],
-        borderRadius: BorderRadius.zero,
-        child: AppButton(
-          disabled: provider.selectedFile == null,
-          labelText: localizationHelper.sendForVerification,
-          onPressed: () => provider.manualPay(context, method),
-        ),
       ),
     );
   }

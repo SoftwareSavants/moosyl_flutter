@@ -37,15 +37,13 @@ class MoosylLocalizationEn extends MoosylLocalization {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
-      'Copy the code, BPay and head to Bankily to pay the amount';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'Copy the code, BPay and head to Bankily to pay the amount';
 
   @override
   String get afterPayment => 'After payment';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation =>
-      'After making the payment, fill the following information';
+  String get afterMakingThePaymentFillTheFollowingInformation => 'After making the payment, fill the following information';
 
   @override
   String get enterYourBankilyPhoneNumber => 'Enter your Bankily phone number';
@@ -78,9 +76,44 @@ class MoosylLocalizationEn extends MoosylLocalization {
   String get capture => 'Capture';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
-      'Copy the merchant code and head to Sedad to pay the amount';
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount => 'Copy the merchant code and head to Sedad to pay the amount';
 
   @override
   String get merchantCode => 'Merchant Code';
+
+  @override
+  String get existingPaymentWasFound => 'An existing pending payment was found. Please wait for the previous payment to be processed.';
+
+  @override
+  String get apiKeyRequired => 'API key is required';
+
+  @override
+  String get invalidApiKeyOrganizationNotFound => 'Invalid API key, organization not found';
+
+  @override
+  String get fileNotFound => 'File not found';
+
+  @override
+  String get authenticationBPayFailed => 'Authentication BPay failed';
+
+  @override
+  String get configurationNotFound => 'Configuration not found';
+
+  @override
+  String get paymentRequestNotFound => 'Payment request not found';
+
+  @override
+  String get paymentNotFound => 'Payment not found';
+
+  @override
+  String get errorWhileCreatingPayment => 'Error while creating payment';
+
+  @override
+  String get errorWhileCreatingPaymentRequest => 'Error while creating paymentRequest';
+
+  @override
+  String get organizationNotFound => 'Organization not found';
+
+  @override
+  String get invalidApiKey => 'Invalid API key';
 }

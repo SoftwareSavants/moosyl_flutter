@@ -36,9 +36,17 @@ class AppErrorWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AppIcons.error.apply(size: 24.0),
+            AppIcons.error.apply(
+              size: 24.0,
+            ),
             const SizedBox(height: 16, width: 8),
-            Text(localizationsHelper.retry),
+            Flexible(
+              child: Text(
+                message ?? localizationsHelper.unknownError,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
           ],
         ),
       );

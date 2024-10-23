@@ -25,5 +25,18 @@
   "upload": "Télécharger",
   "capture": "Capturer",
   "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copiez le code marchand et dirigez-vous vers Sedad pour payer le montant",
-  "merchantCode": "Code marchand"
+  "merchantCode": "Code marchand",
+    "existingPaymentWasFound": "Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.",
+  "apiKeyRequired": "Clé API requise",
+  "invalidApiKeyOrganizationNotFound": "Clé API invalide, organisation non trouvée",
+  "fileNotFound": "Fichier introuvable",
+  "authenticationBPayFailed": "Échec de l'authentification BPay",
+  "configurationNotFound": "Configuration introuvable",
+  "paymentRequestNotFound": "Demande de paiement introuvable",
+  "paymentNotFound": "Paiement introuvable",
+  "errorWhileCreatingPayment": "Erreur lors de la création du paiement",
+  "errorWhileCreatingPaymentRequest": "Erreur lors de la création de la demande de paiement",
+  "organizationNotFound": "Organisation introuvable",
+  "invalidApiKey": "Clé API invalide"
+
 }

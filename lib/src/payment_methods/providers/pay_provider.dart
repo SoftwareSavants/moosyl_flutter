@@ -69,6 +69,7 @@ class PayProvider extends ChangeNotifier {
   void getPaymentRequest() async {
     error = null;
     isLoading = true;
+    notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentRequestService(apiKey).get(transactionId),

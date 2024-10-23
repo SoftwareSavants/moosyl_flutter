@@ -173,7 +173,9 @@ class FetcherResponse<T> {
   /// a properly formatted exception.
   AppException get toException {
     return AppException(
-      code: AppExceptionCode.unknown,
+      code: data is String
+          ? AppExceptionCode(data as String)
+          : AppExceptionCode.unknown,
       message: (data is String) ? data as String : 'An error occurred',
     );
   }

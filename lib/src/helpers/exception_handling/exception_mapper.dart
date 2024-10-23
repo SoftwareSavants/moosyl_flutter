@@ -29,6 +29,31 @@ class ExceptionMapper {
     // Switch on the type of error to determine the appropriate message.
     return switch (error) {
       AppException(code: AppExceptionCode code) => switch (code) {
+          AppExceptionCode.existingPaymentWasFound => localizationsHelper
+              .existingPaymentWasFound, // Localized message for existing payment found.
+          AppExceptionCode.apiKeyRequired => localizationsHelper
+              .apiKeyRequired, // Localized message for API key required.
+          AppExceptionCode.invalidApiKeyOrganizationNotFound =>
+            localizationsHelper
+                .invalidApiKeyOrganizationNotFound, // Localized message for invalid API key (organization not found).
+          AppExceptionCode.fileNotFound => localizationsHelper
+              .fileNotFound, // Localized message for file not found.
+          AppExceptionCode.authenticationBPayFailed => localizationsHelper
+              .authenticationBPayFailed, // Localized message for authentication BPay failed.
+          AppExceptionCode.configurationNotFound => localizationsHelper
+              .configurationNotFound, // Localized message for configuration not found.
+          AppExceptionCode.paymentRequestNotFound => localizationsHelper
+              .paymentRequestNotFound, // Localized message for payment request not found.
+          AppExceptionCode.paymentNotFound => localizationsHelper
+              .paymentNotFound, // Localized message for payment not found.
+          AppExceptionCode.errorWhileCreatingPayment => localizationsHelper
+              .errorWhileCreatingPayment, // Localized message for error while creating payment.
+          AppExceptionCode.errorWhileCreatingPaymentRequest => localizationsHelper
+              .errorWhileCreatingPaymentRequest, // Localized message for error while creating payment request.
+          AppExceptionCode.organizationNotFound => localizationsHelper
+              .organizationNotFound, // Localized message for organization not found.
+          AppExceptionCode.invalidApiKey => localizationsHelper
+              .invalidApiKey, // Localized message for invalid API key.
           AppExceptionCode.unknown => localizationsHelper
               .unknownError, // Localized message for unknown error.
           _ => localizationsHelper

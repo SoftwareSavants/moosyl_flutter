@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:moosyl/src/payment_methods/pages/manual_payment_page.dart';
+
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
 
 import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
 import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
-import 'package:moosyl/src/widgets/buttons.dart';
 import 'package:moosyl/src/widgets/container.dart';
 import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:moosyl/src/widgets/feedback.dart';
@@ -70,8 +71,6 @@ class Pay extends HookWidget {
         onRetry: provider.getPaymentRequest,
       );
     }
-
-    final deviceBottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
       appBar: AppBar(
@@ -135,28 +134,11 @@ class Pay extends HookWidget {
           ],
         ),
       ),
-      bottomSheet: AppContainer(
-        color: Theme.of(context).colorScheme.onPrimary,
-        width: double.infinity,
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16).copyWith(
-          bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
-        ),
-        shadows: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.12),
-            offset: const Offset(0, -4),
-            blurRadius: 16,
-          )
-        ],
-        borderRadius: BorderRadius.zero,
-        child: AppButton(
-          labelText: localizationHelper.sendForVerification,
-          loading: provider.isLoading,
-          onPressed: () => provider.pay(
-            context,
-            method,
-          ),
-        ),
+      bottomSheet: BottomSheetButton(
+        disabled: !provider.formKey.currentState!.validate(),
+        error: provider.error,
+        loading: provider.isLoading,
+        onTap: () => provider.pay(context, method),
       ),
     );
   }

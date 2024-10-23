@@ -33,12 +33,20 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final background = loading || disabled
+        ? Theme.of(context).colorScheme.surface
+        : (this.background ?? Theme.of(context).colorScheme.primary);
+
+    final foregroundColor = loading || disabled
+        ? Theme.of(context).colorScheme.onSurface
+        : textColor ?? Theme.of(context).colorScheme.onPrimary;
+
     final buttonStyle = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ?? BorderRadius.circular(8),
       ),
-      backgroundColor: background ?? Theme.of(context).colorScheme.primary,
-      foregroundColor: textColor ?? Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: background,
+      foregroundColor: foregroundColor,
       textStyle: Theme.of(context).textTheme.titleSmall,
       elevation: 0,
       minimumSize: const Size(0, 40),
@@ -48,7 +56,13 @@ class AppButton extends StatelessWidget {
     final button = loading || leading != null
         ? ElevatedButton.icon(
             onPressed: disabled || loading ? () {} : onPressed ?? () {},
-            icon: loading ? const CircularProgressIndicator() : leading,
+            icon: loading
+                ? SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(color: foregroundColor),
+                  )
+                : leading,
             style: buttonStyle,
             label: Text(labelText),
           )
