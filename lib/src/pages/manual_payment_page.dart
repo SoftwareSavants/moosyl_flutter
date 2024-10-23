@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
+import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
+import 'package:moosyl/src/providers/manual_pay_provider.dart';
 import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/moosyl.dart';
-import 'package:moosyl/src/pages/pay.dart';
-import 'package:moosyl/src/providers/pay_provider.dart';
+import 'package:moosyl/src/pages/automatic_pay_page.dart';
 import 'package:moosyl/src/widgets/buttons.dart';
 import 'package:moosyl/src/widgets/container.dart';
 import 'package:moosyl/src/widgets/pick_image.dart';
@@ -19,6 +22,8 @@ class ManualPaymentPage extends StatelessWidget {
     required this.apiKey,
     required this.transactionId,
     required this.method,
+    this.fullPage = true,
+    this.onPaymentSuccess,
   });
 
   /// The payment method selected for the payment process.
@@ -33,11 +38,44 @@ class ManualPaymentPage extends StatelessWidget {
   /// The transaction ID associated with the current payment.
   final String transactionId;
 
+  /// A flag to indicate whether the widget is in full page mode.
+  final bool fullPage;
+
+  /// Callback to be executed upon successful payment.
+  final FutureOr<void> Function()? onPaymentSuccess;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => ManualPayProvider(
+        apiKey: apiKey,
+        transactionId: transactionId,
+        method: method,
+        onPaymentSuccess: onPaymentSuccess,
+      ),
+      child: _ManualPaymentPageBody(
+        organizationLogo: organizationLogo,
+        fullPage: fullPage,
+      ),
+    );
+  }
+}
+
+class _ManualPaymentPageBody extends StatelessWidget {
+  final bool fullPage;
+  final Widget organizationLogo;
+  const _ManualPaymentPageBody({
+    required this.organizationLogo,
+    this.fullPage = true,
+  });
+
   @override
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
 
-    final provider = context.watch<PayProvider>();
+    final provider = context.watch<ManualPayProvider>();
+
+    final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
 
     if (provider.isLoading && provider.paymentRequest == null) {
       return const Center(
@@ -49,31 +87,64 @@ class ManualPaymentPage extends StatelessWidget {
       return AppErrorWidget(
         message: ExceptionMapper.getErrorMessage(provider.error, context),
         onRetry: provider.getPaymentRequest,
+        withScaffold: fullPage,
       );
     }
 
+    final method = provider.method;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(method.method.title(context)),
-        leading: BackButton(
-          onPressed: () {},
-        ),
-      ),
+      appBar: fullPage
+          ? AppBar(
+              title: Text(method.method.title(context)),
+              leading: BackButton(
+                onPressed: () {
+                  getPaymentMethodsProvider.setPaymentMethod(null);
+                },
+              ),
+            )
+          : null,
       body: ListView(
         padding: const EdgeInsets.only(bottom: 200),
         children: [
-          InputLabel(
-            label: localizationHelper.payUsing(
-              method.method.title(context),
-            ),
-            child: Text(
-              localizationHelper
-                  .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      localizationHelper.payUsing(
+                        method.method.title(context),
+                      ),
+                    ),
+                    if (!fullPage)
+                      AppButton(
+                        minHeight: 0,
+                        background: Theme.of(context).colorScheme.onPrimary,
+                        textColor: Theme.of(context).colorScheme.onSurface,
+                        margin: EdgeInsets.zero,
+                        border: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        labelText: localizationHelper.change,
+                        onPressed: () =>
+                            getPaymentMethodsProvider.setPaymentMethod(null),
+                      ),
+                  ],
+                ),
+                Text(
+                  localizationHelper
+                      .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 8),
           ModeOfPaymentInfo(
             mode: method,
+            paymentRequest: provider.paymentRequest!,
             organizationLogo: organizationLogo,
           ),
           const SizedBox(height: 6),
@@ -96,7 +167,9 @@ class ManualPaymentPage extends StatelessWidget {
       ),
       bottomSheet: BottomSheetButton(
         disabled: provider.selectedFile == null,
-        error: ExceptionMapper.getErrorMessage(provider.error, context),
+        error: provider.error != null
+            ? ExceptionMapper.getErrorMessage(provider.error, context)
+            : null,
         loading: provider.isLoading,
         onTap: () => provider.manualPay(context, method),
       ),
@@ -119,6 +192,8 @@ class BottomSheetButton extends StatelessWidget {
   final String? error;
 
   /// A widget that displays the mode of payment information.
+
+  /// Constructor for [BottomSheetButton].
   const BottomSheetButton({
     super.key,
     required this.loading,

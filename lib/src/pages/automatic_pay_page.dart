@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:moosyl/src/models/payment_request_model.dart';
 import 'package:moosyl/src/pages/manual_payment_page.dart';
 
 import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
+import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
+import 'package:moosyl/src/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
@@ -20,22 +23,23 @@ import 'package:moosyl/src/widgets/text_input.dart';
 
 /// A widget that represents the payment process.
 ///
-/// The [Pay] widget allows users to make a payment using the provided
+/// The [AutomaticPayPage] widget allows users to make a payment using the provided
 /// [PaymentMethod]. It manages the payment input and validation process.
-class Pay extends HookWidget {
-  /// Creates a [Pay] widget.
+class AutomaticPayPage extends HookWidget {
+  /// Creates a [AutomaticPayPage] widget.
   ///
   /// Requires the [method], [apiKey], [transactionId], and [organizationLogo].
   /// Optionally accepts a callback [onPaymentSuccess] to be called when
   /// payment is successful.
 
-  const Pay({
+  const AutomaticPayPage({
     super.key,
     required this.method,
     required this.apiKey,
     required this.transactionId,
     required this.organizationLogo,
     this.onPaymentSuccess,
+    this.fullPage = true,
   });
 
   /// The payment method selected for the payment process.
@@ -53,12 +57,35 @@ class Pay extends HookWidget {
   /// Callback to be executed upon successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
+  /// Builds the [AutomaticPayPage] widget.
+  final bool fullPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => AutomaticPayProvider(
+        apiKey: apiKey,
+        transactionId: transactionId,
+        method: method,
+      ),
+      child: _AutomaticPayBody(organizationLogo, fullPage),
+    );
+  }
+}
+
+class _AutomaticPayBody extends StatelessWidget {
+  final Widget organizationLogo;
+  final bool fullPage;
+  const _AutomaticPayBody(this.organizationLogo, this.fullPage);
+
   @override
   Widget build(BuildContext context) {
     const horizontalPadding = EdgeInsetsDirectional.symmetric(horizontal: 16);
     final localizationHelper = MoosylLocalization.of(context)!;
 
-    final provider = context.watch<PayProvider>();
+    final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
+
+    final provider = context.watch<AutomaticPayProvider>();
 
     if (provider.isLoading && provider.paymentRequest == null) {
       return const Center(
@@ -73,31 +100,62 @@ class Pay extends HookWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(method.method.title(context)),
-        leading: BackButton(
-          onPressed: () {},
-        ),
-      ),
-      body: Form(
-        key: provider.formKey,
-        child: ListView(
+    final method = provider.method;
+
+    return Form(
+      key: provider.formKey,
+      child: Scaffold(
+        appBar: fullPage
+            ? AppBar(
+                title: Text(method.method.title(context)),
+                leading: BackButton(
+                  onPressed: () =>
+                      getPaymentMethodsProvider.setPaymentMethod(null),
+                ),
+              )
+            : null,
+        body: ListView(
           padding: const EdgeInsets.only(bottom: 200, top: 16),
           children: [
-            InputLabel(
-              label: localizationHelper.payUsing(
-                method.method.title(context),
-              ),
-              child: Text(
-                localizationHelper
-                    .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        localizationHelper.payUsing(
+                          method.method.title(context),
+                        ),
+                      ),
+                      if (!fullPage)
+                        AppButton(
+                          minHeight: 0,
+                          background: Theme.of(context).colorScheme.onPrimary,
+                          textColor: Theme.of(context).colorScheme.onSurface,
+                          margin: EdgeInsets.zero,
+                          border: BorderSide(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          labelText: localizationHelper.change,
+                          onPressed: () =>
+                              getPaymentMethodsProvider.setPaymentMethod(null),
+                        ),
+                    ],
+                  ),
+                  Text(
+                    localizationHelper
+                        .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 8),
             ModeOfPaymentInfo(
               mode: method,
               organizationLogo: organizationLogo,
+              paymentRequest: provider.paymentRequest!,
             ),
             const SizedBox(height: 6),
             Divider(
@@ -133,12 +191,14 @@ class Pay extends HookWidget {
             ),
           ],
         ),
-      ),
-      bottomSheet: BottomSheetButton(
-        disabled: !provider.formKey.currentState!.validate(),
-        error: ExceptionMapper.getErrorMessage(provider.error, context),
-        loading: provider.isLoading,
-        onTap: () => provider.pay(context, method),
+        bottomSheet: BottomSheetButton(
+          disabled: false,
+          error: provider.error != null
+              ? ExceptionMapper.getErrorMessage(provider.error, context)
+              : null,
+          loading: provider.isLoading,
+          onTap: () => provider.pay(context),
+        ),
       ),
     );
   }
@@ -154,6 +214,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
     super.key,
     required this.mode,
     required this.organizationLogo,
+    required this.paymentRequest,
   });
 
   /// The selected payment method.
@@ -162,19 +223,12 @@ class ModeOfPaymentInfo extends StatelessWidget {
   /// The logo of the organization processing the payment.
   final Widget organizationLogo;
 
+  ///
+  final PaymentRequestModel paymentRequest;
+
   @override
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
-
-    final provider = context.watch<PayProvider>();
-
-    if (provider.paymentRequest == null) {
-      return const SizedBox(
-          height: 100,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ));
-    }
 
     if (mode is ManualConfigModel) {
       final manualMethod = mode as ManualConfigModel;
@@ -202,7 +256,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
             card(
               context,
               localizationHelper.amountToPay,
-              provider.paymentRequest!.amount.toStringAsFixed(2),
+              paymentRequest.amount.toStringAsFixed(2),
             ),
           ],
         ),
@@ -234,7 +288,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
           card(
             context,
             localizationHelper.amountToPay,
-            provider.paymentRequest!.amount.toStringAsFixed(2),
+            paymentRequest.amount.toStringAsFixed(2),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
 import 'package:moosyl/src/models/payment_request_model.dart';
@@ -10,22 +11,25 @@ import 'package:moosyl/src/services/pay_service.dart';
 ///
 /// This class extends [ChangeNotifier] to notify listeners about changes
 /// in the payment payment request state, including loading status and errors.
-class AutomaticPayProvider extends ChangeNotifier {
+class ManualPayProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment services.
   final String apiKey;
 
   /// The ID of the payment request being processed.
   final String transactionId;
 
-  final PaymentMethod method;
+  /// The payment method used for the payment request.
 
   /// Callback function that gets called on successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
-  /// Constructs a [AutomaticPayProvider].
+  /// The payment method selected for the payment process.
+  final ManualConfigModel method;
+
+  /// Constructs a [ManualPayProvider].
   ///
   /// Initiates fetching the payment request details upon creation.
-  AutomaticPayProvider({
+  ManualPayProvider({
     required this.apiKey,
     required this.transactionId,
     this.onPaymentSuccess,
@@ -34,17 +38,11 @@ class AutomaticPayProvider extends ChangeNotifier {
     getPaymentRequest();
   }
 
-  /// Text controller for inputting the passcode.
-  final passCodeTextController = TextEditingController();
-
-  /// Text controller for inputting the phone number.
-  final phoneNumberTextController = TextEditingController();
-
-  /// Key for the payment form.
-  final formKey = GlobalKey<FormState>();
-
-  /// Holds the payment request details.
+  /// Manual payment request model.
   PaymentRequestModel? paymentRequest;
+
+  /// The selected file for manual payment.
+  PlatformFile? selectedFile;
 
   /// Holds any error messages that occur during payment processing.
   Object? error;
@@ -84,22 +82,18 @@ class AutomaticPayProvider extends ChangeNotifier {
   }
 
   /// Processes the payment for the payment request.
-  ///
-  /// Validates the form, sets the loading state, and calls the payment service.
-  /// If payment is successful, it invokes the [onPaymentSuccess] callback.
-  void pay(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return; // Ensure the form is valid.
+  void manualPay(BuildContext context, PaymentMethod method) async {
+    if (selectedFile == null) return; // Ensure the form is valid.
 
     error = null;
     isLoading = true;
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => service.pay(
+      () => service.manualPay(
         transactionId: transactionId,
         paymentMethodId: method.id,
-        passCode: passCodeTextController.text,
-        phoneNumber: phoneNumberTextController.text,
+        selectedImage: selectedFile!,
       ),
     );
 
@@ -115,5 +109,11 @@ class AutomaticPayProvider extends ChangeNotifier {
     if (context.mounted) {
       Navigator.pop(context);
     }
+  }
+
+  /// A provider class for handling payment payment requests.
+  void setSelectedImage(PlatformFile? file) {
+    selectedFile = file;
+    notifyListeners();
   }
 }

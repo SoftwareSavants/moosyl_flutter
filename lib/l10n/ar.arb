@@ -9,7 +9,7 @@
   "masrivi": "مصريفي",
   "amanty": "أمانتي",
   "bCIpay": "BCI Pay",
-  "payUsing": "ادفع باستخدام",
+  "payUsing": "ادفع باستخدام {method}",
   "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ",
   "afterPayment": "بعد الدفع",
   "afterMakingThePaymentFillTheFollowingInformation": "بعد إتمام الدفع، املأ المعلومات التالية",
@@ -18,7 +18,6 @@
   "paymentPassCode": "رمز المرور للدفع",
   "paymentPassCodeFromBankily": "رمز المرور للدفع من بنكيلي",
   "sendForVerification": "أرسل للتحقق",
-  "payUsing": "ادفع باستخدام {method}",
   "codeBPay": "رمز BPay",
   "amountToPay": "المبلغ الواجب دفعه",
   "retry": "إعادة المحاولة",
@@ -26,8 +25,7 @@
   "capture": "التقاط",
   "merchantCode": "رمز التاجر",
   "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ",
-  "merchantCode": "رمز التاجر",
-    "existingPaymentWasFound": "تم العثور على دفعة معلقة موجودة. يرجى الانتظار حتى يتم معالجة الدفعة السابقة.",
+  "existingPaymentWasFound": "تم العثور على دفعة معلقة موجودة. يرجى الانتظار حتى يتم معالجة الدفعة السابقة.",
   "apiKeyRequired": "مطلوب مفتاح API",
   "invalidApiKeyOrganizationNotFound": "مفتاح API غير صالح، لم يتم العثور على المؤسسة",
   "fileNotFound": "الملف غير موجود",
@@ -38,6 +36,6 @@
   "errorWhileCreatingPayment": "حدث خطأ أثناء إنشاء الدفعة",
   "errorWhileCreatingPaymentRequest": "حدث خطأ أثناء إنشاء طلب الدفع",
   "organizationNotFound": "لم يتم العثور على المؤسسة",
-  "invalidApiKey": "مفتاح API غير صالح"
-
+  "invalidApiKey": "مفتاح API غير صالح",
+  "change": "تغيير"
 }

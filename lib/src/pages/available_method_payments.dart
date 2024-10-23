@@ -13,14 +13,18 @@ import 'package:moosyl/src/widgets/icons.dart';
 /// This widget allows users to choose a payment method from a grid of options.
 /// It retrieves the available methods using the [GetPaymentMethodsProvider]
 /// and handles loading and error states.
-class AvailableMethodPage extends StatelessWidget {
-  /// Creates an instance of [AvailableMethodPage].
+class SelectPaymentMethodPage extends StatelessWidget {
+  /// Creates an instance of [SelectPaymentMethodPage].
   ///
   /// the [apiKey] for fetching available methods, and optional custom handlers
   /// and icons for different payment methods.
-  const AvailableMethodPage({
+  const SelectPaymentMethodPage({
     super.key,
+    required this.fullPage,
   });
+
+  /// A flag to indicate whether the widget is in full page mode.
+  final bool fullPage;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +41,14 @@ class AvailableMethodPage extends StatelessWidget {
     if (provider.error != null) {
       return AppErrorWidget(
         message: ExceptionMapper.getErrorMessage(provider.error, context),
+        withScaffold: fullPage,
         onRetry: provider.getMethods,
       );
     }
 
     final methods = provider.supportedTypes;
 
-    return Padding(
+    final child = Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,5 +90,7 @@ class AvailableMethodPage extends StatelessWidget {
         ],
       ),
     );
+
+    return fullPage ? Scaffold(body: child) : child;
   }
 }

@@ -18,7 +18,6 @@
   "paymentPassCode": "Payment Pass Code",
   "paymentPassCodeFromBankily": "Payment Pass Code from Bankily",
   "sendForVerification": "Send for verification",
-  "payUsing": "Pay using {method}",
   "codeBPay": "Code BPay",
   "amountToPay": "Amount to pay",
   "retry": "Retry",
@@ -37,6 +36,6 @@
   "errorWhileCreatingPayment": "Error while creating payment",
   "errorWhileCreatingPaymentRequest": "Error while creating paymentRequest",
   "organizationNotFound": "Organization not found",
-  "invalidApiKey": "Invalid API key"
-
+  "invalidApiKey": "Invalid API key",
+  "change": "Change"
 }

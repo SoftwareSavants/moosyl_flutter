@@ -152,7 +152,7 @@ abstract class MoosylLocalization {
   /// No description provided for @payUsing.
   ///
   /// In en, this message translates to:
-  /// **'Pay using {method}'**
+  /// **'Pay using'**
   String payUsing(Object method);
 
   /// No description provided for @copyTheCodeBPayAndHeadToBankilyToPayTheAmount.
@@ -316,6 +316,12 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Invalid API key'**
   String get invalidApiKey;
+
+  /// No description provided for @change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get change;
 }
 
 class _MoosylLocalizationDelegate extends LocalizationsDelegate<MoosylLocalization> {

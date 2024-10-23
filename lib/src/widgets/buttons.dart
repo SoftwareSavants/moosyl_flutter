@@ -14,6 +14,7 @@ class AppButton extends StatelessWidget {
   final double? minWidth;
   final double? minHeight;
   final EdgeInsetsGeometry? padding;
+  final BorderSide border;
 
   const AppButton({
     super.key,
@@ -29,6 +30,7 @@ class AppButton extends StatelessWidget {
     this.minWidth = 132,
     this.padding,
     this.minHeight = 60,
+    this.border = BorderSide.none,
   });
 
   @override
@@ -44,6 +46,7 @@ class AppButton extends StatelessWidget {
     final buttonStyle = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ?? BorderRadius.circular(8),
+        side: border,
       ),
       backgroundColor: background,
       foregroundColor: foregroundColor,

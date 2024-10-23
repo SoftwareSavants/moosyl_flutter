@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:moosyl/src/models/payment_method_model.dart';
-import 'package:moosyl/src/pages/moosyl_body.dart';
+import 'package:moosyl/src/pages/moosyl_view.dart';
 
 /// [Moosyl] provides a widget that handles the payment process.
 /// It allows you to customize the payment methods, icons, and success callbacks.
@@ -38,7 +38,7 @@ class Moosyl extends HookWidget {
   /// The payment method selected for the payment process.
   final bool isTestingMode;
 
-  /// Displays the [MoosylBody] modal sheet to start the payment process.
+  /// Displays the [MoosylView] modal sheet to start the payment process.
   ///
   /// * [context]: The build context.
   /// * [apiKey]: The API key to authenticate the payment.
@@ -60,7 +60,7 @@ class Moosyl extends HookWidget {
   }) {
     showBarModalBottomSheet(
       context: context,
-      builder: (context) => MoosylBody(
+      builder: (context) => MoosylView(
         apiKey: apiKey,
         customHandlers: customHandlers,
         transactionId: transactionId,
@@ -101,7 +101,7 @@ class Moosyl extends HookWidget {
         () {
           showBarModalBottomSheet(
             context: context,
-            builder: (context) => MoosylBody(
+            builder: (context) => MoosylView(
               apiKey: apiKey,
               customHandlers: customHandlers,
               transactionId: transactionId,
@@ -116,7 +116,7 @@ class Moosyl extends HookWidget {
     }
 
     // Otherwise, return the default MoosylBody widget.
-    return MoosylBody(
+    return MoosylView(
       apiKey: apiKey,
       customHandlers: customHandlers,
       transactionId: transactionId,

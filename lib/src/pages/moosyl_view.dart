@@ -5,21 +5,20 @@ import 'package:provider/provider.dart';
 import 'package:moosyl/src/models/payment_method_model.dart';
 import 'package:moosyl/src/pages/available_method_payments.dart';
 import 'package:moosyl/src/pages/manual_payment_page.dart';
-import 'package:moosyl/src/pages/pay.dart';
+import 'package:moosyl/src/pages/automatic_pay_page.dart';
 import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
-import 'package:moosyl/src/providers/pay_provider.dart';
 
 /// A widget that provides a payment interface for the Software Pay system.
 ///
 /// This widget allows users to select a payment method and proceed with the payment.
 /// It handles localization and manages the state of the selected payment method.
-class MoosylBody extends HookWidget {
-  /// Creates an instance of [MoosylBody].
+class MoosylView extends HookWidget {
+  /// Creates an instance of [MoosylView].
 
   /// Requires the [apiKey] and [transactionId] for the payment transaction,
   /// an [organizationLogo] to display, and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
-  const MoosylBody({
+  const MoosylView({
     super.key,
     required this.apiKey,
     required this.transactionId,
@@ -28,6 +27,7 @@ class MoosylBody extends HookWidget {
     this.onPaymentSuccess,
     this.customIcons,
     this.isTestingMode = false,
+    this.fullPage = true,
   });
 
   /// The API key for authenticating the payment transaction.
@@ -51,21 +51,16 @@ class MoosylBody extends HookWidget {
   /// A flag to indicate whether the widget is in testing mode.
   final bool isTestingMode;
 
+  /// A flag to indicate whether the widget is in full page mode.
+  final bool fullPage;
+
   @override
   Widget build(BuildContext context) {
     return Material(
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (_) => PayProvider(
-              apiKey: apiKey,
-              transactionId: transactionId,
-              onPaymentSuccess: onPaymentSuccess,
-            ),
-          ),
-          ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
-              context: context,
               customHandlers: customHandlers,
               apiKey: apiKey,
               isTestingMode: isTestingMode,
@@ -82,7 +77,7 @@ class MoosylBody extends HookWidget {
 
             // If no payment method is selected, show the available methods page.
             if (selectedModeOfPayment == null) {
-              return const AvailableMethodPage();
+              return SelectPaymentMethodPage(fullPage: fullPage);
             }
 
             if (selectedModeOfPayment.type.isManual) {
@@ -95,16 +90,18 @@ class MoosylBody extends HookWidget {
                 apiKey: apiKey,
                 transactionId: transactionId,
                 method: selectedModeOfPayment,
+                fullPage: fullPage,
               );
             }
 
             // If a payment method is selected, proceed to the payment page.
-            return Pay(
+            return AutomaticPayPage(
               apiKey: apiKey,
               method: selectedModeOfPayment,
               transactionId: transactionId,
               organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
+              fullPage: fullPage,
             );
           },
         ),

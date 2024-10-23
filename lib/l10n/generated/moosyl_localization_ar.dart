@@ -116,4 +116,7 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get invalidApiKey => 'مفتاح API غير صالح';
+
+  @override
+  String get change => 'تغيير';
 }

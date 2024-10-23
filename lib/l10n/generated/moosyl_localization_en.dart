@@ -33,7 +33,7 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String payUsing(Object method) {
-    return 'Pay using $method';
+    return 'Pay using';
   }
 
   @override
@@ -116,4 +116,7 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get invalidApiKey => 'Invalid API key';
+
+  @override
+  String get change => 'Change';
 }

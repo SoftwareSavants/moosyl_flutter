@@ -9,7 +9,6 @@
   "masrivi": "Masrivi",
   "amanty": "Amanty",
   "bCIpay": "BCI Pay",
-  "payUsing": "Payer avec",
   "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant",
   "afterPayment": "Après paiement",
   "afterMakingThePaymentFillTheFollowingInformation": "Après avoir effectué le paiement, remplissez les informations suivantes",
@@ -26,7 +25,7 @@
   "capture": "Capturer",
   "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copiez le code marchand et dirigez-vous vers Sedad pour payer le montant",
   "merchantCode": "Code marchand",
-    "existingPaymentWasFound": "Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.",
+  "existingPaymentWasFound": "Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.",
   "apiKeyRequired": "Clé API requise",
   "invalidApiKeyOrganizationNotFound": "Clé API invalide, organisation non trouvée",
   "fileNotFound": "Fichier introuvable",
@@ -37,6 +36,6 @@
   "errorWhileCreatingPayment": "Erreur lors de la création du paiement",
   "errorWhileCreatingPaymentRequest": "Erreur lors de la création de la demande de paiement",
   "organizationNotFound": "Organisation introuvable",
-  "invalidApiKey": "Clé API invalide"
-
+  "invalidApiKey": "Clé API invalide",
+  "change": "Changer"
 }

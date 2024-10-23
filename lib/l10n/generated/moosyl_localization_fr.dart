@@ -116,4 +116,7 @@ class MoosylLocalizationFr extends MoosylLocalization {
 
   @override
   String get invalidApiKey => 'Clé API invalide';
+
+  @override
+  String get change => 'Changer';
 }

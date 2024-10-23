@@ -25,8 +25,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The payment method selected for the payment process.
   final bool isTestingMode;
 
-  final BuildContext context;
-
   /// Constructs a [GetPaymentMethodsProvider].
 
   /// Initiates fetching payment methods upon creation.
@@ -35,7 +33,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     required this.apiKey,
     required this.isTestingMode,
     required this.customIcons,
-    required this.context,
   }) {
     getMethods();
   }
@@ -102,7 +99,14 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     }
 
     // Find and select the payment method from the list.
-    selected = methods.firstWhere((element) => element.method == type);
+    final selected = methods.firstWhere((element) => element.method == type);
+
+    setPaymentMethod(selected);
+  }
+
+  /// Sets the selected payment method.
+  void setPaymentMethod(PaymentMethod? method) {
+    selected = method;
     notifyListeners();
   }
 }
