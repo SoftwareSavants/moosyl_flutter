@@ -110,6 +110,7 @@ class _ManualPaymentPageBody extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,6 +119,7 @@ class _ManualPaymentPageBody extends StatelessWidget {
                       localizationHelper.payUsing(
                         method.method.title(context),
                       ),
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     if (!fullPage)
                       AppButton(
@@ -141,13 +143,11 @@ class _ManualPaymentPageBody extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 8),
           ModeOfPaymentInfo(
             mode: method,
             paymentRequest: provider.paymentRequest!,
             organizationLogo: organizationLogo,
           ),
-          const SizedBox(height: 6),
           Divider(
             height: 1,
             thickness: 4,
@@ -236,9 +236,11 @@ class BottomSheetButton extends StatelessWidget {
           AppButton(
             loading: loading,
             disabled: disabled,
-            labelText: error != null
-                ? localizationHelper.retry
-                : localizationHelper.sendForVerification,
+            labelText: loading
+                ? localizationHelper.sending
+                : error != null
+                    ? localizationHelper.retry
+                    : localizationHelper.sendForVerification,
             background:
                 error != null ? Theme.of(context).colorScheme.error : null,
             onPressed: onTap,

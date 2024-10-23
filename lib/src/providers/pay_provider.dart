@@ -17,6 +17,7 @@ class AutomaticPayProvider extends ChangeNotifier {
   /// The ID of the payment request being processed.
   final String transactionId;
 
+  /// The payment method selected for the payment process.
   final PaymentMethod method;
 
   /// Callback function that gets called on successful payment.

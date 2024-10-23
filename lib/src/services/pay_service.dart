@@ -24,6 +24,7 @@ class PayService {
     required String paymentMethodId,
   }) {
     // Make a POST request to the payment methods endpoint with the payment details.
+
     return Fetcher(apiKey).post(
       Endpoints.pay,
       body: {

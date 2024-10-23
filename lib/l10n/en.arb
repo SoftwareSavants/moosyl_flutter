@@ -37,5 +37,6 @@
   "errorWhileCreatingPaymentRequest": "Error while creating paymentRequest",
   "organizationNotFound": "Organization not found",
   "invalidApiKey": "Invalid API key",
-  "change": "Change"
+  "change": "Change",
+  "sending": "Sending..."
 }

@@ -120,6 +120,7 @@ class _AutomaticPayBody extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,6 +129,7 @@ class _AutomaticPayBody extends StatelessWidget {
                         localizationHelper.payUsing(
                           method.method.title(context),
                         ),
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       if (!fullPage)
                         AppButton(
@@ -151,13 +153,11 @@ class _AutomaticPayBody extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
             ModeOfPaymentInfo(
               mode: method,
               organizationLogo: organizationLogo,
               paymentRequest: provider.paymentRequest!,
             ),
-            const SizedBox(height: 6),
             Divider(
               height: 1,
               thickness: 4,
@@ -230,41 +230,6 @@ class ModeOfPaymentInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
 
-    if (mode is ManualConfigModel) {
-      final manualMethod = mode as ManualConfigModel;
-
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(child: organizationLogo),
-                const SizedBox(width: 32),
-                AppIcons.close,
-                const SizedBox(width: 32),
-                Expanded(child: manualMethod.method.icon.apply(size: 80)),
-              ],
-            ),
-            const SizedBox(height: 24),
-            card(
-              context,
-              localizationHelper.merchantCode,
-              manualMethod.merchantCode,
-              copyableValue: manualMethod.id,
-            ),
-            card(
-              context,
-              localizationHelper.amountToPay,
-              paymentRequest.amount.toStringAsFixed(2),
-            ),
-          ],
-        ),
-      );
-    }
-
-    final bpayMethod = mode as BankilyConfigModel;
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -275,21 +240,35 @@ class ModeOfPaymentInfo extends StatelessWidget {
               const SizedBox(width: 32),
               AppIcons.close,
               const SizedBox(width: 32),
-              Expanded(child: bpayMethod.method.icon.apply(size: 80)),
+              Expanded(child: mode.method.icon.apply(size: 80)),
             ],
           ),
-          const SizedBox(height: 24),
-          card(
-            context,
-            localizationHelper.codeBPay,
-            bpayMethod.bPayNumber,
-            copyableValue: bpayMethod.bPayNumber,
-          ),
-          card(
-            context,
-            localizationHelper.amountToPay,
-            paymentRequest.amount.toStringAsFixed(2),
-          ),
+          const SizedBox(height: 12),
+          if (mode is ManualConfigModel) ...[
+            card(
+              context,
+              localizationHelper.merchantCode,
+              (mode as ManualConfigModel).merchantCode,
+              copyableValue: mode.id,
+            ),
+            card(
+              context,
+              localizationHelper.amountToPay,
+              paymentRequest.amount.toStringAsFixed(2),
+            ),
+          ] else if (mode is BankilyConfigModel) ...[
+            card(
+              context,
+              localizationHelper.codeBPay,
+              (mode as BankilyConfigModel).bPayNumber,
+              copyableValue: (mode as BankilyConfigModel).bPayNumber,
+            ),
+            card(
+              context,
+              localizationHelper.amountToPay,
+              paymentRequest.amount.toStringAsFixed(2),
+            ),
+          ]
         ],
       ),
     );

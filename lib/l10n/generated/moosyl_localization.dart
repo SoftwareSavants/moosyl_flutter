@@ -322,6 +322,12 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Change'**
   String get change;
+
+  /// No description provided for @sending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending...'**
+  String get sending;
 }
 
 class _MoosylLocalizationDelegate extends LocalizationsDelegate<MoosylLocalization> {

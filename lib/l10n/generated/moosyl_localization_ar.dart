@@ -119,4 +119,7 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get change => 'تغيير';
+
+  @override
+  String get sending => 'جاري الإرسال...';
 }

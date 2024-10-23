@@ -37,5 +37,6 @@
   "errorWhileCreatingPaymentRequest": "حدث خطأ أثناء إنشاء طلب الدفع",
   "organizationNotFound": "لم يتم العثور على المؤسسة",
   "invalidApiKey": "مفتاح API غير صالح",
-  "change": "تغيير"
+  "change": "تغيير",
+  "sending": "جاري الإرسال..."
 }

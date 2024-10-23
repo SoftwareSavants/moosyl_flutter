@@ -37,5 +37,6 @@
   "errorWhileCreatingPaymentRequest": "Erreur lors de la création de la demande de paiement",
   "organizationNotFound": "Organisation introuvable",
   "invalidApiKey": "Clé API invalide",
-  "change": "Changer"
+  "change": "Changer",
+  "sending": "Envoi..."
 }

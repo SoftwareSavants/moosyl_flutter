@@ -119,4 +119,7 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get change => 'Change';
+
+  @override
+  String get sending => 'Sending...';
 }
