@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
-import 'package:moosyl/src/payment_methods/pages/moosyl_body.dart';
+import 'package:moosyl/src/models/payment_method_model.dart';
+import 'package:moosyl/src/pages/moosyl_body.dart';
 
 /// [Moosyl] provides a widget that handles the payment process.
 /// It allows you to customize the payment methods, icons, and success callbacks.

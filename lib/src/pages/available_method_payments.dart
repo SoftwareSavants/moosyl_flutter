@@ -3,7 +3,7 @@ import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
 
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
-import 'package:moosyl/src/payment_methods/providers/get_payment_methods_provider.dart';
+import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
 import 'package:moosyl/src/widgets/container.dart';
 import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:moosyl/src/widgets/icons.dart';

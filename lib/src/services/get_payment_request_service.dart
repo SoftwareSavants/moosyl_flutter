@@ -1,5 +1,5 @@
 import 'package:moosyl/src/helpers/fetcher.dart';
-import 'package:moosyl/src/payment_methods/models/payment_request_model.dart';
+import 'package:moosyl/src/models/payment_request_model.dart';
 
 /// A service class for fetching Payment Request details.
 ///

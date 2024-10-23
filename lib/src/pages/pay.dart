@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:moosyl/src/payment_methods/pages/manual_payment_page.dart';
+import 'package:moosyl/src/pages/manual_payment_page.dart';
 
 import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
 
-import 'package:moosyl/src/payment_methods/models/payment_method_model.dart';
-import 'package:moosyl/src/payment_methods/providers/pay_provider.dart';
+import 'package:moosyl/src/models/payment_method_model.dart';
+import 'package:moosyl/src/providers/pay_provider.dart';
 import 'package:moosyl/src/widgets/container.dart';
 import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:moosyl/src/widgets/feedback.dart';
