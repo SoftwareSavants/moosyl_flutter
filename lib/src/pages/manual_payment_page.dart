@@ -93,88 +93,103 @@ class _ManualPaymentPageBody extends StatelessWidget {
 
     final method = provider.method;
 
-    return Scaffold(
-      appBar: fullPage
-          ? AppBar(
-              title: Text(method.method.title(context)),
-              leading: BackButton(
-                onPressed: () {
-                  getPaymentMethodsProvider.setPaymentMethod(null);
-                },
-              ),
-            )
-          : null,
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 200),
-        shrinkWrap: fullPage,
-        physics: fullPage ? const NeverScrollableScrollPhysics() : null,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      localizationHelper.payUsing(
-                        method.method.title(context),
-                      ),
-                      style: Theme.of(context).textTheme.headlineMedium,
+    final children = ListView(
+      padding: EdgeInsets.only(bottom: fullPage ? 200 : 20),
+      shrinkWrap: !fullPage,
+      physics: !fullPage ? const NeverScrollableScrollPhysics() : null,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    localizationHelper.payUsing(
+                      method.method.title(context),
                     ),
-                    if (!fullPage)
-                      AppButton(
-                        minHeight: 0,
-                        background: Theme.of(context).colorScheme.onPrimary,
-                        textColor: Theme.of(context).colorScheme.onSurface,
-                        margin: EdgeInsets.zero,
-                        border: BorderSide(
-                          color: Theme.of(context).colorScheme.onSurface,
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 20,
                         ),
-                        labelText: localizationHelper.change,
-                        onPressed: () =>
-                            getPaymentMethodsProvider.setPaymentMethod(null),
+                  ),
+                  if (!fullPage)
+                    AppButton(
+                      minHeight: 0,
+                      background: Theme.of(context).colorScheme.onPrimary,
+                      textColor: Theme.of(context).colorScheme.onSurface,
+                      margin: EdgeInsets.zero,
+                      border: BorderSide(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                  ],
-                ),
-                Text(
-                  localizationHelper
-                      .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
-                ),
-              ],
-            ),
+                      labelText: localizationHelper.change,
+                      onPressed: () =>
+                          getPaymentMethodsProvider.setPaymentMethod(null),
+                    ),
+                ],
+              ),
+              Text(
+                localizationHelper
+                    .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
+              ),
+            ],
           ),
-          ModeOfPaymentInfo(
-            mode: method,
-            paymentRequest: provider.paymentRequest!,
-            organizationLogo: organizationLogo,
+        ),
+        ModeOfPaymentInfo(
+          mode: method,
+          paymentRequest: provider.paymentRequest!,
+          organizationLogo: organizationLogo,
+        ),
+        Divider(
+          height: 1,
+          thickness: 4,
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        const SizedBox(height: 16),
+        InputLabel(
+          label: localizationHelper.afterPayment,
+          child: Text(
+            localizationHelper.afterMakingThePaymentFillTheFollowingInformation,
           ),
-          Divider(
-            height: 1,
-            thickness: 4,
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          const SizedBox(height: 16),
-          InputLabel(
-            label: localizationHelper.afterPayment,
-            child: Text(
-              localizationHelper
-                  .afterMakingThePaymentFillTheFollowingInformation,
-            ),
-          ),
-          const SizedBox(height: 20),
-          PickImageCard(onChanged: provider.setSelectedImage),
+        ),
+        const SizedBox(height: 20),
+        PickImageCard(onChanged: provider.setSelectedImage),
+      ],
+    );
+
+    final paymentButton = BottomSheetButton(
+      disabled: provider.selectedFile == null,
+      error: provider.error != null
+          ? ExceptionMapper.getErrorMessage(provider.error, context)
+          : null,
+      withShadow: fullPage,
+      loading: provider.isLoading,
+      onTap: () => provider.manualPay(context, method),
+    );
+
+    if (!fullPage) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          children,
+          paymentButton,
         ],
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(method.method.title(context)),
+        leading: BackButton(
+          onPressed: () {
+            getPaymentMethodsProvider.setPaymentMethod(null);
+          },
+        ),
       ),
-      bottomSheet: BottomSheetButton(
-        disabled: provider.selectedFile == null,
-        error: provider.error != null
-            ? ExceptionMapper.getErrorMessage(provider.error, context)
-            : null,
-        loading: provider.isLoading,
-        onTap: () => provider.manualPay(context, method),
-      ),
+      body: children,
+      bottomSheet: paymentButton,
     );
   }
 }
@@ -193,6 +208,9 @@ class BottomSheetButton extends StatelessWidget {
   /// Error message to display.
   final String? error;
 
+  /// Flag to indicate whether the button should have a shadow.
+  final bool withShadow;
+
   /// A widget that displays the mode of payment information.
 
   /// Constructor for [BottomSheetButton].
@@ -201,6 +219,7 @@ class BottomSheetButton extends StatelessWidget {
     required this.loading,
     required this.disabled,
     required this.onTap,
+    required this.withShadow,
     this.error,
   });
 
@@ -216,11 +235,12 @@ class BottomSheetButton extends StatelessWidget {
         bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
       ),
       shadows: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.12),
-          offset: const Offset(0, -4),
-          blurRadius: 16,
-        )
+        if (withShadow)
+          BoxShadow(
+            color: Colors.black.withOpacity(0.12),
+            offset: const Offset(0, -4),
+            blurRadius: 16,
+          )
       ],
       borderRadius: BorderRadius.zero,
       child: Column(

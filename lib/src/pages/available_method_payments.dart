@@ -48,6 +48,33 @@ class SelectPaymentMethodPage extends StatelessWidget {
 
     final methods = provider.supportedTypes;
 
+    final children = GridView.builder(
+      padding: const EdgeInsets.all(16),
+      shrinkWrap: !fullPage,
+      physics: !fullPage ? const NeverScrollableScrollPhysics() : null,
+      itemCount: methods.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 1.8,
+      ),
+      itemBuilder: (context, index) {
+        final method = methods.elementAt(index);
+
+        return InkWell(
+          onTap: () => provider.onTap(method, context),
+          child: AppContainer(
+            border: Border.all(width: 1),
+            padding: const EdgeInsetsDirectional.all(24),
+            child: provider.customIcons?[method] != null
+                ? AppIcon(path: provider.customIcons?[method])
+                : method.icon,
+          ),
+        );
+      },
+    );
+
     final child = Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -58,37 +85,12 @@ class SelectPaymentMethodPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               MoosylLocalization.of(context)!.paymentMethod,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              shrinkWrap: fullPage,
-              physics: fullPage ? const NeverScrollableScrollPhysics() : null,
-              itemCount: methods.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 1.8,
-              ),
-              itemBuilder: (context, index) {
-                final method = methods.elementAt(index);
-
-                return InkWell(
-                  onTap: () => provider.onTap(method, context),
-                  child: AppContainer(
-                    border: Border.all(width: 1),
-                    padding: const EdgeInsetsDirectional.all(24),
-                    child: provider.customIcons?[method] != null
-                        ? AppIcon(path: provider.customIcons?[method])
-                        : method.icon,
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    fontSize: 20,
                   ),
-                );
-              },
             ),
           ),
+          if (fullPage) Expanded(child: children) else children,
         ],
       ),
     );

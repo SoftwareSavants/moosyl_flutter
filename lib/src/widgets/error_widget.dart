@@ -64,7 +64,9 @@ class AppErrorWidget extends StatelessWidget {
             if (message != null)
               Text(
                 message!,
-                style: Theme.of(context).textTheme.titleLarge!,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 18,
+                    ),
                 textAlign: TextAlign.center,
               ),
             if (description != null) ...[
@@ -74,7 +76,10 @@ class AppErrorWidget extends StatelessWidget {
               ),
               Text(
                 description!,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
             ],

@@ -79,6 +79,7 @@ class AutomaticPayProvider extends ChangeNotifier {
 
     // Set the payment request details from the result.
     paymentRequest = result.result;
+    phoneNumberTextController.text = paymentRequest!.phoneNumber ?? '';
 
     // Notify listeners of the change in payment request details.
     notifyListeners();

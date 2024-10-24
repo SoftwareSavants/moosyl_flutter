@@ -103,106 +103,121 @@ class _AutomaticPayBody extends StatelessWidget {
 
     final method = provider.method;
 
-    return Form(
+    final paymentButton = BottomSheetButton(
+      disabled: false,
+      error: provider.error != null
+          ? ExceptionMapper.getErrorMessage(provider.error, context)
+          : null,
+      loading: provider.isLoading,
+      onTap: () => provider.pay(context),
+      withShadow: fullPage,
+    );
+    final children = Form(
       key: provider.formKey,
-      child: Scaffold(
-        appBar: fullPage
-            ? AppBar(
-                title: Text(method.method.title(context)),
-                leading: BackButton(
-                  onPressed: () =>
-                      getPaymentMethodsProvider.setPaymentMethod(null),
-                ),
-              )
-            : null,
-        body: ListView(
-          padding: const EdgeInsets.only(bottom: 200, top: 16),
-          shrinkWrap: fullPage,
-          physics: fullPage ? const NeverScrollableScrollPhysics() : null,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        localizationHelper.payUsing(
-                          method.method.title(context),
-                        ),
-                        style: Theme.of(context).textTheme.headlineMedium,
+      child: ListView(
+        padding: EdgeInsets.only(bottom: fullPage ? 200 : 20, top: 16),
+        shrinkWrap: !fullPage,
+        physics: !fullPage ? const NeverScrollableScrollPhysics() : null,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      localizationHelper.payUsing(
+                        method.method.title(context),
                       ),
-                      if (!fullPage)
-                        AppButton(
-                          minHeight: 0,
-                          background: Theme.of(context).colorScheme.onPrimary,
-                          textColor: Theme.of(context).colorScheme.onSurface,
-                          margin: EdgeInsets.zero,
-                          border: BorderSide(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                          labelText: localizationHelper.change,
-                          onPressed: () =>
-                              getPaymentMethodsProvider.setPaymentMethod(null),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium!
+                          .copyWith(fontSize: 20),
+                    ),
+                    if (!fullPage)
+                      AppButton(
+                        minHeight: 0,
+                        background: Theme.of(context).colorScheme.onPrimary,
+                        textColor: Theme.of(context).colorScheme.onSurface,
+                        margin: EdgeInsets.zero,
+                        border: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                    ],
-                  ),
-                  Text(
-                    localizationHelper
-                        .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
-                  ),
-                ],
-              ),
+                        labelText: localizationHelper.change,
+                        onPressed: () =>
+                            getPaymentMethodsProvider.setPaymentMethod(null),
+                      ),
+                  ],
+                ),
+                Text(
+                  localizationHelper
+                      .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
+                ),
+              ],
             ),
-            ModeOfPaymentInfo(
-              mode: method,
-              organizationLogo: organizationLogo,
-              paymentRequest: provider.paymentRequest!,
+          ),
+          ModeOfPaymentInfo(
+            mode: method,
+            organizationLogo: organizationLogo,
+            paymentRequest: provider.paymentRequest!,
+          ),
+          Divider(
+            height: 1,
+            thickness: 4,
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          const SizedBox(height: 16),
+          InputLabel(
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 18,
+                ),
+            label: localizationHelper.afterPayment,
+            child: Text(
+              localizationHelper
+                  .afterMakingThePaymentFillTheFollowingInformation,
             ),
-            Divider(
-              height: 1,
-              thickness: 4,
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            const SizedBox(height: 16),
-            InputLabel(
-              style: Theme.of(context).textTheme.titleLarge,
-              label: localizationHelper.afterPayment,
-              child: Text(
-                localizationHelper
-                    .afterMakingThePaymentFillTheFollowingInformation,
-              ),
-            ),
-            const SizedBox(height: 20),
-            AppTextInput(
-              margin: horizontalPadding,
-              maxLength: 8,
-              controller: provider.phoneNumberTextController,
-              validator: Validators.validateMauritanianPhoneNumber,
-              hint: localizationHelper.enterYourBankilyPhoneNumber,
-              label: localizationHelper.bankilyPhoneNumber,
-            ),
-            AppTextInput(
-              margin: horizontalPadding,
-              controller: provider.passCodeTextController,
-              validator: Validators.validatePassCode,
-              hint: localizationHelper.paymentPassCode,
-              label: localizationHelper.paymentPassCodeFromBankily,
-              maxLength: 4,
-            ),
-          ],
-        ),
-        bottomSheet: BottomSheetButton(
-          disabled: false,
-          error: provider.error != null
-              ? ExceptionMapper.getErrorMessage(provider.error, context)
-              : null,
-          loading: provider.isLoading,
-          onTap: () => provider.pay(context),
-        ),
+          ),
+          const SizedBox(height: 20),
+          AppTextInput(
+            margin: horizontalPadding,
+            maxLength: 8,
+            controller: provider.phoneNumberTextController,
+            validator: Validators.validateMauritanianPhoneNumber,
+            hint: localizationHelper.enterYourBankilyPhoneNumber,
+            label: localizationHelper.bankilyPhoneNumber,
+          ),
+          AppTextInput(
+            margin: horizontalPadding,
+            controller: provider.passCodeTextController,
+            validator: Validators.validatePassCode,
+            hint: localizationHelper.paymentPassCode,
+            label: localizationHelper.paymentPassCodeFromBankily,
+            maxLength: 4,
+          ),
+        ],
       ),
+    );
+
+    if (!fullPage) {
+      return Column(
+        children: [children, paymentButton],
+      );
+    }
+
+    return Scaffold(
+      appBar: fullPage
+          ? AppBar(
+              title: Text(method.method.title(context)),
+              leading: BackButton(
+                onPressed: () =>
+                    getPaymentMethodsProvider.setPaymentMethod(null),
+              ),
+            )
+          : null,
+      body: children,
+      bottomSheet: paymentButton,
     );
   }
 }

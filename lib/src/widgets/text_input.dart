@@ -41,7 +41,9 @@ class AppTextInput extends StatelessWidget {
     final suffixIcon = this.suffixIcon;
 
     return InputLabel(
-      style: Theme.of(context).textTheme.titleMedium,
+      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            fontSize: 16,
+          ),
       label: label,
       child: TextFormField(
         controller: controller,

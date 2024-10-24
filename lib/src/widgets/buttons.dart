@@ -50,7 +50,9 @@ class AppButton extends StatelessWidget {
       ),
       backgroundColor: background,
       foregroundColor: foregroundColor,
-      textStyle: Theme.of(context).textTheme.titleSmall,
+      textStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
+            fontSize: 14,
+          ),
       elevation: 0,
       minimumSize: const Size(0, 40),
       padding: padding,

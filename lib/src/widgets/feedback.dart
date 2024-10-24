@@ -35,6 +35,7 @@ class Feedbacks {
               message,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Theme.of(context).colorScheme.surface,
+                    fontSize: 14,
                   ),
               overflow: TextOverflow.clip,
             ),
