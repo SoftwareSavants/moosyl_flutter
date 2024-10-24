@@ -105,13 +105,11 @@ class _AutomaticPayBody extends StatelessWidget {
 
     final paymentButton = BottomSheetButton(
       disabled: false,
-      error: provider.error != null
-          ? ExceptionMapper.getErrorMessage(provider.error, context)
-          : null,
       loading: provider.isLoading,
       onTap: () => provider.pay(context),
       withShadow: fullPage,
     );
+
     final children = Form(
       key: provider.formKey,
       child: ListView(
@@ -194,6 +192,12 @@ class _AutomaticPayBody extends StatelessWidget {
             validator: Validators.validatePassCode,
             hint: localizationHelper.paymentPassCode,
             label: localizationHelper.paymentPassCodeFromBankily,
+            errorText: provider.error != null
+                ? ExceptionMapper.getErrorMessage(
+                    provider.error,
+                    context,
+                  )
+                : null,
             maxLength: 4,
           ),
         ],
