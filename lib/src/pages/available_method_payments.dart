@@ -80,7 +80,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Display the title for payment methods.
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
