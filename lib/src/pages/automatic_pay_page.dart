@@ -117,6 +117,8 @@ class _AutomaticPayBody extends StatelessWidget {
             : null,
         body: ListView(
           padding: const EdgeInsets.only(bottom: 200, top: 16),
+          shrinkWrap: fullPage,
+          physics: fullPage ? const NeverScrollableScrollPhysics() : null,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

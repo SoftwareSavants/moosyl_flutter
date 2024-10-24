@@ -64,6 +64,8 @@ class SelectPaymentMethodPage extends StatelessWidget {
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
+              shrinkWrap: fullPage,
+              physics: fullPage ? const NeverScrollableScrollPhysics() : null,
               itemCount: methods.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

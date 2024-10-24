@@ -90,7 +90,7 @@ class AppErrorWidget extends StatelessWidget {
     }
 
     return Center(
-      child: withScaffold ? Scaffold(body: child) : child,
+      child: withScaffold ? Scaffold(body: Center(child: child)) : child,
     );
   }
 }

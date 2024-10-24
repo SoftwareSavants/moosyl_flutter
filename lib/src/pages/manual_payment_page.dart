@@ -106,6 +106,8 @@ class _ManualPaymentPageBody extends StatelessWidget {
           : null,
       body: ListView(
         padding: const EdgeInsets.only(bottom: 200),
+        shrinkWrap: fullPage,
+        physics: fullPage ? const NeverScrollableScrollPhysics() : null,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
