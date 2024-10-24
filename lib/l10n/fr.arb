@@ -39,5 +39,6 @@
   "invalidApiKey": "Clé API invalide",
   "change": "Changer",
   "sending": "Envoi...",
-  "processingError": "Erreur de Traitments"
+  "processingError": "Erreur de Traitments",
+  "nonExistentOperation": "Opération inexistante"
 }

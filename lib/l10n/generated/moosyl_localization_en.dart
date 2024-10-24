@@ -125,4 +125,7 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get processingError => 'processing Error';
+
+  @override
+  String get nonExistentOperation => 'Non-existent operation';
 }

@@ -62,7 +62,10 @@ class AppExceptionCode {
   static const invalidApiKey = AppExceptionCode('Invalid API key');
 
   ///Processing Error
-  static const processingError = AppExceptionCode('Erreur de Traitments');
+  static const processingError = AppExceptionCode('Erreur de traitement');
+
+  /// non-existent operation
+  static const nonExistentOperation = AppExceptionCode('operation inexistante');
 
   @override
   bool operator ==(covariant AppExceptionCode other) {

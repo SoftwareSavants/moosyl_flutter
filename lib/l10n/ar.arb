@@ -39,5 +39,6 @@
   "invalidApiKey": "مفتاح API غير صالح",
   "change": "تغيير",
   "sending": "جاري الإرسال...",
-  "processingError":"خطأ في المعالجة"
+  "processingError": "خطأ في المعالجة",
+  "nonExistentOperation": "العملية غير موجودة"
 }

@@ -334,6 +334,12 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'processing Error'**
   String get processingError;
+
+  /// No description provided for @nonExistentOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-existent operation'**
+  String get nonExistentOperation;
 }
 
 class _MoosylLocalizationDelegate extends LocalizationsDelegate<MoosylLocalization> {

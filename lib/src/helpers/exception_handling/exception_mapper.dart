@@ -55,6 +55,8 @@ class ExceptionMapper {
           AppExceptionCode.invalidApiKey => localizationsHelper.invalidApiKey,
           AppExceptionCode.processingError => localizationsHelper
               .processingError, // Localized message for invalid API key. // Localized message for invalid API key.
+          AppExceptionCode.nonExistentOperation =>
+            localizationsHelper.nonExistentOperation,
           AppExceptionCode.unknown => localizationsHelper
               .unknownError, // Localized message for unknown error.
           _ => localizationsHelper

@@ -39,5 +39,6 @@
   "invalidApiKey": "Invalid API key",
   "change": "Change",
   "sending": "Sending...",
-  "processingError": "processing Error"
+  "processingError": "processing Error",
+  "nonExistentOperation": "Non-existent operation"
 }
