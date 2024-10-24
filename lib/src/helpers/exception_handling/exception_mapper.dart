@@ -52,8 +52,9 @@ class ExceptionMapper {
               .errorWhileCreatingPaymentRequest, // Localized message for error while creating payment request.
           AppExceptionCode.organizationNotFound => localizationsHelper
               .organizationNotFound, // Localized message for organization not found.
-          AppExceptionCode.invalidApiKey => localizationsHelper
-              .invalidApiKey, // Localized message for invalid API key.
+          AppExceptionCode.invalidApiKey => localizationsHelper.invalidApiKey,
+          AppExceptionCode.processingError => localizationsHelper
+              .processingError, // Localized message for invalid API key. // Localized message for invalid API key.
           AppExceptionCode.unknown => localizationsHelper
               .unknownError, // Localized message for unknown error.
           _ => localizationsHelper

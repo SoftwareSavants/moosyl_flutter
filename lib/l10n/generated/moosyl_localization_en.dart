@@ -122,4 +122,7 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get sending => 'Sending...';
+
+  @override
+  String get processingError => 'processing Error';
 }

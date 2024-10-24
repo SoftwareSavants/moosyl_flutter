@@ -38,5 +38,6 @@
   "organizationNotFound": "لم يتم العثور على المؤسسة",
   "invalidApiKey": "مفتاح API غير صالح",
   "change": "تغيير",
-  "sending": "جاري الإرسال..."
+  "sending": "جاري الإرسال...",
+  "processingError":"خطأ في المعالجة"
 }

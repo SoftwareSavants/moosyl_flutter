@@ -61,6 +61,9 @@ class AppExceptionCode {
   ///Invalid API key
   static const invalidApiKey = AppExceptionCode('Invalid API key');
 
+  ///Processing Error
+  static const processingError = AppExceptionCode('Processing Error');
+
   @override
   bool operator ==(covariant AppExceptionCode other) {
     if (identical(this, other)) return true; // Check for reference equality.

@@ -38,5 +38,6 @@
   "organizationNotFound": "Organization not found",
   "invalidApiKey": "Invalid API key",
   "change": "Change",
-  "sending": "Sending..."
+  "sending": "Sending...",
+  "processingError": "processing Error"
 }

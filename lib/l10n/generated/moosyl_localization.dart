@@ -328,6 +328,12 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Sending...'**
   String get sending;
+
+  /// No description provided for @processingError.
+  ///
+  /// In en, this message translates to:
+  /// **'processing Error'**
+  String get processingError;
 }
 
 class _MoosylLocalizationDelegate extends LocalizationsDelegate<MoosylLocalization> {

@@ -38,5 +38,6 @@
   "organizationNotFound": "Organisation introuvable",
   "invalidApiKey": "Clé API invalide",
   "change": "Changer",
-  "sending": "Envoi..."
+  "sending": "Envoi...",
+  "processingError": "Erreur de Traitments"
 }
