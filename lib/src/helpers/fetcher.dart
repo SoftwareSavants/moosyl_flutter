@@ -20,7 +20,7 @@ class Fetcher {
       'content-type': 'application/json',
     };
 
-    headers['api_key'] = authorization;
+    headers['Authorization'] = authorization;
 
     return headers;
   }
