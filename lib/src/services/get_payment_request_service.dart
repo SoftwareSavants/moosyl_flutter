@@ -7,10 +7,10 @@ import 'package:moosyl/src/models/payment_request_model.dart';
 /// Payment Request information based on the Payment Request ID.
 class GetPaymentRequestService {
   /// The API key used for authentication with the backend.
-  final String apiKey;
+  final String authorizations;
 
-  /// Constructs a [GetPaymentRequestService] with the provided [apiKey].
-  GetPaymentRequestService(this.apiKey);
+  /// Constructs a [GetPaymentRequestService] with the provided [authorizations].
+  GetPaymentRequestService(this.authorizations);
 
   /// Fetches Payment Request details for the specified [transactionId].
   ///
@@ -18,7 +18,7 @@ class GetPaymentRequestService {
   /// Returns an [PaymentRequestModel] object containing the Payment Request details.
   Future<PaymentRequestModel> get(String transactionId) async {
     // Fetch the Payment Request details from the backend.
-    final methodsResult = await Fetcher(apiKey).get(
+    final methodsResult = await Fetcher(authorizations).get(
       Endpoints.paymentRequest(transactionId),
     );
 

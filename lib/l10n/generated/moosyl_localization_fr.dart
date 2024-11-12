@@ -37,16 +37,19 @@ class MoosylLocalizationFr extends MoosylLocalization {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
+      'Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant';
 
   @override
   String get afterPayment => 'Après paiement';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation => 'Après avoir effectué le paiement, remplissez les informations suivantes';
+  String get afterMakingThePaymentFillTheFollowingInformation =>
+      'Après avoir effectué le paiement, remplissez les informations suivantes';
 
   @override
-  String get enterYourBankilyPhoneNumber => 'Entrez votre numéro de téléphone Bankily';
+  String get enterYourBankilyPhoneNumber =>
+      'Entrez votre numéro de téléphone Bankily';
 
   @override
   String get bankilyPhoneNumber => 'Numéro de téléphone Bankily';
@@ -55,7 +58,8 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get paymentPassCode => 'Code de passe de paiement';
 
   @override
-  String get paymentPassCodeFromBankily => 'Code de passe de paiement de Bankily';
+  String get paymentPassCodeFromBankily =>
+      'Code de passe de paiement de Bankily';
 
   @override
   String get sendForVerification => 'Envoyer pour vérification';
@@ -76,19 +80,22 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get capture => 'Capturer';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount => 'Copiez le code marchand et dirigez-vous vers Sedad pour payer le montant';
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
+      'Copiez le code marchand et dirigez-vous vers Sedad pour payer le montant';
 
   @override
   String get merchantCode => 'Code marchand';
 
   @override
-  String get existingPaymentWasFound => 'Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.';
+  String get existingPaymentWasFound =>
+      'Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.';
 
   @override
-  String get apiKeyRequired => 'Clé API requise';
+  String get authorizationRequired => 'Clé API requise';
 
   @override
-  String get invalidApiKeyOrganizationNotFound => 'Clé API invalide, organisation non trouvée';
+  String get invalidAuthorizationOrganizationNotFound =>
+      'Clé API invalide, organisation non trouvée';
 
   @override
   String get fileNotFound => 'Fichier introuvable';
@@ -106,16 +113,18 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get paymentNotFound => 'Paiement introuvable';
 
   @override
-  String get errorWhileCreatingPayment => 'Erreur lors de la création du paiement';
+  String get errorWhileCreatingPayment =>
+      'Erreur lors de la création du paiement';
 
   @override
-  String get errorWhileCreatingPaymentRequest => 'Erreur lors de la création de la demande de paiement';
+  String get errorWhileCreatingPaymentRequest =>
+      'Erreur lors de la création de la demande de paiement';
 
   @override
   String get organizationNotFound => 'Organisation introuvable';
 
   @override
-  String get invalidApiKey => 'Clé API invalide';
+  String get invalidAuthorization => 'Clé API invalide';
 
   @override
   String get change => 'Changer';

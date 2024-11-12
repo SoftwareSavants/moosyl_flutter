@@ -15,12 +15,12 @@ import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
 class MoosylView extends HookWidget {
   /// Creates an instance of [MoosylView].
 
-  /// Requires the [apiKey] and [transactionId] for the payment transaction,
+  /// Requires the [authorization] and [transactionId] for the payment transaction,
   /// an [organizationLogo] to display, and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
   const MoosylView({
     super.key,
-    required this.apiKey,
+    required this.authorization,
     required this.transactionId,
     required this.organizationLogo,
     this.customHandlers = const {},
@@ -31,7 +31,7 @@ class MoosylView extends HookWidget {
   });
 
   /// The API key for authenticating the payment transaction.
-  final String apiKey;
+  final String authorization;
 
   /// The transaction ID for the specific payment transaction.
   final String transactionId;
@@ -62,7 +62,7 @@ class MoosylView extends HookWidget {
           ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
               customHandlers: customHandlers,
-              apiKey: apiKey,
+              authorization: authorization,
               isTestingMode: isTestingMode,
               customIcons: customIcons,
             ),
@@ -87,7 +87,7 @@ class MoosylView extends HookWidget {
 
               return ManualPaymentPage(
                 organizationLogo: organizationLogo,
-                apiKey: apiKey,
+                authorization: authorization,
                 transactionId: transactionId,
                 method: selectedModeOfPayment,
                 fullPage: fullPage,
@@ -97,7 +97,7 @@ class MoosylView extends HookWidget {
 
             // If a payment method is selected, proceed to the payment page.
             return AutomaticPayPage(
-              apiKey: apiKey,
+              authorization: authorization,
               method: selectedModeOfPayment,
               transactionId: transactionId,
               organizationLogo: organizationLogo,

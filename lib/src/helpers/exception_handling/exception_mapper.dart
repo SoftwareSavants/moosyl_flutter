@@ -31,11 +31,11 @@ class ExceptionMapper {
       AppException(code: AppExceptionCode code) => switch (code) {
           AppExceptionCode.existingPaymentWasFound => localizationsHelper
               .existingPaymentWasFound, // Localized message for existing payment found.
-          AppExceptionCode.apiKeyRequired => localizationsHelper
-              .apiKeyRequired, // Localized message for API key required.
-          AppExceptionCode.invalidApiKeyOrganizationNotFound =>
+          AppExceptionCode.authorizationRequired => localizationsHelper
+              .authorizationRequired, // Localized message for API key required.
+          AppExceptionCode.invalidAuthorizationOrganizationNotFound =>
             localizationsHelper
-                .invalidApiKeyOrganizationNotFound, // Localized message for invalid API key (organization not found).
+                .invalidAuthorizationOrganizationNotFound, // Localized message for invalid API key (organization not found).
           AppExceptionCode.fileNotFound => localizationsHelper
               .fileNotFound, // Localized message for file not found.
           AppExceptionCode.authenticationBPayFailed => localizationsHelper
@@ -52,7 +52,8 @@ class ExceptionMapper {
               .errorWhileCreatingPaymentRequest, // Localized message for error while creating payment request.
           AppExceptionCode.organizationNotFound => localizationsHelper
               .organizationNotFound, // Localized message for organization not found.
-          AppExceptionCode.invalidApiKey => localizationsHelper.invalidApiKey,
+          AppExceptionCode.invalidAuthorization =>
+            localizationsHelper.invalidAuthorization,
           AppExceptionCode.processingError => localizationsHelper
               .processingError, // Localized message for invalid API key. // Localized message for invalid API key.
           AppExceptionCode.nonExistentOperation =>

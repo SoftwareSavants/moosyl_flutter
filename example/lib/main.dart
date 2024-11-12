@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: MoosylView(
         //withScaffold: true,
-        apiKey:
+        authorization:
             'hjafbhawbfj3bhj232i23jd2bmdhaggd737732jvgmdbvvajd721yiejhddadcnkc338',
         transactionId: '507876',
         organizationLogo: const Text('Moosyl'),

@@ -7,10 +7,10 @@ import 'package:moosyl/src/helpers/fetcher.dart';
 /// execute payment transactions.
 class PayService {
   /// The API key used for authentication with the backend.
-  final String apiKey;
+  final String authorization;
 
-  /// Constructs a [PayService] with the provided [apiKey].
-  PayService(this.apiKey);
+  /// Constructs a [PayService] with the provided [authorization].
+  PayService(this.authorization);
 
   /// Processes a payment transaction.
   ///
@@ -25,7 +25,7 @@ class PayService {
   }) {
     // Make a POST request to the payment methods endpoint with the payment details.
 
-    return Fetcher(apiKey).post(
+    return Fetcher(authorization).post(
       Endpoints.pay,
       body: {
         'transactionId': transactionId,
@@ -55,7 +55,7 @@ class PayService {
     required PlatformFile selectedImage,
   }) {
     // Make a POST request to the payment methods endpoint with the payment details.
-    return Fetcher(apiKey).multipartPost(
+    return Fetcher(authorization).multipartPost(
       Endpoints.manualPayment,
       files: [selectedImage],
       body: {

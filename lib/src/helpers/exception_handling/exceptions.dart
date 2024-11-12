@@ -16,10 +16,10 @@ class AppExceptionCode {
   );
 
   /// API key is required
-  static const apiKeyRequired = AppExceptionCode('API key is required');
+  static const authorizationRequired = AppExceptionCode('API key is required');
 
   ///Invalid API key, organization not found
-  static const invalidApiKeyOrganizationNotFound = AppExceptionCode(
+  static const invalidAuthorizationOrganizationNotFound = AppExceptionCode(
     'Invalid API key, organization not found',
   );
 
@@ -59,7 +59,7 @@ class AppExceptionCode {
       AppExceptionCode('Organization not found');
 
   ///Invalid API key
-  static const invalidApiKey = AppExceptionCode('Invalid API key');
+  static const invalidAuthorization = AppExceptionCode('Invalid API key');
 
   ///Processing Error
   static const processingError = AppExceptionCode('Erreur de traitement');

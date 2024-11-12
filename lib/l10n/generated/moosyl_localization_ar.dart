@@ -37,13 +37,15 @@ class MoosylLocalizationAr extends MoosylLocalization {
   }
 
   @override
-  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount => 'انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ';
+  String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
+      'انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ';
 
   @override
   String get afterPayment => 'بعد الدفع';
 
   @override
-  String get afterMakingThePaymentFillTheFollowingInformation => 'بعد إتمام الدفع، املأ المعلومات التالية';
+  String get afterMakingThePaymentFillTheFollowingInformation =>
+      'بعد إتمام الدفع، املأ المعلومات التالية';
 
   @override
   String get enterYourBankilyPhoneNumber => 'أدخل رقم هاتفك الخاص ببنكيلي';
@@ -76,19 +78,22 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get capture => 'التقاط';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount => 'انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ';
+  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
+      'انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ';
 
   @override
   String get merchantCode => 'رمز التاجر';
 
   @override
-  String get existingPaymentWasFound => 'تم العثور على دفعة معلقة موجودة. يرجى الانتظار حتى يتم معالجة الدفعة السابقة.';
+  String get existingPaymentWasFound =>
+      'تم العثور على دفعة معلقة موجودة. يرجى الانتظار حتى يتم معالجة الدفعة السابقة.';
 
   @override
-  String get apiKeyRequired => 'مطلوب مفتاح API';
+  String get authorizationRequired => 'مطلوب مفتاح API';
 
   @override
-  String get invalidApiKeyOrganizationNotFound => 'مفتاح API غير صالح، لم يتم العثور على المؤسسة';
+  String get invalidAuthorizationOrganizationNotFound =>
+      'مفتاح API غير صالح، لم يتم العثور على المؤسسة';
 
   @override
   String get fileNotFound => 'الملف غير موجود';
@@ -109,13 +114,14 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get errorWhileCreatingPayment => 'حدث خطأ أثناء إنشاء الدفعة';
 
   @override
-  String get errorWhileCreatingPaymentRequest => 'حدث خطأ أثناء إنشاء طلب الدفع';
+  String get errorWhileCreatingPaymentRequest =>
+      'حدث خطأ أثناء إنشاء طلب الدفع';
 
   @override
   String get organizationNotFound => 'لم يتم العثور على المؤسسة';
 
   @override
-  String get invalidApiKey => 'مفتاح API غير صالح';
+  String get invalidAuthorization => 'مفتاح API غير صالح';
 
   @override
   String get change => 'تغيير';

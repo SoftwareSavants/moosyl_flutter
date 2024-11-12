@@ -28,14 +28,14 @@ import 'package:moosyl/src/widgets/text_input.dart';
 class AutomaticPayPage extends HookWidget {
   /// Creates a [AutomaticPayPage] widget.
   ///
-  /// Requires the [method], [apiKey], [transactionId], and [organizationLogo].
+  /// Requires the [method], [authorization], [transactionId], and [organizationLogo].
   /// Optionally accepts a callback [onPaymentSuccess] to be called when
   /// payment is successful.
 
   const AutomaticPayPage({
     super.key,
     required this.method,
-    required this.apiKey,
+    required this.authorization,
     required this.transactionId,
     required this.organizationLogo,
     this.onPaymentSuccess,
@@ -46,7 +46,7 @@ class AutomaticPayPage extends HookWidget {
   final PaymentMethod method;
 
   /// The API key required for payment authentication.
-  final String apiKey;
+  final String authorization;
 
   /// The transaction ID associated with the current payment.
   final String transactionId;
@@ -64,7 +64,7 @@ class AutomaticPayPage extends HookWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => AutomaticPayProvider(
-        apiKey: apiKey,
+        authorization: authorization,
         transactionId: transactionId,
         method: method,
         onPaymentSuccess: onPaymentSuccess,
