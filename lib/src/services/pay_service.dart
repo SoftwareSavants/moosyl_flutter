@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:moosyl/src/helpers/fetcher.dart';
 
 /// A service class for processing payments.
@@ -65,7 +66,7 @@ class PayService {
         'attachments': [
           {
             "name": selectedImage.name,
-            "type": selectedImage.xFile.mimeType,
+            "type": lookupMimeType(selectedImage.name),
             "size": selectedImage.size,
             "data": base64Encode(await selectedImage.xFile.readAsBytes()),
           }
