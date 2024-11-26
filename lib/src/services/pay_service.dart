@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:moosyl/src/helpers/fetcher.dart';
 
@@ -53,9 +55,9 @@ class PayService {
     required String transactionId,
     required String paymentMethodId,
     required PlatformFile selectedImage,
-  }) {
+  }) async {
     // Make a POST request to the payment methods endpoint with the payment details.
-    return Fetcher(authorization).post(
+    Fetcher(authorization).post(
       Endpoints.manualPayment,
       body: {
         'transactionId': transactionId,
@@ -65,7 +67,7 @@ class PayService {
             "name": selectedImage.name,
             "type": selectedImage.xFile.mimeType,
             "size": selectedImage.size,
-            "data": selectedImage.bytes,
+            "data": base64Encode(await selectedImage.xFile.readAsBytes()),
           }
         ]
       },
