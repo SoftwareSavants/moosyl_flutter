@@ -55,12 +55,19 @@ class PayService {
     required PlatformFile selectedImage,
   }) {
     // Make a POST request to the payment methods endpoint with the payment details.
-    return Fetcher(authorization).multipartPost(
+    return Fetcher(authorization).post(
       Endpoints.manualPayment,
-      files: [selectedImage],
       body: {
         'transactionId': transactionId,
         'configurationId': paymentMethodId,
+        'attachments': [
+          {
+            "name": selectedImage.name,
+            "type": selectedImage.xFile.mimeType,
+            "size": selectedImage.size,
+            "data": selectedImage.bytes,
+          }
+        ]
       },
     );
   }
