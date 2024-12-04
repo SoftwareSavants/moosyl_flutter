@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Update repository references and localization classes to moosyl instead of SoftwarePay
+
 ## 1.0.1
 
 - Update GitHub issue link in README.md
@@ -14,7 +18,7 @@
 
 ## 0.0.2
 
-- **Export fix**: Made sure that only the `SoftwarePay` widget is exported and internal classes such as `Pay`, `SoftwarePayBody`, `AvailableMethodPage`, and `_ModeOfPaymentInfo` remain private and inaccessible from outside the package.
+- **Export fix**: Made sure that only the `Moosyl` widget is exported and internal classes such as `Moosyl`, `MoosylBody`, `AvailableMethodPage`, and `_ModeOfPaymentInfo` remain private and inaccessible from outside the package.
 - Resolved issue with incorrect import exposure of internal classes.
 
 ## 0.0.1
