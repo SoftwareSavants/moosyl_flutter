@@ -8,19 +8,18 @@ import 'package:moosyl/src/helpers/exception_handling/exceptions.dart';
 /// A class responsible for making HTTP requests to the server.
 /// It allows for sending GET and POST requests with predefined headers.
 class Fetcher {
-  /// Constructs a [Fetcher] with the provided [authorization].
-  Fetcher(this.authorization);
+  /// Constructs a [Fetcher] with the provided [publishableApiKey].
+  Fetcher(this.publishableApiKey);
 
   /// The API key used to authenticate the requests.
-  String authorization;
+  String publishableApiKey;
 
   /// Returns the HTTP headers including the `api_key`.
   Map<String, String> get headers {
     final headers = <String, String>{
       'content-type': 'application/json',
+      'Authorization': publishableApiKey,
     };
-
-    headers['Authorization'] = authorization;
 
     return headers;
   }

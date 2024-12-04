@@ -51,7 +51,7 @@ Before displaying the payment interface in your Flutter app, you need to create 
 
 ```bash
 curl -X POST https://api.moosyl.com/payment-request \
--H "Authorization: Bearer YOUR_SECRET_API_KEY" \
+-H "Authorization: YOUR_SECRET_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
   "phoneNumber": "+22212345678",
@@ -70,10 +70,10 @@ async function createPaymentRequest() {
     const response = await axios.post('https://api.moosyl.com/payment-request', {
       phoneNumber: '+22212345678', // Optional
       transactionId: 'your-unique-transaction-id',
-      amount: 5000, // Amount in the smallest currency unit
+      amount: 5000, // Amount in MRU
     }, {
       headers: {
-        'Authorization': 'Bearer YOUR_SECRET_API_KEY',
+        'Authorization': 'YOUR_SECRET_API_KEY',
         'Content-Type': 'application/json',
       },
     });
@@ -103,7 +103,7 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MoosylView(
-      authorization: 'YOUR_PUBLISHABLE_API_KEY',
+      publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
       transactionId: 'TRANSACTION_ID', // Retrieved from your backend
       organizationLogo: const Text('Your Logo Here'),
       customHandlers: {
@@ -121,7 +121,7 @@ class PaymentScreen extends StatelessWidget {
 
 This example showcases the essential **MoosylView** widget, where you can configure:
 
-- **`authorization`**: Your Moosyl authorization token.
+- **`publishableApiKey`**: Your Moosyl publishable API Key.
 - **`transactionId`**: The unique transaction identifier returned by your backend.
 - **`customHandlers`**: Define custom actions for specific payment methods.
 - **`onPaymentSuccess`**: Handle successful payment events.

@@ -16,8 +16,8 @@ import 'package:moosyl/src/widgets/icons.dart';
 class SelectPaymentMethodPage extends StatelessWidget {
   /// Creates an instance of [SelectPaymentMethodPage].
   ///
-  /// the [authorization] for fetching available methods, and optional custom handlers
-  /// and icons for different payment methods.
+  /// the [fullPage] flag is used to determine whether the widget should be
+  /// displayed in full page mode or as a part of a larger widget.
   const SelectPaymentMethodPage({
     super.key,
     required this.fullPage,

@@ -15,12 +15,12 @@ import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
 class MoosylView extends HookWidget {
   /// Creates an instance of [MoosylView].
 
-  /// Requires the [authorization] and [transactionId] for the payment transaction,
+  /// Requires the [publishableApiKey] and [transactionId] for the payment transaction,
   /// an [organizationLogo] to display, and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
   const MoosylView({
     super.key,
-    required this.authorization,
+    required this.publishableApiKey,
     required this.transactionId,
     required this.organizationLogo,
     this.customHandlers = const {},
@@ -31,7 +31,7 @@ class MoosylView extends HookWidget {
   });
 
   /// The API key for authenticating the payment transaction.
-  final String authorization;
+  final String publishableApiKey;
 
   /// The transaction ID for the specific payment transaction.
   final String transactionId;
@@ -62,7 +62,7 @@ class MoosylView extends HookWidget {
           ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
               customHandlers: customHandlers,
-              authorization: authorization,
+              publishableApiKey: publishableApiKey,
               isTestingMode: isTestingMode,
               customIcons: customIcons,
             ),
@@ -87,7 +87,7 @@ class MoosylView extends HookWidget {
 
               return ManualPaymentPage(
                 organizationLogo: organizationLogo,
-                authorization: authorization,
+                publishableApiKey: publishableApiKey,
                 transactionId: transactionId,
                 method: selectedModeOfPayment,
                 fullPage: fullPage,
@@ -97,7 +97,7 @@ class MoosylView extends HookWidget {
 
             // If a payment method is selected, proceed to the payment page.
             return AutomaticPayPage(
-              authorization: authorization,
+              publishableApiKey: publishableApiKey,
               method: selectedModeOfPayment,
               transactionId: transactionId,
               organizationLogo: organizationLogo,

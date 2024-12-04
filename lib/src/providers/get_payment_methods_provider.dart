@@ -11,7 +11,7 @@ import 'package:moosyl/src/services/get_payment_methods_service.dart';
 /// in the payment methods' loading state and results.
 class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment methods service.
-  final String authorization;
+  final String publishableApiKey;
 
   /// A map of custom handlers for specific payment method types.
   final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
@@ -30,7 +30,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// Initiates fetching payment methods upon creation.
   GetPaymentMethodsProvider({
     required this.customHandlers,
-    required this.authorization,
+    required this.publishableApiKey,
     required this.isTestingMode,
     required this.customIcons,
   }) {
@@ -65,7 +65,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentMethodsService(authorization).get(isTestingMode),
+      () => GetPaymentMethodsService(publishableApiKey).get(isTestingMode),
       showFlashBar: false,
     );
 

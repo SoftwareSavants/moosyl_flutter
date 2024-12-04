@@ -19,7 +19,7 @@ class ManualPaymentPage extends StatelessWidget {
   const ManualPaymentPage({
     super.key,
     required this.organizationLogo,
-    required this.authorization,
+    required this.publishableApiKey,
     required this.transactionId,
     required this.method,
     this.fullPage = true,
@@ -33,7 +33,7 @@ class ManualPaymentPage extends StatelessWidget {
   final Widget organizationLogo;
 
   /// The API key for authenticating the payment transaction.
-  final String authorization;
+  final String publishableApiKey;
 
   /// The transaction ID associated with the current payment.
   final String transactionId;
@@ -48,7 +48,7 @@ class ManualPaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ManualPayProvider(
-        apiKey: authorization,
+        apiKey: publishableApiKey,
         transactionId: transactionId,
         method: method,
         onPaymentSuccess: onPaymentSuccess,

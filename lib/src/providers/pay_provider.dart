@@ -12,7 +12,7 @@ import 'package:moosyl/src/services/pay_service.dart';
 /// in the payment payment request state, including loading status and errors.
 class AutomaticPayProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment services.
-  final String authorization;
+  final String publishableApiKey;
 
   /// The ID of the payment request being processed.
   final String transactionId;
@@ -27,11 +27,11 @@ class AutomaticPayProvider extends ChangeNotifier {
   ///
   /// Initiates fetching the payment request details upon creation.
   AutomaticPayProvider({
-    required this.authorization,
+    required this.publishableApiKey,
     required this.transactionId,
     this.onPaymentSuccess,
     required this.method,
-  }) : service = PayService(authorization) {
+  }) : service = PayService(publishableApiKey) {
     getPaymentRequest();
   }
 
@@ -66,7 +66,7 @@ class AutomaticPayProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentRequestService(authorization).get(transactionId),
+      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
       showFlashBar: false,
     );
 

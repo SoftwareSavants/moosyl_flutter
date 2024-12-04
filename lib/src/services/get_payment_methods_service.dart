@@ -7,10 +7,10 @@ import 'package:moosyl/src/models/payment_method_model.dart';
 /// a list of payment methods.
 class GetPaymentMethodsService {
   /// The API key used for authentication with the backend.
-  final String authorization;
+  final String publishableApiKey;
 
-  /// Constructs a [GetPaymentMethodsService] with the provided [authorization].
-  GetPaymentMethodsService(this.authorization);
+  /// Constructs a [GetPaymentMethodsService] with the provided [publishableApiKey].
+  GetPaymentMethodsService(this.publishableApiKey);
 
   /// Fetches the available payment methods from the backend.
   ///
@@ -18,7 +18,7 @@ class GetPaymentMethodsService {
   /// Returns a list of [PaymentMethod] objects.
   Future<List<PaymentMethod>> get(bool isTestingMode) async {
     // Fetch the payment methods from the backend.
-    final methodsResult = await Fetcher(authorization).get(
+    final methodsResult = await Fetcher(publishableApiKey).get(
       Endpoints.paymentMethods(isTestingMode),
     );
 
