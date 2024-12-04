@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Update GitHub issue link in README.md
+
 ## 1.0.0
 
 - First stable release of the Moosyl Flutter SDK 🎉!
