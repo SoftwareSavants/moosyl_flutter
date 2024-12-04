@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Add MoosylLocalization class to hide localization strings from the public API
+
 ## 1.0.2
 
 - Update repository references and localization classes to moosyl instead of SoftwarePay
