@@ -1,8 +1,8 @@
 name: moosyl
-description: "Moosyl is a Flutter package designed to simplify and customize payment methods for organizations."
-# TODO: rename the package to moosyl
-homepage: https://github.com/just-abdou/SoftwarePay.git
-version: 0.1.0
+description: "The Moosyl Flutter SDK is a powerful tool for integrating payment solutions with Mauritania's popular banking apps, such as Bankily, Sedad, and Masrivi"
+
+homepage: https://github.com/SoftwareSavants/moosyl_flutter
+version: 1.0.0
 
 license: MIT
 
@@ -13,27 +13,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_hooks: ^0.20.5
-  flutter_localization: ^0.2.2
   intl: ^0.19.0
   http: ^1.2.2
   provider: ^6.1.2
-  flutter_localizations:
-    sdk: flutter
   modal_bottom_sheet: ^3.0.0
   file_picker: ^8.1.2
-  mime: ^1.0.6
+  mime: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
   flutter_gen: ^5.7.0
   build_runner: ^2.4.11
-  custom_lint: ^0.6.4
-
-dependency_overrides:
-  intl: ^0.18.1
+  custom_lint: ^0.7.0
 
 flutter:
   generate: true
