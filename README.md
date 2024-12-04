@@ -161,7 +161,7 @@ For help or questions:
 
 - Visit [moosyl.com](https://moosyl.com).  
 - Email support@moosyl.com.  
-- Open an issue on [GitHub](https://github.com/moosyl/flutter-sdk).
+- Open an issue on [GitHub](https://github.com/SoftwareSavants/moosyl_flutter).
 
 ---
 
