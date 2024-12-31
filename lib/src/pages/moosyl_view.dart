@@ -22,7 +22,7 @@ class MoosylView extends HookWidget {
     super.key,
     required this.publishableApiKey,
     required this.transactionId,
-    required this.organizationLogo,
+    this.organizationLogo,
     this.customHandlers = const {},
     this.onPaymentSuccess,
     this.customIcons,

@@ -18,7 +18,7 @@ class ManualPaymentPage extends StatelessWidget {
   /// The manual payment method contractor
   const ManualPaymentPage({
     super.key,
-    required this.organizationLogo,
+    this.organizationLogo,
     required this.publishableApiKey,
     required this.transactionId,
     required this.method,

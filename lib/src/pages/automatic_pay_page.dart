@@ -37,7 +37,7 @@ class AutomaticPayPage extends HookWidget {
     required this.method,
     required this.publishableApiKey,
     required this.transactionId,
-    required this.organizationLogo,
+    this.organizationLogo,
     this.onPaymentSuccess,
     this.fullPage = true,
   });
@@ -236,7 +236,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
   const ModeOfPaymentInfo({
     super.key,
     required this.mode,
-    required this.organizationLogo,
+    this.organizationLogo,
     required this.paymentRequest,
   });
 
@@ -258,15 +258,23 @@ class ModeOfPaymentInfo extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: [
-              Expanded(
-                child: organizationLogo ?? const SizedBox.shrink(),
-              ),
-              const SizedBox(width: 32),
-              AppIcons.close,
-              const SizedBox(width: 32),
-              Expanded(child: mode.method.icon.apply(size: 80)),
-            ],
+            children: organizationLogo != null
+                ? [
+                    Expanded(
+                      child: organizationLogo!,
+                    ),
+                    const SizedBox(width: 32),
+                    AppIcons.close,
+                    const SizedBox(width: 32),
+                    Expanded(
+                      child: mode.method.icon.apply(size: 80),
+                    ),
+                  ]
+                : [
+                    Expanded(
+                      child: mode.method.icon.apply(size: 120),
+                    ),
+                  ],
           ),
           const SizedBox(height: 12),
           if (mode is ManualConfigModel) ...[

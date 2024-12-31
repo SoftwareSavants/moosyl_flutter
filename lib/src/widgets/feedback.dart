@@ -21,6 +21,7 @@ class Feedbacks {
     }
 
     final snackBar = SnackBar(
+      showCloseIcon: true,
       behavior: SnackBarBehavior.floating,
       elevation: 0.0,
       margin: EdgeInsets.symmetric(
@@ -42,7 +43,7 @@ class Feedbacks {
           ),
         ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.onSurface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       duration: const Duration(seconds: 5),

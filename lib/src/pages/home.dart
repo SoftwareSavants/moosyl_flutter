@@ -53,7 +53,7 @@ class Moosyl extends HookWidget {
     final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
         const {},
     required String transactionId,
-    required Widget organizationLogo,
+    Widget? organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
     bool isTestingMode = false,
@@ -85,7 +85,7 @@ class Moosyl extends HookWidget {
     super.key,
     required this.publishableApiKey,
     required this.transactionId,
-    required this.organizationLogo,
+    this.organizationLogo,
     this.customHandlers = const {},
     this.customIcons,
     this.inputBuilder,
