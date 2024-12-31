@@ -182,14 +182,15 @@ class _AutomaticPayBody extends StatelessWidget {
             margin: horizontalPadding,
             maxLength: 8,
             controller: provider.phoneNumberTextController,
-            validator: Validators.validateMauritanianPhoneNumber,
+            validator: (value) =>
+                Validators.validateMauritanianPhoneNumber(value, context),
             hint: localizationHelper.enterYourBankilyPhoneNumber,
             label: localizationHelper.bankilyPhoneNumber,
           ),
           AppTextInput(
             margin: horizontalPadding,
             controller: provider.passCodeTextController,
-            validator: Validators.validatePassCode,
+            validator: (value) => Validators.validatePassCode(value, context),
             hint: localizationHelper.paymentPassCode,
             label: localizationHelper.paymentPassCodeFromBankily,
             errorText: provider.error != null

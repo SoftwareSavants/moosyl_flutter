@@ -343,6 +343,30 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Non-existent operation'**
   String get nonExistentOperation;
+
+  /// No description provided for @phoneNumberRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneNumberRequired;
+
+  /// No description provided for @validMauritanianNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Mauritanian phone number'**
+  String get validMauritanianNumber;
+
+  /// No description provided for @passCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass code is required'**
+  String get codeRequired;
+
+  /// No description provided for @validPassCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 4-digit code'**
+  String get validDigitCode;
 }
 
 class _MoosylLocalizationDelegate

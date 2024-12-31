@@ -40,5 +40,9 @@
   "change": "Change",
   "sending": "Sending...",
   "processingError": "processing Error",
-  "nonExistentOperation": "Non-existent operation"
+  "nonExistentOperation": "Non-existent operation",
+  "phoneNumberRequired": "Phone number is required",
+  "validMauritanianNumber": "Enter a valid Mauritanian phone number",
+  "codeRequired": "Code is required",
+  "validDigitCode": "Enter a valid 4-digit code"
 }

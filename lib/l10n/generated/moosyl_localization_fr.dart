@@ -137,4 +137,21 @@ class MoosylLocalizationFr extends MoosylLocalization {
 
   @override
   String get nonExistentOperation => 'Opération inexistante';
+
+  @override
+  // TODO: implement codeRequired
+  String get codeRequired => 'Le code est obligatoire';
+
+  @override
+  // TODO: implement phoneNumberRequired
+  String get phoneNumberRequired => 'Le numéro de téléphone est obligatoire';
+
+  @override
+  // TODO: implement validDigitCode
+  String get validDigitCode => 'Entrez un code à 4 chiffres valide';
+
+  @override
+  // TODO: implement validMauritanianNumber
+  String get validMauritanianNumber =>
+      'Entrez un numéro de téléphone mauritanien valide';
 }

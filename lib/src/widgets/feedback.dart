@@ -20,7 +20,7 @@ class Feedbacks {
       margin = (width - 600) / 2;
     }
 
-    SnackBar(
+    final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       elevation: 0.0,
       margin: EdgeInsets.symmetric(
@@ -47,6 +47,7 @@ class Feedbacks {
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       duration: const Duration(seconds: 5),
     );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   static copy(String description, BuildContext context) {

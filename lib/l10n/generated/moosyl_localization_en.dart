@@ -134,4 +134,20 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get nonExistentOperation => 'Non-existent operation';
+
+  @override
+  // TODO: implement codeRequired
+  String get codeRequired => 'Code is required';
+
+  @override
+  // TODO: implement phoneNumberRequired
+  String get phoneNumberRequired => 'Phone number is required';
+
+  @override
+  // TODO: implement validDigitCode
+  String get validDigitCode => 'Enter a valid 4-digit code';
+
+  @override
+  // TODO: implement validMauritanianNumber
+  String get validMauritanianNumber => 'Enter a valid Mauritanian phone number';
 }

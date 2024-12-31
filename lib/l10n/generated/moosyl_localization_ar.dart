@@ -134,4 +134,20 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get nonExistentOperation => 'العملية غير موجودة';
+
+  @override
+  // TODO: implement codeRequired
+  String get codeRequired => 'الرمز مطلوب';
+
+  @override
+  // TODO: implement phoneNumberRequired
+  String get phoneNumberRequired => 'رقم الهاتف مطلوب';
+
+  @override
+  // TODO: implement validDigitCode
+  String get validDigitCode => 'أدخل رمزًا صالحًا مكونًا من 4 أرقام';
+
+  @override
+  // TODO: implement validMauritanianNumber
+  String get validMauritanianNumber => 'أدخل رقم هاتف موريتاني صالح';
 }

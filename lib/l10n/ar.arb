@@ -40,5 +40,9 @@
   "change": "تغيير",
   "sending": "جاري الإرسال...",
   "processingError": "خطأ في المعالجة",
-  "nonExistentOperation": "العملية غير موجودة"
+  "nonExistentOperation": "العملية غير موجودة",
+  "phoneNumberRequired": "رقم الهاتف مطلوب",
+  "validMauritanianNumber": "أدخل رقم هاتف موريتاني صالح",
+  "codeRequired": "الرمز مطلوب",
+  "validDigitCode": "أدخل رمزًا صالحًا مكونًا من 4 أرقام"
 }
