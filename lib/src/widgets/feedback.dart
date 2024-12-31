@@ -21,6 +21,9 @@ class Feedbacks {
     }
 
     final snackBar = SnackBar(
+      closeIconColor: Theme.of(context).brightness == Brightness.light
+          ? Theme.of(context).colorScheme.surface
+          : Theme.of(context).colorScheme.onSurface,
       showCloseIcon: true,
       behavior: SnackBarBehavior.floating,
       elevation: 0.0,
@@ -35,7 +38,9 @@ class Feedbacks {
             child: Text(
               message,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.surface,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).colorScheme.surface
+                        : Theme.of(context).colorScheme.onSurface,
                     fontSize: 14,
                   ),
               overflow: TextOverflow.clip,
@@ -43,7 +48,9 @@ class Feedbacks {
           ),
         ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? Theme.of(context).colorScheme.onSurface
+          : Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       duration: const Duration(seconds: 5),
