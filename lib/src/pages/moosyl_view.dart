@@ -37,7 +37,7 @@ class MoosylView extends HookWidget {
   final String transactionId;
 
   /// A widget representing the logo of the organization.
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
 
   /// Optional custom handlers for specific payment methods.
   final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;

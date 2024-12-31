@@ -30,7 +30,7 @@ class ManualPaymentPage extends StatelessWidget {
   final ManualConfigModel method;
 
   /// A widget representing the logo of the organization.
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
 
   /// The API key for authenticating the payment transaction.
   final String publishableApiKey;
@@ -63,7 +63,7 @@ class ManualPaymentPage extends StatelessWidget {
 
 class _ManualPaymentPageBody extends StatelessWidget {
   final bool fullPage;
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
   const _ManualPaymentPageBody({
     required this.organizationLogo,
     this.fullPage = true,

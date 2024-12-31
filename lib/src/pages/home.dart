@@ -16,7 +16,7 @@ class Moosyl extends HookWidget {
   final String transactionId;
 
   /// The logo of the organization processing the payment.
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
 
   /// Optional function to build a custom input widget for the payment process.
   /// [open] is the callback to open the payment sheet.

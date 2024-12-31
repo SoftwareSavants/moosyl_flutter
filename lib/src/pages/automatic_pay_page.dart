@@ -52,7 +52,7 @@ class AutomaticPayPage extends HookWidget {
   final String transactionId;
 
   /// The logo of the organization processing the payment.
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
 
   /// Callback to be executed upon successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
@@ -75,7 +75,7 @@ class AutomaticPayPage extends HookWidget {
 }
 
 class _AutomaticPayBody extends StatelessWidget {
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
   final bool fullPage;
   const _AutomaticPayBody(this.organizationLogo, this.fullPage);
 
@@ -243,7 +243,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
   final PaymentMethod mode;
 
   /// The logo of the organization processing the payment.
-  final Widget organizationLogo;
+  final Widget? organizationLogo;
 
   ///
   final PaymentRequestModel paymentRequest;
@@ -258,7 +258,9 @@ class ModeOfPaymentInfo extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: organizationLogo),
+              Expanded(
+                child: organizationLogo ?? const SizedBox.shrink(),
+              ),
               const SizedBox(width: 32),
               AppIcons.close,
               const SizedBox(width: 32),
