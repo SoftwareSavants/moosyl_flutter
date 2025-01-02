@@ -33,7 +33,11 @@ class Feedbacks {
       content: Row(
         children: [
           (error ? AppIcons.error : AppIcons.done).apply(
-              size: 24, margin: const EdgeInsets.symmetric(horizontal: 8)),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Theme.of(context).colorScheme.surface
+                  : Theme.of(context).colorScheme.onSurface,
+              size: 24,
+              margin: const EdgeInsets.symmetric(horizontal: 8)),
           Expanded(
             child: Text(
               message,
