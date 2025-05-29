@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
             print('Custom handler for BIM Bank payment method');
           },
         },
-        onPaymentSuccess: () {
+        onPaymentSuccess: (isManual) {
           print('Payment was successful!');
         },
       ),

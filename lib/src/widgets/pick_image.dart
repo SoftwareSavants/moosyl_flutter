@@ -2,9 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
-import 'package:moosyl/src/widgets/buttons.dart';
-import 'package:moosyl/src/widgets/container.dart';
-import 'package:moosyl/src/widgets/icons.dart';
+import 'package:moosyl/src/widgets/app_image.dart';
 
 class PickImageCard extends StatefulWidget {
   final String? label;
@@ -40,9 +38,6 @@ class _PickImageCardState extends State<PickImageCard> {
   Widget build(BuildContext context) {
     const size = 300.0;
     final textTheme = Theme.of(context).textTheme;
-    // final style = ElevatedButton.styleFrom(
-    //   minimumSize: const Size(200, 60), // Fixed size (width, height)
-    // );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -57,98 +52,89 @@ class _PickImageCardState extends State<PickImageCard> {
             const SizedBox(height: 16),
           ],
           if (selectedFile == null)
-            AppContainer(
-              padding: const EdgeInsets.all(16),
-              color: Theme.of(context).colorScheme.surface,
-              child: Row(
-                children: [
-                  Expanded(
-                      child: AppButton(
-                    minHeight: 40,
-                    textColor: Theme.of(context).colorScheme.onSurface,
-                    leading: AppIcons.cloud,
-                    background: Theme.of(context).colorScheme.onPrimary,
-                    labelText: MoosylLocalization.of(context)!.upload,
-                    onPressed: () => _pickImage(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 16),
+                  height: 200,
+                  child: GestureDetector(
+                    onTap: () => _pickImage(
                       isCamera: false,
                       context: context,
                     ),
-                  )),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: AppButton(
-                      minHeight: 40,
-                      textColor: Theme.of(context).colorScheme.onSurface,
-                      leading: AppIcons.pic,
-                      background: Theme.of(context).colorScheme.onPrimary,
-                      labelText: MoosylLocalization.of(context)!.capture,
-                      onPressed: () => _pickImage(
-                        isCamera: true,
-                        context: context,
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFf5f5f5),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.add_a_photo_outlined,
+                              size: 64,
+                              color: Color(0xFF636363),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                MoosylLocalization.of(context)!.upload,
+                                style: const TextStyle(
+                                  color: Color(0xFF636363),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           if (selectedFile != null)
             Container(
               padding: const EdgeInsets.only(top: 16),
               height: size,
-              child: Stack(
-                children: [
-                  Center(
-                      child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: SizedBox(
-                      width: 215,
-                      child: AppPlatformFileView(file: selectedFile!),
+              child: AppImage(
+                uri: selectedFile!.path!,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                borderRadius: BorderRadius.circular(10),
+                customZoomIcon: GestureDetector(
+                  onTap: () {
+                    selectedFile = null;
+                    widget.onChanged(selectedFile);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: BoxShape.circle,
                     ),
-                  )),
-                  Center(
-                    child: IconButton(
-                      icon: AppIcons.delete.apply(
-                        size: 44,
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                      onPressed: () {
-                        selectedFile = null;
-                        widget.onChanged(selectedFile);
-                      },
+                    padding: const EdgeInsets.all(4),
+                    child: Icon(
+                      Icons.close,
+                      color: Theme.of(context).colorScheme.error,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            )
         ],
       ),
     );
-  }
-}
-
-class AppPlatformFileView extends StatelessWidget {
-  final PlatformFile file;
-
-  const AppPlatformFileView({super.key, required this.file});
-
-  @override
-  Widget build(BuildContext context) {
-    if (file.bytes != null) {
-      return Image.memory(
-        file.bytes!,
-        fit: BoxFit.fill,
-        width: double.infinity,
-        height: double.infinity,
-      );
-    } else if (file.path != null) {
-      return Image.asset(
-        file.path!,
-        fit: BoxFit.fill,
-        width: double.infinity,
-        height: double.infinity,
-      );
-    } else {
-      return const Center(child: Text('No image available'));
-    }
   }
 }

@@ -31,12 +31,15 @@ class Moosyl extends HookWidget {
   final Map<PaymentMethodTypes, String>? customIcons;
 
   /// Optional callback to be triggered upon successful payment.
-  final FutureOr<void> Function()? onPaymentSuccess;
+  final FutureOr<void> Function(bool isManual)? onPaymentSuccess;
 
   /// manual payment
 
   /// The payment method selected for the payment process.
   final bool isTestingMode;
+
+  /// Map of payment method IDs to their corresponding tutorial video paths.
+  final Map<PaymentMethodTypes, String> paymentMethodTutorials;
 
   /// Displays the [MoosylView] modal sheet to start the payment process.
   ///
@@ -54,9 +57,10 @@ class Moosyl extends HookWidget {
         const {},
     required String transactionId,
     Widget? organizationLogo,
-    final FutureOr<void> Function()? onPaymentSuccess,
+    final FutureOr<void> Function(bool isManual)? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
     bool isTestingMode = false,
+    Map<PaymentMethodTypes, String> paymentMethodTutorials = const {},
   }) {
     showBarModalBottomSheet(
       context: context,
@@ -68,6 +72,7 @@ class Moosyl extends HookWidget {
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
         isTestingMode: isTestingMode,
+        paymentMethodTutorials: paymentMethodTutorials,
       ),
     );
   }
@@ -91,6 +96,7 @@ class Moosyl extends HookWidget {
     this.inputBuilder,
     this.onPaymentSuccess,
     this.isTestingMode = false,
+    this.paymentMethodTutorials = const {},
   });
 
   @override
@@ -109,6 +115,7 @@ class Moosyl extends HookWidget {
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
               isTestingMode: isTestingMode,
+              paymentMethodTutorials: paymentMethodTutorials,
             ),
           );
         },
@@ -124,6 +131,7 @@ class Moosyl extends HookWidget {
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,
       isTestingMode: isTestingMode,
+      paymentMethodTutorials: paymentMethodTutorials,
     );
   }
 }

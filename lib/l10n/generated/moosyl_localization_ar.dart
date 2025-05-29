@@ -1,5 +1,7 @@
 import 'moosyl_localization.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Arabic (`ar`).
 class MoosylLocalizationAr extends MoosylLocalization {
   MoosylLocalizationAr([String locale = 'ar']) : super(locale);
@@ -20,7 +22,7 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get sedad => 'سداد';
 
   @override
-  String get bimBank => 'بنك BIM';
+  String get bimBank => 'بيم بنك';
 
   @override
   String get masrivi => 'مصريفي';
@@ -38,23 +40,28 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
-      'انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ';
+      '1- انسخ الرمز، BPay وتوجه إلى بنكيلي لدفع المبلغ';
 
   @override
   String get afterPayment => 'بعد الدفع';
 
   @override
   String get afterMakingThePaymentFillTheFollowingInformation =>
-      'بعد إتمام الدفع، املأ المعلومات التالية';
+      '2- بعد اتمام عملية الدفع قم بتحميل صورة من المعاملة';
 
   @override
-  String get enterYourBankilyPhoneNumber => 'أدخل رقم هاتفك الخاص ببنكيلي';
+  String
+      get afterMakingThePaymentFillTheFollowingInformationWithTheBankilyPhoneNumber =>
+          '2- بعد اتمام عملية الدفع قم بإدخال الرمز المولد من بنكيلي';
+
+  @override
+  String get enterYourBankilyPhoneNumber => 'رقم الهاتف الذي قمت بالدفع منه';
 
   @override
   String get bankilyPhoneNumber => 'رقم هاتف بنكيلي';
 
   @override
-  String get paymentPassCode => 'رمز المرور للدفع';
+  String get paymentPassCode => 'رمز المعاملة';
 
   @override
   String get paymentPassCodeFromBankily => 'رمز المرور للدفع من بنكيلي';
@@ -72,14 +79,20 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get retry => 'إعادة المحاولة';
 
   @override
-  String get upload => 'رفع';
+  String get upload => 'تحميل';
 
   @override
   String get capture => 'التقاط';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
-      'انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ';
+  String copyTheMerchantCodeAndHeadToMethodToPayTheAmount(Object method) {
+    return '1- انسخ الرمز وتوجه إلى $method لدفع المبلغ';
+  }
+
+  @override
+  String copyThePhoneNumberAndHeadToMethodToPayTheAmount(Object method) {
+    return '1- انسخ رقم الهاتف وتوجه إلى $method لدفع المبلغ';
+  }
 
   @override
   String get merchantCode => 'رمز التاجر';
@@ -136,18 +149,24 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get nonExistentOperation => 'العملية غير موجودة';
 
   @override
-  // TODO: implement codeRequired
-  String get codeRequired => 'الرمز مطلوب';
-
-  @override
-  // TODO: implement phoneNumberRequired
   String get phoneNumberRequired => 'رقم الهاتف مطلوب';
 
   @override
-  // TODO: implement validDigitCode
+  String get validMauritanianNumber => 'أدخل رقم هاتف موريتاني صالح';
+
+  @override
+  String get codeRequired => 'الرمز مطلوب';
+
+  @override
   String get validDigitCode => 'أدخل رمزًا صالحًا مكونًا من 4 أرقام';
 
   @override
-  // TODO: implement validMauritanianNumber
-  String get validMauritanianNumber => 'أدخل رقم هاتف موريتاني صالح';
+  String get errorWhilePaying =>
+      'حدث خطأ ما في عملية الدفع، يرجى التحقق من رقم الهاتف و رمز المعاملة!في حالة عدم نجاح المعاملة مرة أخرى، نرجوا منك التواصل مع مركز الاتصال الخاص بنا!';
+
+  @override
+  String get enterYourPaymentInformation => '2- أدخل معلومات الدفع الخاصة بك';
+
+  @override
+  String get ourPhoneNumber => 'رقم الهاتف الخاص بنا';
 }

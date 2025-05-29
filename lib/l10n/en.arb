@@ -10,9 +10,10 @@
   "amanty": "Amanty",
   "bCIpay": "BCI Pay",
   "payUsing": "Pay using",
-  "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "Copy the code, BPay and head to Bankily to pay the amount",
+  "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "1- Copy the code, BPay and head to Bankily to pay the amount",
   "afterPayment": "After payment",
-  "afterMakingThePaymentFillTheFollowingInformation": "After making the payment, fill the following information",
+  "afterMakingThePaymentFillTheFollowingInformation": "2- After making the payment, upload a photo of the transaction",
+  "afterMakingThePaymentFillTheFollowingInformationWithTheBankilyPhoneNumber": "After making the payment, fill generated code from Bankily",
   "enterYourBankilyPhoneNumber": "Enter your Bankily phone number",
   "bankilyPhoneNumber": "Bankily Phone Number",
   "paymentPassCode": "Payment Pass Code",
@@ -23,7 +24,8 @@
   "retry": "Retry",
   "upload": "Upload",
   "capture": "Capture",
-  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copy the merchant code and head to Sedad to pay the amount",
+  "copyTheMerchantCodeAndHeadToMethodToPayTheAmount": "1- Copy the code and head to {method} to pay the amount",
+  "copyThePhoneNumberAndHeadToMethodToPayTheAmount": "1- Copy the phone number and head to {method} to pay the amount",
   "merchantCode": "Merchant Code",
   "existingPaymentWasFound": "An existing pending payment was found. Please wait for the previous payment to be processed.",
   "authorizationRequired": "API key is required",
@@ -44,5 +46,8 @@
   "phoneNumberRequired": "Phone number is required",
   "validMauritanianNumber": "Enter a valid Mauritanian phone number",
   "codeRequired": "Code is required",
-  "validDigitCode": "Enter a valid 4-digit code"
+  "validDigitCode": "Enter a valid 4-digit code",
+  "errorWhilePaying": "An error occurred while processing your payment",
+  "enterYourPaymentInformation": "2- Enter your payment information",
+  "ourPhoneNumber": "Our phone number"
 }

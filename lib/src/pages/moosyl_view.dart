@@ -28,6 +28,7 @@ class MoosylView extends HookWidget {
     this.customIcons,
     this.isTestingMode = false,
     this.fullPage = true,
+    this.paymentMethodTutorials = const {},
   });
 
   /// The API key for authenticating the payment transaction.
@@ -43,7 +44,7 @@ class MoosylView extends HookWidget {
   final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
 
   /// Optional callback that is invoked when the payment is successful.
-  final FutureOr<void> Function()? onPaymentSuccess;
+  final FutureOr<void> Function(bool isManual)? onPaymentSuccess;
 
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
@@ -53,6 +54,9 @@ class MoosylView extends HookWidget {
 
   /// A flag to indicate whether the widget is in full page mode.
   final bool fullPage;
+
+  /// Map of payment method IDs to their corresponding tutorial video paths.
+  final Map<PaymentMethodTypes, String> paymentMethodTutorials;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +95,9 @@ class MoosylView extends HookWidget {
                 transactionId: transactionId,
                 method: selectedModeOfPayment,
                 fullPage: fullPage,
-                onPaymentSuccess: onPaymentSuccess,
+                onPaymentSuccess: () => onPaymentSuccess?.call(
+                  selectedModeOfPayment.type.isManual,
+                ),
               );
             }
 
@@ -101,7 +107,11 @@ class MoosylView extends HookWidget {
               method: selectedModeOfPayment,
               transactionId: transactionId,
               organizationLogo: organizationLogo,
-              onPaymentSuccess: onPaymentSuccess,
+              tutorialVideoPath:
+                  paymentMethodTutorials[selectedModeOfPayment.method],
+              onPaymentSuccess: () => onPaymentSuccess?.call(
+                selectedModeOfPayment.type.isManual,
+              ),
               fullPage: fullPage,
             );
           },

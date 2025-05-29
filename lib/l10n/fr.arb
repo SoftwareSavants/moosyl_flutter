@@ -9,12 +9,13 @@
   "masrivi": "Masrivi",
   "amanty": "Amanty",
   "bCIpay": "BCI Pay",
-  "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant",
+  "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "1- Copiez le code, BPay et dirigez-vous vers Bankily pour payer le montant",
   "afterPayment": "Après paiement",
-  "afterMakingThePaymentFillTheFollowingInformation": "Après avoir effectué le paiement, remplissez les informations suivantes",
-  "enterYourBankilyPhoneNumber": "Entrez votre numéro de téléphone Bankily",
+  "afterMakingThePaymentFillTheFollowingInformation": "2- Après avoir effectué le paiement, téléchargez une image de la transaction",
+  "afterMakingThePaymentFillTheFollowingInformationWithTheBankilyPhoneNumber": "Après avoir effectué le paiement, entrez le code généré par Bankily",
+  "enterYourBankilyPhoneNumber": "№ téléphone avec lequel vous avez payé",
   "bankilyPhoneNumber": "Numéro de téléphone Bankily",
-  "paymentPassCode": "Code de passe de paiement",
+  "paymentPassCode": "Le code de la transaction",
   "paymentPassCodeFromBankily": "Code de passe de paiement de Bankily",
   "sendForVerification": "Envoyer pour vérification",
   "payUsing": "Payer avec {method}",
@@ -23,7 +24,8 @@
   "retry": "Réessayer",
   "upload": "Télécharger",
   "capture": "Capturer",
-  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copiez le code marchand et dirigez-vous vers Sedad pour payer le montant",
+  "copyTheMerchantCodeAndHeadToMethodToPayTheAmount": "1- Copiez le code et dirigez-vous vers {method} pour payer le montant",
+  "copyThePhoneNumberAndHeadToMethodToPayTheAmount": "1- Copiez le numéro de téléphone et dirigez-vous vers {method} pour payer le montant",
   "merchantCode": "Code marchand",
   "existingPaymentWasFound": "Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.",
   "authorizationRequired": "Clé API requise",
@@ -44,5 +46,10 @@
   "phoneNumberRequired": "Le numéro de téléphone est obligatoire",
   "validMauritanianNumber": "Entrez un numéro de téléphone mauritanien valide",
   "codeRequired": "Le code est obligatoire",
-  "validDigitCode": "Entrez un code à 4 chiffres valide"
+  "validDigitCode": "Entrez un code à 4 chiffres valide",
+  "errorWhilePaying":"Une erreur s’est produite lors du processus de paiement. Veuillez vérifier le numéro de téléphone et le code de la transaction ! Si la transaction échoue à nouveau, nous vous prions de contacter notre centre d’appel.",
+  "enterYourPaymentInformation": "2- Après avoir effectué le paiement, entrez le code dans le champ ci-dessous",
+  "ourPhoneNumber": "Notre numéro de téléphone"
+
+
 }
