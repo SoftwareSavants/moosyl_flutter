@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
+import 'package:moosyl/src/widgets/video_player.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:moosyl/src/models/payment_request_model.dart';
 import 'package:moosyl/src/pages/manual_payment_page.dart';
 
 import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
-import 'package:moosyl/src/widgets/buttons.dart';
+import 'package:moosyl/src/widgets/error_message_card.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl/src/helpers/validators.dart';
@@ -40,6 +40,7 @@ class AutomaticPayPage extends HookWidget {
     this.organizationLogo,
     this.onPaymentSuccess,
     this.fullPage = true,
+    required this.tutorialVideoPath,
   });
 
   /// The payment method selected for the payment process.
@@ -60,6 +61,9 @@ class AutomaticPayPage extends HookWidget {
   /// Builds the [AutomaticPayPage] widget.
   final bool fullPage;
 
+  /// The path of the explain video.
+  final String? tutorialVideoPath;
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -69,7 +73,11 @@ class AutomaticPayPage extends HookWidget {
         method: method,
         onPaymentSuccess: onPaymentSuccess,
       ),
-      child: _AutomaticPayBody(organizationLogo, fullPage),
+      child: _AutomaticPayBody(
+        organizationLogo,
+        fullPage,
+        tutorialVideoPath,
+      ),
     );
   }
 }
@@ -77,7 +85,9 @@ class AutomaticPayPage extends HookWidget {
 class _AutomaticPayBody extends StatelessWidget {
   final Widget? organizationLogo;
   final bool fullPage;
-  const _AutomaticPayBody(this.organizationLogo, this.fullPage);
+  final String? tutorialVideoPath;
+  const _AutomaticPayBody(
+      this.organizationLogo, this.fullPage, this.tutorialVideoPath);
 
   @override
   Widget build(BuildContext context) {
@@ -117,45 +127,11 @@ class _AutomaticPayBody extends StatelessWidget {
         shrinkWrap: !fullPage,
         physics: !fullPage ? const NeverScrollableScrollPhysics() : null,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      localizationHelper.payUsing(
-                        method.method.title(context),
-                      ),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium!
-                          .copyWith(fontSize: 20),
-                    ),
-                    if (!fullPage)
-                      AppButton(
-                        minHeight: 0,
-                        background: Theme.of(context).colorScheme.onPrimary,
-                        textColor: Theme.of(context).colorScheme.onSurface,
-                        margin: EdgeInsets.zero,
-                        border: BorderSide(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        labelText: localizationHelper.change,
-                        onPressed: () =>
-                            getPaymentMethodsProvider.setPaymentMethod(null),
-                      ),
-                  ],
-                ),
-                Text(
-                  localizationHelper
-                      .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
-                ),
-              ],
+          if (tutorialVideoPath != null)
+            VideoPlayer(
+              videoPath: tutorialVideoPath!,
+              autoPlay: true,
             ),
-          ),
           ModeOfPaymentInfo(
             mode: method,
             organizationLogo: organizationLogo,
@@ -168,16 +144,8 @@ class _AutomaticPayBody extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           InputLabel(
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontSize: 18,
-                ),
-            label: localizationHelper.afterPayment,
-            child: Text(
-              localizationHelper
-                  .afterMakingThePaymentFillTheFollowingInformation,
-            ),
+            label: localizationHelper.enterYourPaymentInformation,
           ),
-          const SizedBox(height: 20),
           AppTextInput(
             margin: horizontalPadding,
             maxLength: 8,
@@ -185,14 +153,12 @@ class _AutomaticPayBody extends StatelessWidget {
             validator: (value) =>
                 Validators.validateMauritanianPhoneNumber(value, context),
             hint: localizationHelper.enterYourBankilyPhoneNumber,
-            label: localizationHelper.bankilyPhoneNumber,
           ),
           AppTextInput(
             margin: horizontalPadding,
             controller: provider.passCodeTextController,
             validator: (value) => Validators.validatePassCode(value, context),
             hint: localizationHelper.paymentPassCode,
-            label: localizationHelper.paymentPassCodeFromBankily,
             errorText: provider.error != null
                 ? ExceptionMapper.getErrorMessage(
                     provider.error,
@@ -201,6 +167,13 @@ class _AutomaticPayBody extends StatelessWidget {
                 : null,
             maxLength: 4,
           ),
+          if (provider.error != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ErrorMessageCard(
+                message: localizationHelper.errorWhilePaying,
+              ),
+            ),
         ],
       ),
     );
@@ -252,56 +225,94 @@ class ModeOfPaymentInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
+    final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
+    final merchantCode = (mode is ManualConfigModel)
+        ? (mode as ManualConfigModel).merchantCode
+        : (mode as BankilyConfigModel).bPayNumber;
+    final isPhoneNumber = merchantCode.length == 8;
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(6),
       child: Column(
         children: [
-          Row(
-            children: organizationLogo != null
-                ? [
-                    Expanded(
-                      child: organizationLogo!,
+          if (mode.type.isManual)
+            Stack(
+              alignment: Alignment.topRight,
+              children: [
+                mode.method.icon.apply(
+                  size: 200,
+                ),
+                Positioned(
+                  child: InkWell(
+                    onTap: () =>
+                        getPaymentMethodsProvider.setPaymentMethod(null),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.close,
+                          size: 30,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
-                    const SizedBox(width: 32),
-                    AppIcons.close,
-                    const SizedBox(width: 32),
-                    Expanded(
-                      child: mode.method.icon.apply(size: 80),
+                  ),
+                ),
+              ],
+            ),
+          const SizedBox(height: 18),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (mode is BankilyConfigModel)
+                  Text(
+                    localizationHelper
+                        .copyTheCodeBPayAndHeadToBankilyToPayTheAmount,
+                  )
+                else if (isPhoneNumber)
+                  Text(
+                    localizationHelper
+                        .copyThePhoneNumberAndHeadToMethodToPayTheAmount(
+                      mode.method.title(context),
                     ),
-                  ]
-                : [
-                    Expanded(
-                      child: mode.method.icon.apply(size: 120),
+                  )
+                else
+                  Text(
+                    localizationHelper
+                        .copyTheMerchantCodeAndHeadToMethodToPayTheAmount(
+                      mode.method.title(context),
                     ),
-                  ],
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: 12),
           if (mode is ManualConfigModel) ...[
-            card(
-              context,
-              localizationHelper.merchantCode,
-              (mode as ManualConfigModel).merchantCode,
-              copyableValue: mode.id,
-            ),
-            card(
-              context,
-              localizationHelper.amountToPay,
-              paymentRequest.amount.toStringAsFixed(2),
-            ),
-          ] else if (mode is BankilyConfigModel) ...[
+            if (isPhoneNumber)
+              card(
+                context,
+                localizationHelper.ourPhoneNumber,
+                merchantCode,
+                copyableValue: merchantCode,
+              )
+            else
+              card(
+                context,
+                localizationHelper.merchantCode,
+                merchantCode,
+                copyableValue: merchantCode,
+              ),
+          ] else if (mode is BankilyConfigModel)
             card(
               context,
               localizationHelper.codeBPay,
               (mode as BankilyConfigModel).bPayNumber,
               copyableValue: (mode as BankilyConfigModel).bPayNumber,
             ),
-            card(
-              context,
-              localizationHelper.amountToPay,
-              paymentRequest.amount.toStringAsFixed(2),
-            ),
-          ]
+          card(
+            context,
+            localizationHelper.amountToPay,
+            paymentRequest.amount.toStringAsFixed(2),
+          ),
         ],
       ),
     );

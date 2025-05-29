@@ -22,7 +22,9 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   file_picker: ^8.1.2
   mime: ^2.0.0
-
+  video_player: ^2.8.2
+  chewie: ^1.10.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -35,6 +37,7 @@ flutter:
   generate: true
   assets:
     - assets/icons/
+
 
 repository: https://github.com/SoftwareSavants/moosyl_flutter.git
 

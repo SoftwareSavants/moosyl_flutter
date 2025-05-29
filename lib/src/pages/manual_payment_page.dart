@@ -98,45 +98,6 @@ class _ManualPaymentPageBody extends StatelessWidget {
       shrinkWrap: !fullPage,
       physics: !fullPage ? const NeverScrollableScrollPhysics() : null,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    localizationHelper.payUsing(
-                      method.method.title(context),
-                    ),
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                          fontSize: 20,
-                        ),
-                  ),
-                  if (!fullPage)
-                    AppButton(
-                      minHeight: 0,
-                      background: Theme.of(context).colorScheme.onPrimary,
-                      textColor: Theme.of(context).colorScheme.onSurface,
-                      margin: EdgeInsets.zero,
-                      border: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      labelText: localizationHelper.change,
-                      onPressed: () =>
-                          getPaymentMethodsProvider.setPaymentMethod(null),
-                    ),
-                ],
-              ),
-              Text(
-                localizationHelper
-                    .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
-              ),
-            ],
-          ),
-        ),
         ModeOfPaymentInfo(
           mode: method,
           paymentRequest: provider.paymentRequest!,
@@ -149,10 +110,8 @@ class _ManualPaymentPageBody extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         InputLabel(
-          label: localizationHelper.afterPayment,
-          child: Text(
-            localizationHelper.afterMakingThePaymentFillTheFollowingInformation,
-          ),
+          label: localizationHelper
+              .afterMakingThePaymentFillTheFollowingInformation,
         ),
         const SizedBox(height: 20),
         PickImageCard(onChanged: provider.setSelectedImage),

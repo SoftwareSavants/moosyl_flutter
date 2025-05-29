@@ -9,6 +9,8 @@ import 'moosyl_localization_ar.dart';
 import 'moosyl_localization_en.dart';
 import 'moosyl_localization_fr.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of MoosylLocalization
 /// returned by `MoosylLocalization.of(context)`.
 ///
@@ -45,12 +47,12 @@ import 'moosyl_localization_fr.dart';
 ///
 /// iOS applications define key application metadata, including supported
 /// locales, in an Info.plist file that is built into the application bundle.
-/// To configure the locales supported by your app, you’ll need to edit this
+/// To configure the locales supported by your app, you'll need to edit this
 /// file.
 ///
-/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// First, open your project's ios/Runner.xcworkspace Xcode workspace file.
 /// Then, in the Project Navigator, open the Info.plist file under the Runner
-/// project’s Runner folder.
+/// project's Runner folder.
 ///
 /// Next, select the Information Property List item, select Add Item from the
 /// Editor menu, then select Localizations from the pop-up menu.
@@ -173,8 +175,15 @@ abstract class MoosylLocalization {
   /// No description provided for @afterMakingThePaymentFillTheFollowingInformation.
   ///
   /// In en, this message translates to:
-  /// **'After making the payment, fill the following information'**
+  /// **'After making the payment, upload a photo of the transaction'**
   String get afterMakingThePaymentFillTheFollowingInformation;
+
+  /// No description provided for @afterMakingThePaymentFillTheFollowingInformationWithTheBankilyPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'After making the payment, fill generated code from Bankily'**
+  String
+      get afterMakingThePaymentFillTheFollowingInformationWithTheBankilyPhoneNumber;
 
   /// No description provided for @enterYourBankilyPhoneNumber.
   ///
@@ -236,11 +245,17 @@ abstract class MoosylLocalization {
   /// **'Capture'**
   String get capture;
 
-  /// No description provided for @copyTheMerchantCodeAndHeadToSedadToPayTheAmount.
+  /// No description provided for @copyTheMerchantCodeAndHeadToMethodToPayTheAmount.
   ///
   /// In en, this message translates to:
-  /// **'Copy the merchant code and head to Sedad to pay the amount'**
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount;
+  /// **'Copy the code and head to {method} to pay the amount'**
+  String copyTheMerchantCodeAndHeadToMethodToPayTheAmount(Object method);
+
+  /// No description provided for @copyThePhoneNumberAndHeadToMethodToPayTheAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the phone number and head to {method} to pay the amount'**
+  String copyThePhoneNumberAndHeadToMethodToPayTheAmount(Object method);
 
   /// No description provided for @merchantCode.
   ///
@@ -356,17 +371,35 @@ abstract class MoosylLocalization {
   /// **'Enter a valid Mauritanian phone number'**
   String get validMauritanianNumber;
 
-  /// No description provided for @passCodeRequired.
+  /// No description provided for @codeRequired.
   ///
   /// In en, this message translates to:
-  /// **'Pass code is required'**
+  /// **'Code is required'**
   String get codeRequired;
 
-  /// No description provided for @validPassCode.
+  /// No description provided for @validDigitCode.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid 4-digit code'**
   String get validDigitCode;
+
+  /// No description provided for @errorWhilePaying.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while processing your payment'**
+  String get errorWhilePaying;
+
+  /// No description provided for @enterYourPaymentInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your payment information'**
+  String get enterYourPaymentInformation;
+
+  /// No description provided for @ourPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Our phone number'**
+  String get ourPhoneNumber;
 }
 
 class _MoosylLocalizationDelegate

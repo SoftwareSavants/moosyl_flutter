@@ -1,5 +1,7 @@
 import 'moosyl_localization.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for English (`en`).
 class MoosylLocalizationEn extends MoosylLocalization {
   MoosylLocalizationEn([String locale = 'en']) : super(locale);
@@ -38,14 +40,19 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get copyTheCodeBPayAndHeadToBankilyToPayTheAmount =>
-      'Copy the code, BPay and head to Bankily to pay the amount';
+      '1- Copy the code, BPay and head to Bankily to pay the amount';
 
   @override
   String get afterPayment => 'After payment';
 
   @override
   String get afterMakingThePaymentFillTheFollowingInformation =>
-      'After making the payment, fill the following information';
+      '2- After making the payment, upload a photo of the transaction';
+
+  @override
+  String
+      get afterMakingThePaymentFillTheFollowingInformationWithTheBankilyPhoneNumber =>
+          'After making the payment, fill generated code from Bankily';
 
   @override
   String get enterYourBankilyPhoneNumber => 'Enter your Bankily phone number';
@@ -78,8 +85,14 @@ class MoosylLocalizationEn extends MoosylLocalization {
   String get capture => 'Capture';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
-      'Copy the merchant code and head to Sedad to pay the amount';
+  String copyTheMerchantCodeAndHeadToMethodToPayTheAmount(Object method) {
+    return '1- Copy the code and head to $method to pay the amount';
+  }
+
+  @override
+  String copyThePhoneNumberAndHeadToMethodToPayTheAmount(Object method) {
+    return '1- Copy the phone number and head to $method to pay the amount';
+  }
 
   @override
   String get merchantCode => 'Merchant Code';
@@ -136,18 +149,24 @@ class MoosylLocalizationEn extends MoosylLocalization {
   String get nonExistentOperation => 'Non-existent operation';
 
   @override
-  // TODO: implement codeRequired
-  String get codeRequired => 'Code is required';
-
-  @override
-  // TODO: implement phoneNumberRequired
   String get phoneNumberRequired => 'Phone number is required';
 
   @override
-  // TODO: implement validDigitCode
+  String get validMauritanianNumber => 'Enter a valid Mauritanian phone number';
+
+  @override
+  String get codeRequired => 'Code is required';
+
+  @override
   String get validDigitCode => 'Enter a valid 4-digit code';
 
   @override
-  // TODO: implement validMauritanianNumber
-  String get validMauritanianNumber => 'Enter a valid Mauritanian phone number';
+  String get errorWhilePaying =>
+      'An error occurred while processing your payment';
+
+  @override
+  String get enterYourPaymentInformation => '2- Enter your payment information';
+
+  @override
+  String get ourPhoneNumber => 'Our phone number';
 }

@@ -29,8 +29,9 @@ class ExceptionMapper {
     // Switch on the type of error to determine the appropriate message.
     return switch (error) {
       AppException(code: AppExceptionCode code) => switch (code) {
-          AppExceptionCode.existingPaymentWasFound => localizationsHelper
-              .existingPaymentWasFound, // Localized message for existing payment found.
+          AppExceptionCode.existingPaymentWasFound =>
+            localizationsHelper.existingPaymentWasFound,
+          // Localized message for existing payment found.
           AppExceptionCode.authorizationRequired => localizationsHelper
               .authorizationRequired, // Localized message for API key required.
           AppExceptionCode.invalidAuthorizationOrganizationNotFound =>
