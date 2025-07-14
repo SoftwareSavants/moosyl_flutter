@@ -2,7 +2,7 @@ name: moosyl
 description: "The Moosyl Flutter SDK is a powerful tool for integrating payment solutions with Mauritania's popular banking apps, such as Bankily, Sedad, and Masrivi"
 
 homepage: https://github.com/SoftwareSavants/moosyl_flutter
-version: 1.0.7
+version: 1.0.8
 
 license: MIT
 

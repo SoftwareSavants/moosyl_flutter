@@ -1,4 +1,8 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'moosyl_localization.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class MoosylLocalizationEn extends MoosylLocalization {
@@ -78,8 +82,9 @@ class MoosylLocalizationEn extends MoosylLocalization {
   String get capture => 'Capture';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
-      'Copy the merchant code and head to Sedad to pay the amount';
+  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(Object paymentMethod) {
+    return 'Copy the merchant code and head to $paymentMethod to pay the amount';
+  }
 
   @override
   String get merchantCode => 'Merchant Code';
@@ -136,18 +141,14 @@ class MoosylLocalizationEn extends MoosylLocalization {
   String get nonExistentOperation => 'Non-existent operation';
 
   @override
-  // TODO: implement codeRequired
-  String get codeRequired => 'Code is required';
-
-  @override
-  // TODO: implement phoneNumberRequired
   String get phoneNumberRequired => 'Phone number is required';
 
   @override
-  // TODO: implement validDigitCode
-  String get validDigitCode => 'Enter a valid 4-digit code';
+  String get validMauritanianNumber => 'Enter a valid Mauritanian phone number';
 
   @override
-  // TODO: implement validMauritanianNumber
-  String get validMauritanianNumber => 'Enter a valid Mauritanian phone number';
+  String get codeRequired => 'Code is required';
+
+  @override
+  String get validDigitCode => 'Enter a valid 4-digit code';
 }

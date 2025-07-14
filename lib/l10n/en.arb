@@ -23,7 +23,7 @@
   "retry": "Retry",
   "upload": "Upload",
   "capture": "Capture",
-  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copy the merchant code and head to Sedad to pay the amount",
+  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copy the merchant code and head to {paymentMethod} to pay the amount",
   "merchantCode": "Merchant Code",
   "existingPaymentWasFound": "An existing pending payment was found. Please wait for the previous payment to be processed.",
   "authorizationRequired": "API key is required",

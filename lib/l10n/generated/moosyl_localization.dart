@@ -9,6 +9,8 @@ import 'moosyl_localization_ar.dart';
 import 'moosyl_localization_en.dart';
 import 'moosyl_localization_fr.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of MoosylLocalization
 /// returned by `MoosylLocalization.of(context)`.
 ///
@@ -239,8 +241,8 @@ abstract class MoosylLocalization {
   /// No description provided for @copyTheMerchantCodeAndHeadToSedadToPayTheAmount.
   ///
   /// In en, this message translates to:
-  /// **'Copy the merchant code and head to Sedad to pay the amount'**
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount;
+  /// **'Copy the merchant code and head to {paymentMethod} to pay the amount'**
+  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(Object paymentMethod);
 
   /// No description provided for @merchantCode.
   ///
@@ -356,13 +358,13 @@ abstract class MoosylLocalization {
   /// **'Enter a valid Mauritanian phone number'**
   String get validMauritanianNumber;
 
-  /// No description provided for @passCodeRequired.
+  /// No description provided for @codeRequired.
   ///
   /// In en, this message translates to:
-  /// **'Pass code is required'**
+  /// **'Code is required'**
   String get codeRequired;
 
-  /// No description provided for @validPassCode.
+  /// No description provided for @validDigitCode.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid 4-digit code'**

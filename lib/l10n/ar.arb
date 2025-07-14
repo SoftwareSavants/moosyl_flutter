@@ -24,7 +24,7 @@
   "upload": "رفع",
   "capture": "التقاط",
   "merchantCode": "رمز التاجر",
-  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ",
+  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "انسخ رمز التاجر وتوجه إلى {paymentMethod} لدفع المبلغ",
   "existingPaymentWasFound": "تم العثور على دفعة معلقة موجودة. يرجى الانتظار حتى يتم معالجة الدفعة السابقة.",
   "authorizationRequired": "مطلوب مفتاح API",
   "invalidAuthorizationOrganizationNotFound": "مفتاح API غير صالح، لم يتم العثور على المؤسسة",

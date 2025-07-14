@@ -23,7 +23,7 @@
   "retry": "Réessayer",
   "upload": "Télécharger",
   "capture": "Capturer",
-  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copiez le code marchand et dirigez-vous vers Sedad pour payer le montant",
+  "copyTheMerchantCodeAndHeadToSedadToPayTheAmount": "Copiez le code marchand et dirigez-vous vers {paymentMethod} pour payer le montant",
   "merchantCode": "Code marchand",
   "existingPaymentWasFound": "Un paiement en attente a été trouvé. Veuillez attendre que le paiement précédent soit traité.",
   "authorizationRequired": "Clé API requise",

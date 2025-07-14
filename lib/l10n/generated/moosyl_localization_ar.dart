@@ -1,4 +1,8 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'moosyl_localization.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for Arabic (`ar`).
 class MoosylLocalizationAr extends MoosylLocalization {
@@ -78,8 +82,9 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get capture => 'التقاط';
 
   @override
-  String get copyTheMerchantCodeAndHeadToSedadToPayTheAmount =>
-      'انسخ رمز التاجر وتوجه إلى سداد لدفع المبلغ';
+  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(Object paymentMethod) {
+    return 'انسخ رمز التاجر وتوجه إلى $paymentMethod لدفع المبلغ';
+  }
 
   @override
   String get merchantCode => 'رمز التاجر';
@@ -136,18 +141,14 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get nonExistentOperation => 'العملية غير موجودة';
 
   @override
-  // TODO: implement codeRequired
-  String get codeRequired => 'الرمز مطلوب';
-
-  @override
-  // TODO: implement phoneNumberRequired
   String get phoneNumberRequired => 'رقم الهاتف مطلوب';
 
   @override
-  // TODO: implement validDigitCode
-  String get validDigitCode => 'أدخل رمزًا صالحًا مكونًا من 4 أرقام';
+  String get validMauritanianNumber => 'أدخل رقم هاتف موريتاني صالح';
 
   @override
-  // TODO: implement validMauritanianNumber
-  String get validMauritanianNumber => 'أدخل رقم هاتف موريتاني صالح';
+  String get codeRequired => 'الرمز مطلوب';
+
+  @override
+  String get validDigitCode => 'أدخل رمزًا صالحًا مكونًا من 4 أرقام';
 }

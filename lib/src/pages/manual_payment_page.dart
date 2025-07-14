@@ -132,7 +132,8 @@ class _ManualPaymentPageBody extends StatelessWidget {
               ),
               Text(
                 localizationHelper
-                    .copyTheMerchantCodeAndHeadToSedadToPayTheAmount,
+                    .copyTheMerchantCodeAndHeadToSedadToPayTheAmount(
+                        method.method.title(context)),
               ),
             ],
           ),
