@@ -253,6 +253,15 @@ class ModeOfPaymentInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
 
+    final isManual = mode is ManualConfigModel;
+
+    final merchantCode =
+        isManual ? (mode as ManualConfigModel).merchantCode : '';
+
+    final identifierLabel = isManual && merchantCode.length < 8
+        ? localizationHelper.merchantCodeLabel
+        : localizationHelper.phoneNumberLabel;
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -280,7 +289,7 @@ class ModeOfPaymentInfo extends StatelessWidget {
           if (mode is ManualConfigModel) ...[
             card(
               context,
-              localizationHelper.merchantCode,
+              identifierLabel,
               (mode as ManualConfigModel).merchantCode,
               copyableValue: mode.id,
             ),

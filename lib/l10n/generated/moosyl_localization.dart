@@ -241,14 +241,33 @@ abstract class MoosylLocalization {
   /// No description provided for @copyTheMerchantCodeAndHeadToSedadToPayTheAmount.
   ///
   /// In en, this message translates to:
-  /// **'Copy the merchant code and head to {paymentMethod} to pay the amount'**
-  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(Object paymentMethod);
+  /// **'Copy the {identifier} and head to {paymentMethod} to pay the amount'**
+  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(
+      Object identifier, Object paymentMethod);
 
   /// No description provided for @merchantCode.
   ///
   /// In en, this message translates to:
-  /// **'Merchant Code'**
+  /// **'merchant code'**
   String get merchantCode;
+
+  /// No description provided for @merchantCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant Code'**
+  String get merchantCodeLabel;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'phone number'**
+  String get phoneNumber;
+
+  /// No description provided for @phoneNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumberLabel;
 
   /// No description provided for @existingPaymentWasFound.
   ///

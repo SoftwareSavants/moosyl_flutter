@@ -84,12 +84,22 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get capture => 'Capturer';
 
   @override
-  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(Object paymentMethod) {
-    return 'Copiez le code marchand et dirigez-vous vers $paymentMethod pour payer le montant';
+  String copyTheMerchantCodeAndHeadToSedadToPayTheAmount(
+      Object identifier, Object paymentMethod) {
+    return 'Copiez le $identifier et dirigez-vous vers $paymentMethod pour payer le montant';
   }
 
   @override
-  String get merchantCode => 'Code marchand';
+  String get merchantCode => 'code marchand';
+
+  @override
+  String get merchantCodeLabel => 'Code Marchand';
+
+  @override
+  String get phoneNumber => 'numéro de téléphone';
+
+  @override
+  String get phoneNumberLabel => 'Numéro de Téléphone';
 
   @override
   String get existingPaymentWasFound =>
