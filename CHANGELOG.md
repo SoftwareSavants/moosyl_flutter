@@ -1,3 +1,11 @@
+## 1.0.9
+
+- Add GitHub Actions workflow for publishing to pub.dev
+
+## 1.0.8
+
+- Fix "Sedad" hardcoded payment method string in the payment screen
+
 ## 1.0.3
 
 - Add MoosylLocalization class to hide localization strings from the public API
