@@ -80,9 +80,23 @@ jobs:
           echo "new-tag=$NEW_TAG" >> $GITHUB_OUTPUT
           echo "Final tag: $NEW_TAG"
 
-      - name: Create and push new tag
+      - name: Check if tag exists and create new tag
         run: |
           NEW_TAG="${{ steps.determine-tag.outputs.new-tag }}"
+          
+          # Check if tag already exists
+          if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
+            echo "Tag $NEW_TAG already exists. Skipping tag creation."
+            exit 0
+          fi
+          
+          # Check if tag exists on remote
+          if git ls-remote --tags origin | grep -q "refs/tags/$NEW_TAG$"; then
+            echo "Tag $NEW_TAG already exists on remote. Skipping tag creation."
+            exit 0
+          fi
+          
+          # Create and push the tag
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "$NEW_TAG" -m "Auto-generated tag $NEW_TAG from PR #${{ github.event.pull_request.number }}"
