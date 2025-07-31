@@ -1,0 +1,90 @@
+name: Auto Tag on Pull Request
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches:
+      - trunk
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from PR title
+        id: extract-version
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR Title: $PR_TITLE"
+          
+          # Try to extract version from PR title using regex
+          # Matches patterns like: v1.2.3, 1.2.3, version 1.2.3, etc.
+          VERSION_FROM_TITLE=$(echo "$PR_TITLE" | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "")
+          
+          if [ ! -z "$VERSION_FROM_TITLE" ]; then
+            # Ensure version starts with 'v'
+            if [[ ! "$VERSION_FROM_TITLE" =~ ^v ]]; then
+              VERSION_FROM_TITLE="v$VERSION_FROM_TITLE"
+            fi
+            echo "version-from-title=$VERSION_FROM_TITLE" >> $GITHUB_OUTPUT
+            echo "Found version in PR title: $VERSION_FROM_TITLE"
+          else
+            echo "version-from-title=" >> $GITHUB_OUTPUT
+            echo "No version found in PR title"
+          fi
+
+      - name: Get latest tag
+        id: get-latest-tag
+        run: |
+          # Get the latest tag, or default to v0.0.0 if no tags exist
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "latest-tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest tag: $LATEST_TAG"
+
+      - name: Determine new tag version
+        id: determine-tag
+        run: |
+          VERSION_FROM_TITLE="${{ steps.extract-version.outputs.version-from-title }}"
+          LATEST_TAG="${{ steps.get-latest-tag.outputs.latest-tag }}"
+          
+          if [ ! -z "$VERSION_FROM_TITLE" ]; then
+            # Use version from PR title
+            NEW_TAG="$VERSION_FROM_TITLE"
+            echo "Using version from PR title: $NEW_TAG"
+          else
+            # Increment the latest tag
+            echo "No version in PR title, incrementing latest tag: $LATEST_TAG"
+            
+            # Remove 'v' prefix if present
+            VERSION=${LATEST_TAG#v}
+            
+            # Split version into parts
+            IFS='.' read -ra VERSION_PARTS <<< "$VERSION"
+            MAJOR=${VERSION_PARTS[0]:-0}
+            MINOR=${VERSION_PARTS[1]:-0}
+            PATCH=${VERSION_PARTS[2]:-0}
+            
+            # Increment patch version
+            NEW_PATCH=$((PATCH + 1))
+            NEW_TAG="v$MAJOR.$MINOR.$NEW_PATCH"
+            echo "Auto-incremented to: $NEW_TAG"
+          fi
+          
+          echo "new-tag=$NEW_TAG" >> $GITHUB_OUTPUT
+          echo "Final tag: $NEW_TAG"
+
+      - name: Create and push new tag
+        run: |
+          NEW_TAG="${{ steps.determine-tag.outputs.new-tag }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$NEW_TAG" -m "Auto-generated tag $NEW_TAG from PR #${{ github.event.pull_request.number }}"
+          git push origin "$NEW_TAG"
+          echo "Created and pushed tag: $NEW_TAG" 
