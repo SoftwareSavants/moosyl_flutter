@@ -93,6 +93,10 @@ class _ManualPaymentPageBody extends StatelessWidget {
 
     final method = provider.method;
 
+    final identifierLabel = method.merchantCode.length < 8
+        ? localizationHelper.merchantCode
+        : localizationHelper.phoneNumber;
+
     final children = ListView(
       padding: EdgeInsets.only(bottom: fullPage ? 200 : 20),
       shrinkWrap: !fullPage,
@@ -133,7 +137,9 @@ class _ManualPaymentPageBody extends StatelessWidget {
               Text(
                 localizationHelper
                     .copyTheMerchantCodeAndHeadToSedadToPayTheAmount(
-                        method.method.title(context)),
+                  identifierLabel,
+                  method.method.title(context),
+                ),
               ),
             ],
           ),
