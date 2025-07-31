@@ -18,26 +18,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract version from PR title
+      - name: Extract version from pubspec.yaml
         id: extract-version
         run: |
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          echo "PR Title: $PR_TITLE"
+          # Extract version from pubspec.yaml
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: *//' | tr -d ' ')
           
-          # Try to extract version from PR title using regex
-          # Matches patterns like: v1.2.3, 1.2.3, version 1.2.3, etc.
-          VERSION_FROM_TITLE=$(echo "$PR_TITLE" | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "")
-          
-          if [ ! -z "$VERSION_FROM_TITLE" ]; then
+          if [ ! -z "$PUBSPEC_VERSION" ]; then
             # Ensure version starts with 'v'
-            if [[ ! "$VERSION_FROM_TITLE" =~ ^v ]]; then
-              VERSION_FROM_TITLE="v$VERSION_FROM_TITLE"
-            fi
-            echo "version-from-title=$VERSION_FROM_TITLE" >> $GITHUB_OUTPUT
-            echo "Found version in PR title: $VERSION_FROM_TITLE"
+            VERSION_FROM_PUBSPEC="v$PUBSPEC_VERSION"
+            echo "version-from-pubspec=$VERSION_FROM_PUBSPEC" >> $GITHUB_OUTPUT
+            echo "Found version in pubspec.yaml: $VERSION_FROM_PUBSPEC"
           else
-            echo "version-from-title=" >> $GITHUB_OUTPUT
-            echo "No version found in PR title"
+            echo "version-from-pubspec=" >> $GITHUB_OUTPUT
+            echo "No version found in pubspec.yaml"
           fi
 
       - name: Get latest tag
@@ -51,16 +45,16 @@ jobs:
       - name: Determine new tag version
         id: determine-tag
         run: |
-          VERSION_FROM_TITLE="${{ steps.extract-version.outputs.version-from-title }}"
+          VERSION_FROM_PUBSPEC="${{ steps.extract-version.outputs.version-from-pubspec }}"
           LATEST_TAG="${{ steps.get-latest-tag.outputs.latest-tag }}"
           
-          if [ ! -z "$VERSION_FROM_TITLE" ]; then
-            # Use version from PR title
-            NEW_TAG="$VERSION_FROM_TITLE"
-            echo "Using version from PR title: $NEW_TAG"
+          if [ ! -z "$VERSION_FROM_PUBSPEC" ]; then
+            # Use version from pubspec.yaml
+            NEW_TAG="$VERSION_FROM_PUBSPEC"
+            echo "Using version from pubspec.yaml: $NEW_TAG"
           else
             # Increment the latest tag
-            echo "No version in PR title, incrementing latest tag: $LATEST_TAG"
+            echo "No version in pubspec.yaml, incrementing latest tag: $LATEST_TAG"
             
             # Remove 'v' prefix if present
             VERSION=${LATEST_TAG#v}
