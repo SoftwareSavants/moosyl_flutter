@@ -155,8 +155,6 @@ abstract class PaymentMethod {
         return fromPaymentMethod(map);
       case PaymentType.manual:
         return ManualConfigModel.fromMap(map);
-      default:
-        throw UnimplementedError('This payment method is not supported');
     }
   }
 }
