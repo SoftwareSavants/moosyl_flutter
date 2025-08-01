@@ -1,3 +1,7 @@
+## 1.0.10
+
+- Fix phone number including the country code in the payment screen
+
 ## 1.0.9
 
 - Add GitHub Actions workflow for publishing to pub.dev
