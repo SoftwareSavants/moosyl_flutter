@@ -1,3 +1,7 @@
+## 1.0.11
+
+- Update payment request endpoint path to the new api version
+
 ## 1.0.10
 
 - Fix phone number including the country code in the payment screen
