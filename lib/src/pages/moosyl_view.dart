@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import 'package:moosyl/src/models/payment_method_model.dart';
 import 'package:moosyl/src/pages/available_method_payments.dart';
-import 'package:moosyl/src/pages/manual_payment_page.dart';
 import 'package:moosyl/src/pages/automatic_pay_page.dart';
 import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
 
@@ -23,7 +22,6 @@ class MoosylView extends HookWidget {
     required this.publishableApiKey,
     required this.transactionId,
     this.organizationLogo,
-    this.customHandlers = const {},
     this.onPaymentSuccess,
     this.customIcons,
     this.isTestingMode = false,
@@ -38,9 +36,6 @@ class MoosylView extends HookWidget {
 
   /// A widget representing the logo of the organization.
   final Widget? organizationLogo;
-
-  /// Optional custom handlers for specific payment methods.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
 
   /// Optional callback that is invoked when the payment is successful.
   final FutureOr<void> Function()? onPaymentSuccess;
@@ -61,7 +56,6 @@ class MoosylView extends HookWidget {
         providers: [
           ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
-              customHandlers: customHandlers,
               publishableApiKey: publishableApiKey,
               isTestingMode: isTestingMode,
               customIcons: customIcons,
@@ -78,21 +72,6 @@ class MoosylView extends HookWidget {
             // If no payment method is selected, show the available methods page.
             if (selectedModeOfPayment == null) {
               return SelectPaymentMethodPage(fullPage: fullPage);
-            }
-
-            if (selectedModeOfPayment.type.isManual) {
-              if (selectedModeOfPayment is! ManualConfigModel) {
-                throw Exception('Invalid payment method selected');
-              }
-
-              return ManualPaymentPage(
-                organizationLogo: organizationLogo,
-                publishableApiKey: publishableApiKey,
-                transactionId: transactionId,
-                method: selectedModeOfPayment,
-                fullPage: fullPage,
-                onPaymentSuccess: onPaymentSuccess,
-              );
             }
 
             // If a payment method is selected, proceed to the payment page.

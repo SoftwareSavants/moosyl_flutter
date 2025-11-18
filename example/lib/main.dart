@@ -54,15 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: MoosylView(
-        publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
-        transactionId: 'YOUR_TRANSACTION_ID',
+        publishableApiKey: 'unQq7nRs+A6c962o/piAfv3weq1Sx/reCamIxKqlj1U=',
+        transactionId: '123456789',
         organizationLogo: const Text('Moosyl'),
         fullPage: false,
-        customHandlers: {
-          PaymentMethodTypes.bimBank: () {
-            print('Custom handler for BIM Bank payment method');
-          },
-        },
         onPaymentSuccess: () {
           print('Payment was successful!');
         },
