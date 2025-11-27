@@ -97,6 +97,16 @@ Once the payment request is created, the backend will return details including t
 
 ### Step 2: Display the Payment View
 
+Before instantiating `MoosylView`, make sure your `MaterialApp` registers the Moosyl localization delegates and supported locales:
+
+```dart
+return MaterialApp(
+  localizationsDelegates: MoosylLocalization.localizationsDelegates,
+  supportedLocales: MoosylLocalization.supportedLocales,
+  home: const PaymentScreen(),
+);
+```
+
 Here’s how you can use the **MoosylView** widget in your Flutter app:
 
 ```dart
