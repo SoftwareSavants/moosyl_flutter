@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
 import 'package:moosyl/src/models/payment_method_model.dart';
@@ -12,9 +10,6 @@ import 'package:moosyl/src/services/get_payment_methods_service.dart';
 class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment methods service.
   final String publishableApiKey;
-
-  /// A map of custom handlers for specific payment method types.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
 
   /// A map of custom icons for specific payment method types.
   final Map<PaymentMethodTypes, String>? customIcons;
@@ -29,7 +24,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
 
   /// Initiates fetching payment methods upon creation.
   GetPaymentMethodsProvider({
-    required this.customHandlers,
     required this.publishableApiKey,
     required this.isTestingMode,
     required this.customIcons,
@@ -48,12 +42,12 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
 
   /// Retrieves the list of supported payment method types.
   List<PaymentMethodTypes> get supportedTypes {
-    return [...methods.map((method) => method.method), ...customHandlers.keys];
+    return [...methods.map((method) => method.method)];
   }
 
   /// Retrieves the list of valid payment method types, including custom handlers.
   List<PaymentMethodTypes> get validMethods =>
-      [...methods.map((e) => e.method), ...customHandlers.keys];
+      [...methods.map((e) => e.method)];
 
   /// Asynchronously fetches available payment methods from the service.
   ///
@@ -90,15 +84,8 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// it invokes the handler. Otherwise, it selects the corresponding
   /// payment method from the list and calls the [onSelected] callback.
   void onTap(PaymentMethodTypes type, BuildContext context) async {
-    if (customHandlers[type] != null) {
-      await customHandlers[type]!(); // Call the custom handler if available.
-
-      if (context.mounted) {
-        return Navigator.pop(context); // Close the context (e.g., dialog).
-      }
-    }
-
     // Find and select the payment method from the list.
+
     final selected = methods.firstWhere((element) => element.method == type);
 
     setPaymentMethod(selected);

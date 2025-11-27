@@ -63,24 +63,28 @@ curl -X POST https://api.moosyl.com/payment-request \
 #### Node.js Example:
 
 ```javascript
-const axios = require('axios');
+const axios = require("axios");
 
 async function createPaymentRequest() {
   try {
-    const response = await axios.post('https://api.moosyl.com/payment-request', {
-      phoneNumber: '+22212345678', // Optional
-      transactionId: 'your-unique-transaction-id',
-      amount: 5000, // Amount in MRU
-    }, {
-      headers: {
-        'Authorization': 'YOUR_SECRET_API_KEY',
-        'Content-Type': 'application/json',
+    const response = await axios.post(
+      "https://api.moosyl.com/payment-request",
+      {
+        phoneNumber: "+22212345678", // Optional
+        transactionId: "your-unique-transaction-id",
+        amount: 5000, // Amount in MRU
       },
-    });
+      {
+        headers: {
+          Authorization: "YOUR_SECRET_API_KEY",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log('Payment Request Created:', response.data);
+    console.log("Payment Request Created:", response.data);
   } catch (error) {
-    console.error('Error creating payment request:', error.response.data);
+    console.error("Error creating payment request:", error.response.data);
   }
 }
 
@@ -92,6 +96,16 @@ Once the payment request is created, the backend will return details including t
 ---
 
 ### Step 2: Display the Payment View
+
+Before instantiating `MoosylView`, make sure your `MaterialApp` registers the Moosyl localization delegates and supported locales:
+
+```dart
+return MaterialApp(
+  localizationsDelegates: MoosylLocalization.localizationsDelegates,
+  supportedLocales: MoosylLocalization.supportedLocales,
+  home: const PaymentScreen(),
+);
+```
 
 Here’s how you can use the **MoosylView** widget in your Flutter app:
 
@@ -106,11 +120,6 @@ class PaymentScreen extends StatelessWidget {
       publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
       transactionId: 'TRANSACTION_ID', // Retrieved from your backend
       organizationLogo: const Text('Your Logo Here'),
-      customHandlers: {
-        PaymentMethodTypes.bimBank: () {
-          print('Custom handler for BIM Bank payment method');
-        },
-      },
       onPaymentSuccess: () {
         print('Payment was successful!');
       },
@@ -123,7 +132,6 @@ This example showcases the essential **MoosylView** widget, where you can config
 
 - **`publishableApiKey`**: Your Moosyl publishable API Key.
 - **`transactionId`**: The unique transaction identifier returned by your backend.
-- **`customHandlers`**: Define custom actions for specific payment methods.
 - **`onPaymentSuccess`**: Handle successful payment events.
 
 For detailed API documentation, visit the [Moosyl API Documentation](https://pub.dev/documentation/moosyl/latest/moosyl/moosyl-library.html).
@@ -147,11 +155,11 @@ Complete documentation, including step-by-step guides and best practices, will s
 
 We welcome contributions! Follow these steps to contribute:
 
-1. Fork this repository.  
-2. Create a feature branch (`git checkout -b feature-name`).  
-3. Commit your changes (`git commit -m 'Add feature'`).  
-4. Push to your branch (`git push origin feature-name`).  
-5. Submit a pull request.  
+1. Fork this repository.
+2. Create a feature branch (`git checkout -b feature-name`).
+3. Commit your changes (`git commit -m 'Add feature'`).
+4. Push to your branch (`git push origin feature-name`).
+5. Submit a pull request.
 
 ---
 
@@ -159,8 +167,8 @@ We welcome contributions! Follow these steps to contribute:
 
 For help or questions:
 
-- Visit [moosyl.com](https://moosyl.com).  
-- Email support@moosyl.com.  
+- Visit [moosyl.com](https://moosyl.com).
+- Email support@moosyl.com.
 - Open an issue on [GitHub](https://github.com/SoftwareSavants/moosyl_flutter).
 
 ---

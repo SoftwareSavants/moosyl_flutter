@@ -1,6 +1,6 @@
 ## 1.0.11
 
-- Update payment request endpoint path to the new api version
+- Add documentation for including Moosyl localization delegates before using `MoosylView` and remove ManualPay
 
 ## 1.0.10
 

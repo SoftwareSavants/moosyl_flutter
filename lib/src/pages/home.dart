@@ -22,10 +22,6 @@ class Moosyl extends HookWidget {
   /// [open] is the callback to open the payment sheet.
   final Widget Function(VoidCallback open)? inputBuilder;
 
-  /// Optional map to override the default behavior of specific payment methods.
-  /// The keys are [PaymentMethodTypes] and the values are the custom callback functions.
-  final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers;
-
   /// Optional map to provide custom icons for each payment method type.
   /// The keys are [PaymentMethodTypes] and the values are the paths to the custom icons.
   final Map<PaymentMethodTypes, String>? customIcons;
@@ -44,14 +40,11 @@ class Moosyl extends HookWidget {
   /// * [publishableApiKey]: The API key to authenticate the payment.
   /// * [transactionId]: The transaction ID for the current session.
   /// * [organizationLogo]: The logo widget of the organization.
-  /// * [customHandlers]: Map for custom handlers for payment methods.
   /// * [customIcons]: Map for custom icons for payment methods.
   /// * [onPaymentSuccess]: Callback for when payment is successful.
   static void show(
     BuildContext context, {
     required String publishableApiKey,
-    final Map<PaymentMethodTypes, FutureOr<void> Function()> customHandlers =
-        const {},
     required String transactionId,
     Widget? organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
@@ -62,7 +55,6 @@ class Moosyl extends HookWidget {
       context: context,
       builder: (context) => MoosylView(
         publishableApiKey: publishableApiKey,
-        customHandlers: customHandlers,
         transactionId: transactionId,
         organizationLogo: organizationLogo,
         onPaymentSuccess: onPaymentSuccess,
@@ -77,7 +69,6 @@ class Moosyl extends HookWidget {
   /// * [publishableApiKey]: The API key for payment authentication.
   /// * [transactionId]: The transaction ID for the current payment session.
   /// * [organizationLogo]: The logo of the organization handling the payment.
-  /// * [customHandlers]: Optional custom handlers for specific payment methods.
   /// * [customIcons]: Optional custom icons for specific payment methods.
   /// * [inputBuilder]: A function to build a custom input widget.
   /// * [onPaymentSuccess]: Callback when the payment is successful.
@@ -86,7 +77,6 @@ class Moosyl extends HookWidget {
     required this.publishableApiKey,
     required this.transactionId,
     this.organizationLogo,
-    this.customHandlers = const {},
     this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
@@ -103,7 +93,6 @@ class Moosyl extends HookWidget {
             context: context,
             builder: (context) => MoosylView(
               publishableApiKey: publishableApiKey,
-              customHandlers: customHandlers,
               transactionId: transactionId,
               organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
@@ -118,7 +107,6 @@ class Moosyl extends HookWidget {
     // Otherwise, return the default MoosylBody widget.
     return MoosylView(
       publishableApiKey: publishableApiKey,
-      customHandlers: customHandlers,
       transactionId: transactionId,
       organizationLogo: organizationLogo,
       onPaymentSuccess: onPaymentSuccess,
