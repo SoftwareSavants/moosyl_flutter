@@ -1,6 +1,6 @@
 ## 1.0.11
 
-- Add documentation for including Moosyl localization delegates before using `MoosylView`
+- Add documentation for including Moosyl localization delegates before using `MoosylView` and remove ManualPay
 
 ## 1.0.10
 
