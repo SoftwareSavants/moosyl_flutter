@@ -54,8 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: MoosylView(
-        publishableApiKey: 'unQq7nRs+A6c962o/piAfv3weq1Sx/reCamIxKqlj1U=',
-        transactionId: '123456789',
+        publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
+        transactionId: 'TRANSACTION_ID',
         organizationLogo: const Text('Moosyl'),
         fullPage: false,
         onPaymentSuccess: () {
