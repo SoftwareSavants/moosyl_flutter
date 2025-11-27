@@ -1,4 +1,4 @@
-## 1.0.11
+## 1.0.10
 
 - Fix phone number including the country code in the payment screen
 
