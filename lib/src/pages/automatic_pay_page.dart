@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:moosyl/src/models/payment_request_model.dart';
-import 'package:moosyl/src/pages/manual_payment_page.dart';
-
 import 'package:moosyl/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
 import 'package:moosyl/src/widgets/buttons.dart';
@@ -20,6 +18,85 @@ import 'package:moosyl/src/widgets/error_widget.dart';
 import 'package:moosyl/src/widgets/feedback.dart';
 import 'package:moosyl/src/widgets/icons.dart';
 import 'package:moosyl/src/widgets/text_input.dart';
+
+/// A widget that displays the mode of payment information.
+class BottomSheetButton extends StatelessWidget {
+  /// Loading state of the button.
+  final bool loading;
+
+  /// Disabled state of the button.
+  final bool disabled;
+
+  /// Callback function for the button.
+  final VoidCallback onTap;
+
+  /// Error message to display.
+  final String? error;
+
+  /// Flag to indicate whether the button should have a shadow.
+  final bool withShadow;
+
+  /// A widget that displays the mode of payment information.
+
+  /// Constructor for [BottomSheetButton].
+  const BottomSheetButton({
+    super.key,
+    required this.loading,
+    required this.disabled,
+    required this.onTap,
+    required this.withShadow,
+    this.error,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceBottomPadding = MediaQuery.of(context).padding.bottom;
+    final localizationHelper = MoosylLocalization.of(context)!;
+
+    return AppContainer(
+      color: Theme.of(context).colorScheme.onPrimary,
+      width: double.infinity,
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 16).copyWith(
+        bottom: deviceBottomPadding == 0 ? 20 : deviceBottomPadding,
+      ),
+      shadows: [
+        if (withShadow)
+          BoxShadow(
+            color: Colors.black.withOpacity(0.12),
+            offset: const Offset(0, -4),
+            blurRadius: 16,
+          )
+      ],
+      borderRadius: BorderRadius.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (error != null)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(top: 16),
+              child: AppErrorWidget(
+                message: error,
+                horizontalAxis: true,
+              ),
+            ),
+          AppButton(
+            loading: loading,
+            disabled: disabled,
+            labelText: loading
+                ? localizationHelper.sending
+                : error != null
+                    ? localizationHelper.retry
+                    : localizationHelper.sendForVerification,
+            background:
+                error != null ? Theme.of(context).colorScheme.error : null,
+            onPressed: onTap,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 /// A widget that represents the payment process.
 ///
@@ -207,7 +284,10 @@ class _AutomaticPayBody extends StatelessWidget {
 
     if (!fullPage) {
       return Column(
-        children: [children, paymentButton],
+        children: [
+          Expanded(child: SingleChildScrollView(child: children)),
+          paymentButton
+        ],
       );
     }
 
