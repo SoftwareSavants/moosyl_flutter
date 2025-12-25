@@ -1,3 +1,7 @@
+## 1.0.12
+
+- Fix an issue with payment request fetching in the latest version
+
 ## 1.0.11
 
 - Add documentation for including Moosyl localization delegates before using `MoosylView` and remove ManualPay

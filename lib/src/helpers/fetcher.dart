@@ -196,5 +196,5 @@ class Endpoints {
   static String get manualPayment => '$baseUrl/payment/manual';
 
   /// Returns the URL for retrieving details of a specific transaction with the given [id].
-  static String paymentRequest(String id) => '$baseUrl/payment-request/$id';
+  static String paymentRequest(String id) => '$baseUrl/payment-request/by-transaction/$id';
 }
