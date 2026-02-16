@@ -130,7 +130,7 @@ abstract class PaymentMethod {
   PaymentMethod.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         method = PaymentMethodTypes.fromString(map['type']),
-        type = PaymentType.fromString(map['configurationType']);
+        type = PaymentType.auto;
 
   /// Creates a [PaymentMethod] instance from the provided type.
   ///
