@@ -144,12 +144,13 @@ abstract class PaymentMethod {
       case PaymentMethodTypes.bankily:
         return BankilyConfigModel.fromMap(map);
       default:
-        throw UnimplementedError('This payment method is not supported');
+        return BankilyConfigModel.fromMap(map);
+      // throw UnimplementedError('This payment method is not supported');
     }
   }
 
   static PaymentMethod fromPaymentType(Map<String, dynamic> map) {
-    final type = PaymentType.fromString(map['configurationType']);
+    final type = PaymentType.auto;
     switch (type) {
       case PaymentType.auto:
         return fromPaymentMethod(map);
