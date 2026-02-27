@@ -1,21 +1,26 @@
-import 'dart:convert';
+import 'package:moosyl/moosyl.dart';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:mime/mime.dart';
-import 'package:moosyl/src/helpers/fetcher.dart';
+/// Base URL for the Moosyl API.
+const String _defaultBaseUrl = 'https://moosyl.moosyl.workers.dev';
 
 /// A service class for processing payments.
 ///
 /// This class provides methods to interact with the backend and
-/// execute payment transactions.
+/// execute payment transactions using the Moosyl SDK [PaymentApi].
 class PayService {
   /// The API key used for authentication with the backend.
   final String publishableApiKey;
 
-  /// Constructs a [PayService] with the provided [publishableApiKey].
-  PayService(this.publishableApiKey);
+  /// Optional base URL override.
+  final String? baseUrlOverride;
 
-  /// Processes a payment transaction.
+  /// Constructs a [PayService] with the provided [publishableApiKey].
+  PayService(
+    this.publishableApiKey, {
+    this.baseUrlOverride,
+  });
+
+  /// Processes a payment transaction via [PaymentApi].
   ///
   /// This method makes an API call to process a payment using the specified
   /// parameters. It requires the Transaction ID, phone number, passcode,
@@ -25,53 +30,26 @@ class PayService {
     required String phoneNumber,
     required String passCode,
     required String paymentMethodId,
-  }) {
-    // Make a POST request to the payment methods endpoint with the payment details.
+  }) async {
+    final client = _createClient();
+    final paymentApi = client.getPaymentApi();
 
-    return Fetcher(publishableApiKey).post(
-      Endpoints.pay,
-      body: {
-        'transactionId': transactionId,
-        'phoneNumber': phoneNumber,
-        'passCode': passCode,
-        'configurationId': paymentMethodId,
-      },
+    final paymentCreate = PaymentCreate(
+      (b) => b
+        ..configurationId = paymentMethodId
+        ..transactionId = transactionId
+        ..phoneNumber = phoneNumber
+        ..passCode = passCode,
     );
+
+    await paymentApi.postPayment(paymentCreate: paymentCreate);
   }
 
-  /// Manually processes a payment by making a POST request to the payment methods endpoint.
-  ///
-  /// This method sends the payment details including the transaction ID, payment method ID,
-  /// and a screenshot of the payment to the server for processing.
-  ///
-  /// Parameters:
-  /// - `transactionId` (required): The unique identifier for the transaction.
-  /// - `paymentMethodId` (required): The identifier for the selected payment method.
-  /// - `selectedImage` (required): A screenshot of the payment as a `PlatformFile`.
-  ///
-  /// Returns:
-  /// - A `Future<void>` that completes when the payment has been processed.
-
-  Future<void> manualPay({
-    required String transactionId,
-    required String paymentMethodId,
-    required PlatformFile selectedImage,
-  }) async {
-    // Make a POST request to the payment methods endpoint with the payment details.
-    Fetcher(publishableApiKey).post(
-      Endpoints.manualPayment,
-      body: {
-        'transactionId': transactionId,
-        'configurationId': paymentMethodId,
-        'attachments': [
-          {
-            "name": selectedImage.name,
-            "type": lookupMimeType(selectedImage.name),
-            "size": selectedImage.size,
-            "data": base64Encode(await selectedImage.xFile.readAsBytes()),
-          }
-        ]
-      },
+  Moosyl _createClient() {
+    final client = Moosyl(
+      basePathOverride: baseUrlOverride ?? _defaultBaseUrl,
     );
+    client.dio.options.headers['Authorization'] = publishableApiKey;
+    return client;
   }
 }

@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
-import 'package:moosyl/src/models/payment_request_model.dart';
-import 'package:moosyl/src/models/payment_method_model.dart';
-import 'package:moosyl/src/services/get_payment_request_service.dart';
-import 'package:moosyl/src/services/pay_service.dart';
+import 'package:moosyl_flutter/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl_flutter/src/models/payment_request_model.dart';
+import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
+import 'package:moosyl_flutter/src/services/pay_service.dart';
 
 /// A provider class for handling payment payment requests.
 ///
 /// This class extends [ChangeNotifier] to notify listeners about changes
 /// in the payment payment request state, including loading status and errors.
-class AutomaticPayProvider extends ChangeNotifier {
+class PayProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment services.
   final String publishableApiKey;
 
@@ -23,10 +23,10 @@ class AutomaticPayProvider extends ChangeNotifier {
   /// Callback function that gets called on successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
-  /// Constructs a [AutomaticPayProvider].
+  /// Constructs a [PayProvider].
   ///
   /// Initiates fetching the payment request details upon creation.
-  AutomaticPayProvider({
+  PayProvider({
     required this.publishableApiKey,
     required this.transactionId,
     this.onPaymentSuccess,

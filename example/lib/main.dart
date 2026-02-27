@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:moosyl/moosyl.dart';
+import 'package:moosyl_flutter/moosyl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,20 +48,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: MoosylView(
-        publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
-        transactionId: 'TRANSACTION_ID',
-        organizationLogo: const Text('Moosyl'),
-        fullPage: false,
-        onPaymentSuccess: () {
-          print('Payment was successful!');
-        },
-      ),
+    return MoosylView(
+      publishableApiKey: 'your publishable api key',
+      transactionId: 'your transaction id',
+      organizationLogo: const Text('Moosyl'),
+      isTestingMode: true,
+      primaryColor: Colors.red,
+      onBackPress: () => print('Back pressed'),
+      // amountToPay: 5,
+      // tax: 5,
+      onPaymentSuccess: () {
+        print('Payment was successful!');
+      },
     );
   }
 }

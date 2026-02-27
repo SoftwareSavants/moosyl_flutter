@@ -52,7 +52,7 @@ class MoosylLocalizationAr extends MoosylLocalization {
       'بعد إتمام الدفع، املأ المعلومات التالية';
 
   @override
-  String get enterYourBankilyPhoneNumber => 'أدخل رقم هاتفك الخاص ببنكيلي';
+  String get enterYourBankilyPhoneNumber => 'أدخل رقم هاتفك';
 
   @override
   String get bankilyPhoneNumber => 'رقم هاتف بنكيلي';
@@ -61,16 +61,19 @@ class MoosylLocalizationAr extends MoosylLocalization {
   String get paymentPassCode => 'رمز المرور للدفع';
 
   @override
-  String get paymentPassCodeFromBankily => 'رمز المرور للدفع من بنكيلي';
-
-  @override
-  String get sendForVerification => 'أرسل للتحقق';
-
-  @override
   String get codeBPay => 'رمز BPay';
 
   @override
   String get amountToPay => 'المبلغ الواجب دفعه';
+
+  @override
+  String get choosePaymentMethods => 'اختر طريقة الدفع';
+
+  @override
+  String get tax => 'الضريبة';
+
+  @override
+  String get pay => 'ادفع';
 
   @override
   String get retry => 'إعادة المحاولة';
@@ -161,4 +164,70 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get validDigitCode => 'أدخل رمزًا صالحًا مكونًا من 4 أرقام';
+
+  @override
+  String get totalAmount => 'المبلغ الإجمالي';
+
+  @override
+  String get paymentSummary => 'ملخص الدفع';
+
+  @override
+  String get paymentCode => 'رمز الدفع';
+
+  @override
+  String get ivePaid => 'لقد دفعت';
+
+  @override
+  String get usePaymentCodeAboveToComplete =>
+      'استخدم رمز الدفع أعلاه لإكمال الدفع في تطبيق سداد، ثم اضغط على الزر أدناه.';
+
+  @override
+  String get paymentRequestFullyPaid => 'تم دفع طلب الدفع هذا بالكامل.';
+
+  @override
+  String get amountToPayShouldMatchPaymentRequest =>
+      'يجب أن يتطابق المبلغ المطلوب دفعه مع مبلغ طلب الدفع.';
+
+  @override
+  String get selected => 'محدد';
+
+  @override
+  String get tapToUse => 'اضغط للاستخدام';
+
+  @override
+  String get chooseHowYouWouldLikeToPay => 'اختر كيف تريد الدفع';
+
+  @override
+  String get useThisCodeToCompletePayment => 'استخدم هذا الرمز لإكمال الدفع';
+
+  @override
+  String get sedadStep1 => '1. افتح تطبيق سداد';
+
+  @override
+  String get sedadStep2 => '2. انتقل إلى الدفع';
+
+  @override
+  String get sedadStep3 => '3. الصق أو أدخل الرمز لتأكيد الدفع';
+
+  @override
+  String get sedadStep4 => '4. ارجع إلى هذه الصفحة وانقر على \"لقد دفعت\"';
+
+  @override
+  String get changePaymentMethod => 'تغيير طريقة الدفع';
+
+  @override
+  String get clickToCopy => 'انقر للنسخ';
+
+  @override
+  String get bankilyStep1 => '1. افتح تطبيق بنكيلي';
+
+  @override
+  String get bankilyStep2 => '2. انتقل إلى BPay';
+
+  @override
+  String get bankilyStep3 => '3. أدخل رمز BPay والمبلغ المطلوب دفعه';
+
+  @override
+  String get bankilyStep4 =>
+      '4. ارجع هنا، أدخل رقمك ورمز المرور، ثم انقر على ادفع';
 }

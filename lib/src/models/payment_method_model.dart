@@ -1,30 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:moosyl/l10n/generated/moosyl_localization.dart';
+import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 
-import 'package:moosyl/src/widgets/icons.dart';
-
-enum PaymentType {
-  manual,
-  auto;
-
-  String get toStr {
-    return switch (this) {
-      PaymentType.manual => 'manual',
-      PaymentType.auto => 'auto'
-    };
-  }
-
-  bool get isManual => this == manual;
-  bool get isAuto => this == auto;
-
-  static PaymentType fromString(String type) {
-    return PaymentType.values.firstWhere(
-      (value) => value.toStr == type,
-      orElse: () =>
-          throw UnimplementedError('This payment method is not supported'),
-    );
-  }
-}
+import 'package:moosyl_flutter/src/widgets/icons.dart';
 
 /// Enum representing the different types of payment methods available.
 ///
@@ -106,14 +83,16 @@ enum PaymentMethodTypes {
 
 /// Abstract class representing a payment method.
 ///
-/// This class holds the common properties and methods for all payment methods.
-abstract class PaymentMethod {
+/// Model representing the configuration for the Bankily payment method.
+class PaymentMethod {
   /// The unique identifier for the payment method.
   final String id;
 
   /// The type of the payment method.
   final PaymentMethodTypes method;
-  final PaymentType type;
+
+  /// The BPay number associated with the Bankily payment method.
+  final String bPayNumber;
 
   /// Creates an instance of [PaymentMethod].
   ///
@@ -121,7 +100,7 @@ abstract class PaymentMethod {
   PaymentMethod({
     required this.id,
     required this.method,
-    required this.type,
+    required this.bPayNumber,
   });
 
   /// Creates an instance of [PaymentMethod] from a map.
@@ -130,7 +109,7 @@ abstract class PaymentMethod {
   PaymentMethod.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         method = PaymentMethodTypes.fromString(map['type']),
-        type = PaymentType.fromString(map['configurationType']);
+        bPayNumber = map['config']['code'];
 
   /// Creates a [PaymentMethod] instance from the provided type.
   ///
@@ -138,73 +117,7 @@ abstract class PaymentMethod {
   /// of payment method to create.
   ///
   /// Throws an [UnimplementedError] if the payment method type is not supported.
-  static PaymentMethod fromPaymentMethod(Map<String, dynamic> map) {
-    final type = PaymentMethodTypes.fromString(map['type']);
-    switch (type) {
-      case PaymentMethodTypes.bankily:
-        return BankilyConfigModel.fromMap(map);
-      default:
-        throw UnimplementedError('This payment method is not supported');
-    }
-  }
-
   static PaymentMethod fromPaymentType(Map<String, dynamic> map) {
-    final type = PaymentType.fromString(map['configurationType']);
-    switch (type) {
-      case PaymentType.auto:
-        return fromPaymentMethod(map);
-      case PaymentType.manual:
-        return ManualConfigModel.fromMap(map);
-    }
+    return PaymentMethod.fromMap(map);
   }
-}
-
-/// Model representing the configuration for the Bankily payment method.
-///
-/// Extends [PaymentMethod] to include specific properties for Bankily.
-class BankilyConfigModel extends PaymentMethod {
-  /// The BPay number associated with the Bankily payment method.
-  final String bPayNumber;
-
-  /// Creates an instance of [BankilyConfigModel].
-  ///
-  /// Requires [id], [method], and [bPayNumber] to initialize the model.
-  BankilyConfigModel({
-    required super.id,
-    required super.method,
-    required this.bPayNumber,
-    required super.type,
-  });
-
-  /// Creates an instance of [BankilyConfigModel] from a map.
-  ///
-  /// The [map] must contain the key 'bpay_number' to initialize the property.
-  BankilyConfigModel.fromMap(super.map)
-      : bPayNumber = map['config']['code'],
-        super.fromMap();
-}
-
-/// Model representing the configuration for the Bankily payment method.
-///
-/// Extends [PaymentMethod] to include specific properties for Bankily.
-class ManualConfigModel extends PaymentMethod {
-  /// The BPay number associated with the Bankily payment method.
-  final String merchantCode;
-
-  /// Creates an instance of [ManualConfigModel].
-  ///
-  /// Requires [id], [method], and [bPayNumber] to initialize the model.
-  ManualConfigModel({
-    required super.id,
-    required super.method,
-    required this.merchantCode,
-    required super.type,
-  });
-
-  /// Creates an instance of [ManualConfigModel] from a map.
-  ///
-  /// The [map] must contain the key 'merchant code' to initialize the property.
-  ManualConfigModel.fromMap(super.map)
-      : merchantCode = map['config']['code'],
-        super.fromMap();
 }
