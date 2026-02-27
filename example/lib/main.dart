@@ -52,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
       publishableApiKey: 'your publishable api key',
       transactionId: 'your transaction id',
       organizationLogo: const Text('Moosyl'),
-      isTestingMode: true,
       primaryColor: Colors.red,
       onBackPress: () => print('Back pressed'),
       // amountToPay: 5,

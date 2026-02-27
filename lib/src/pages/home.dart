@@ -29,11 +29,6 @@ class Moosyl extends HookWidget {
   /// Optional callback to be triggered upon successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
-  /// manual payment
-
-  /// The payment method selected for the payment process.
-  final bool isTestingMode;
-
   /// When true, shows as full page. When false, shows as bottom sheet.
   final bool isFullPage;
 
@@ -52,7 +47,6 @@ class Moosyl extends HookWidget {
     Widget? organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
-    bool isTestingMode = false,
     bool isFullPage = false,
   }) {
     showBarModalBottomSheet(
@@ -63,7 +57,6 @@ class Moosyl extends HookWidget {
         organizationLogo: organizationLogo,
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
-        isTestingMode: isTestingMode,
         isFullPage: isFullPage,
       ),
     );
@@ -85,7 +78,6 @@ class Moosyl extends HookWidget {
     this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
-    this.isTestingMode = false,
     this.isFullPage = false,
   });
 
@@ -103,7 +95,6 @@ class Moosyl extends HookWidget {
               organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
-              isTestingMode: isTestingMode,
               isFullPage: isFullPage,
             ),
           );
@@ -118,7 +109,6 @@ class Moosyl extends HookWidget {
       organizationLogo: organizationLogo,
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,
-      isTestingMode: isTestingMode,
       isFullPage: isFullPage,
     );
   }

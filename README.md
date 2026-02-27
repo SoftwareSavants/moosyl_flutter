@@ -24,7 +24,7 @@ Add the **Moosyl** package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  moosyl: ^latest_version
+  moosyl_flutter: ^latest_version
 ```
 
 Fetch the package:
@@ -36,7 +36,7 @@ flutter pub get
 ### Import the Package
 
 ```dart
-import 'package:moosyl/moosyl.dart';
+import 'package:moosyl_flutter/moosyl.dart';
 ```
 
 ---
