@@ -14,13 +14,12 @@ class MoosylView extends StatelessWidget {
   /// Creates an instance of [MoosylView].
 
   /// Requires the [publishableApiKey] and [transactionId] for the payment transaction,
-  /// an [organizationLogo] to display, and optional handlers for custom payment methods,
+  /// and optional handlers for custom payment methods,
   /// success callbacks, and custom icons.
   const MoosylView({
     super.key,
     required this.publishableApiKey,
     required this.transactionId,
-    this.organizationLogo,
     this.onPaymentSuccess,
     this.customIcons,
     this.primaryColor,
@@ -35,9 +34,6 @@ class MoosylView extends StatelessWidget {
 
   /// The transaction ID for the specific payment transaction.
   final String transactionId;
-
-  /// A widget representing the logo of the organization.
-  final Widget? organizationLogo;
 
   /// Optional callback that is invoked when the payment is successful.
   final FutureOr<void> Function()? onPaymentSuccess;
@@ -91,7 +87,6 @@ class MoosylView extends StatelessWidget {
                 totalAmount: amountToPay + tax,
                 transactionId: transactionId,
                 onPaymentSuccess: onPaymentSuccess,
-                organizationLogo: organizationLogo,
                 isFullPage: isFullPage,
               );
             } else {

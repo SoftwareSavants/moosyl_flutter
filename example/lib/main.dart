@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return MoosylView(
       publishableApiKey: 'your publishable api key',
       transactionId: 'your transaction id',
-      organizationLogo: const Text('Moosyl'),
       primaryColor: Colors.red,
       onBackPress: () => print('Back pressed'),
       // amountToPay: 5,
