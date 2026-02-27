@@ -30,7 +30,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
     this.totalAmount = 0.0,
     required this.transactionId,
     this.onPaymentSuccess,
-    this.organizationLogo,
     required this.isFullPage,
   });
 
@@ -58,9 +57,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
   /// Callback when payment succeeds (for Sedad/Bankily dialogs).
   final FutureOr<void> Function()? onPaymentSuccess;
 
-  /// Organization logo (for Bankily).
-  final Widget? organizationLogo;
-
   @override
   Widget build(BuildContext context) {
     if (isFullPage) {
@@ -72,7 +68,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
         totalAmount: totalAmount,
         transactionId: transactionId,
         onPaymentSuccess: onPaymentSuccess,
-        organizationLogo: organizationLogo,
         isFullPage: isFullPage,
       );
     } else {
@@ -84,7 +79,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
         totalAmount: totalAmount,
         transactionId: transactionId,
         onPaymentSuccess: onPaymentSuccess,
-        organizationLogo: organizationLogo,
         isFullPage: isFullPage,
       );
     }
@@ -101,7 +95,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     required this.totalAmount,
     required this.transactionId,
     required this.onPaymentSuccess,
-    required this.organizationLogo,
     required this.isFullPage,
     this.onClose,
   });
@@ -113,7 +106,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   final double totalAmount;
   final String transactionId;
   final FutureOr<void> Function()? onPaymentSuccess;
-  final Widget? organizationLogo;
   final bool isFullPage;
   final VoidCallback? onClose;
 
@@ -394,7 +386,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
             method: method,
             publishableApiKey: publishableApiKey,
             transactionId: transactionId,
-            organizationLogo: organizationLogo,
             onClose: () {
               Navigator.of(dialogContext).pop();
               getPaymentMethodsProvider.setPaymentMethod(null);
@@ -418,7 +409,6 @@ class _SelectPaymentMethodBottomSheetTrigger extends StatefulWidget {
     required this.totalAmount,
     required this.transactionId,
     required this.onPaymentSuccess,
-    required this.organizationLogo,
     required this.isFullPage,
   });
 
@@ -429,7 +419,6 @@ class _SelectPaymentMethodBottomSheetTrigger extends StatefulWidget {
   final double totalAmount;
   final String transactionId;
   final FutureOr<void> Function()? onPaymentSuccess;
-  final Widget? organizationLogo;
   final bool isFullPage;
   @override
   State<_SelectPaymentMethodBottomSheetTrigger> createState() =>
@@ -490,7 +479,6 @@ class _SelectPaymentMethodBottomSheetTriggerState
                     totalAmount: widget.totalAmount,
                     transactionId: widget.transactionId,
                     onPaymentSuccess: widget.onPaymentSuccess,
-                    organizationLogo: widget.organizationLogo,
                     isFullPage: widget.isFullPage,
                     onClose: () {
                       Navigator.of(sheetContext).pop();

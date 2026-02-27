@@ -19,7 +19,6 @@ class BankilyView extends StatelessWidget {
     required this.method,
     required this.publishableApiKey,
     required this.transactionId,
-    this.organizationLogo,
     this.onPaymentSuccess,
     this.onClose,
     required this.primaryColor,
@@ -28,7 +27,6 @@ class BankilyView extends StatelessWidget {
   final PaymentMethod method;
   final String publishableApiKey;
   final String transactionId;
-  final Widget? organizationLogo;
   final FutureOr<void> Function()? onPaymentSuccess;
   final VoidCallback? onClose;
   final Color primaryColor;

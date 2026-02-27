@@ -119,10 +119,11 @@ class PaymentScreen extends StatelessWidget {
     return MoosylView(
       publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
       transactionId: 'TRANSACTION_ID', // Retrieved from your backend
-      organizationLogo: const Text('Your Logo Here'),
+      primaryColor: Colors.red,
       onPaymentSuccess: () {
         print('Payment was successful!');
       },
+      onBackPress: () => print('Back pressed'),
     );
   }
 }

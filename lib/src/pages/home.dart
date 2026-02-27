@@ -15,9 +15,6 @@ class Moosyl extends HookWidget {
   /// The transaction ID associated with the current payment session.
   final String transactionId;
 
-  /// The logo of the organization processing the payment.
-  final Widget? organizationLogo;
-
   /// Optional function to build a custom input widget for the payment process.
   /// [open] is the callback to open the payment sheet.
   final Widget Function(VoidCallback open)? inputBuilder;
@@ -37,14 +34,12 @@ class Moosyl extends HookWidget {
   /// * [context]: The build context.
   /// * [publishableApiKey]: The API key to authenticate the payment.
   /// * [transactionId]: The transaction ID for the current session.
-  /// * [organizationLogo]: The logo widget of the organization.
   /// * [customIcons]: Map for custom icons for payment methods.
   /// * [onPaymentSuccess]: Callback for when payment is successful.
   static void show(
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
-    Widget? organizationLogo,
     final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
     bool isFullPage = false,
@@ -54,7 +49,6 @@ class Moosyl extends HookWidget {
       builder: (context) => MoosylView(
         publishableApiKey: publishableApiKey,
         transactionId: transactionId,
-        organizationLogo: organizationLogo,
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
         isFullPage: isFullPage,
@@ -66,7 +60,6 @@ class Moosyl extends HookWidget {
   ///
   /// * [publishableApiKey]: The API key for payment authentication.
   /// * [transactionId]: The transaction ID for the current payment session.
-  /// * [organizationLogo]: The logo of the organization handling the payment.
   /// * [customIcons]: Optional custom icons for specific payment methods.
   /// * [inputBuilder]: A function to build a custom input widget.
   /// * [onPaymentSuccess]: Callback when the payment is successful.
@@ -74,7 +67,6 @@ class Moosyl extends HookWidget {
     super.key,
     required this.publishableApiKey,
     required this.transactionId,
-    this.organizationLogo,
     this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
@@ -92,7 +84,6 @@ class Moosyl extends HookWidget {
             builder: (context) => MoosylView(
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
-              organizationLogo: organizationLogo,
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
               isFullPage: isFullPage,
@@ -106,7 +97,6 @@ class Moosyl extends HookWidget {
     return MoosylView(
       publishableApiKey: publishableApiKey,
       transactionId: transactionId,
-      organizationLogo: organizationLogo,
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,
       isFullPage: isFullPage,
