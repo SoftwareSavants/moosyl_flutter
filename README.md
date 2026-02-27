@@ -134,6 +134,7 @@ This example showcases the essential **MoosylView** widget, where you can config
 - **`publishableApiKey`**: Your Moosyl publishable API Key.
 - **`transactionId`**: The unique transaction identifier returned by your backend.
 - **`onPaymentSuccess`**: Handle successful payment events.
+- **`onBackPress`**: Handle back press events.
 
 For detailed API documentation, visit the [Moosyl API Documentation](https://pub.dev/documentation/moosyl/latest/moosyl/moosyl-library.html).
 
