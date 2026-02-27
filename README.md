@@ -20,7 +20,7 @@ The **Moosyl Flutter SDK** is a powerful tool for integrating payment solutions 
 
 ### Installation
 
-Add the **Moosyl** package to your `pubspec.yaml`:
+Add the **Moosyl Flutter** package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
