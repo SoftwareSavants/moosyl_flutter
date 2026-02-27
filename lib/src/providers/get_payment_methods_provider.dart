@@ -25,9 +25,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The payment method selected for the payment process.
   PaymentMethod? selected;
 
-  /// Whether the app is in testing mode.
-  final bool isTestingMode;
-
   /// The payment method selected in the list (radio) before confirming with Pay.
   PaymentMethod? pendingSelection;
 
@@ -39,7 +36,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     required this.publishableApiKey,
     required this.transactionId,
     required this.totalAmount,
-    required this.isTestingMode,
     required this.customIcons,
   }) {
     getMethods();
@@ -73,7 +69,8 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// For Sedad/Bankily: returns the method to show dialog (caller shows dialog).
   /// For Masrivi etc: calls setPaymentMethod and returns null.
   /// On validation error: returns null and sets selectionError.
-  Future<PaymentMethod?> setPaymentMethodWithValidation(PaymentMethod method) async {
+  Future<PaymentMethod?> setPaymentMethodWithValidation(
+      PaymentMethod method) async {
     selectionError = null;
     isValidating = true;
     notifyListeners();

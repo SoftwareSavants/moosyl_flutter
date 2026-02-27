@@ -24,7 +24,6 @@ class GetPaymentMethodsService {
   /// Fetches the available payment methods from the backend.
   ///
   /// Makes an API call via [ConfigurationApi] to retrieve the payment methods.
-  /// Uses [isTestingMode] as a query parameter for the configuration endpoint.
   /// Returns a list of [PaymentMethod] objects.
   Future<List<PaymentMethod>> get() async {
     final client = Moosyl(
@@ -33,8 +32,6 @@ class GetPaymentMethodsService {
 
     client.dio.options.headers['Authorization'] = publishableApiKey;
 
-    // Use dio to pass isTestingMode (ConfigurationApi.getConfiguration()
-    // doesn't support query params, but the backend expects it)
     final config = client.getConfigurationApi();
     final response = await config.getConfiguration();
 

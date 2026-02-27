@@ -23,7 +23,6 @@ class MoosylView extends StatelessWidget {
     this.organizationLogo,
     this.onPaymentSuccess,
     this.customIcons,
-    this.isTestingMode = false,
     this.primaryColor,
     this.onBackPress,
     this.amountToPay = 0.0,
@@ -45,9 +44,6 @@ class MoosylView extends StatelessWidget {
 
   /// Optional custom icons for different payment methods.
   final Map<PaymentMethodTypes, String>? customIcons;
-
-  /// A flag to indicate whether the widget is in testing mode.
-  final bool isTestingMode;
 
   /// Primary color for the payment method selection page (radio, pay button).
   final Color? primaryColor;
@@ -74,7 +70,6 @@ class MoosylView extends StatelessWidget {
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
               totalAmount: amountToPay + tax,
-              isTestingMode: isTestingMode,
               customIcons: customIcons,
             ),
           ),
