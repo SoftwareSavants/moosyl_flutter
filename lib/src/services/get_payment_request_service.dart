@@ -1,5 +1,4 @@
 import 'package:moosyl/moosyl.dart';
-import 'package:moosyl_flutter/src/models/payment_request_model.dart';
 
 /// Base URL for the Moosyl API.
 const String _defaultBaseUrl = 'https://moosyl.moosyl.workers.dev';
@@ -24,13 +23,13 @@ class GetPaymentRequestService {
   /// Fetches Payment Request details for the specified [transactionId].
   ///
   /// Makes an API call via [PaymentRequestApi] to retrieve the Payment Request.
-  /// Returns a [PaymentRequestModel] object containing the Payment Request details.
-  Future<PaymentRequestModel> get(String transactionId) async {
+  /// Returns a [PaymentRequestGetData] object containing the Payment Request details.
+  Future<PaymentRequestGetData> get(String transactionId) async {
     final client = Moosyl(
       basePathOverride: baseUrlOverride ?? _defaultBaseUrl,
     );
 
-    client.dio.options.headers['Authorization'] = authorizations;
+    client.setApiKey('ApiKey', authorizations);
 
     final paymentRequestApi = client.getPaymentRequestApi();
     final response =
@@ -43,10 +42,6 @@ class GetPaymentRequestService {
       throw StateError('Payment request not found');
     }
 
-    return PaymentRequestModel(
-      id: data.id,
-      phoneNumber: data.phoneNumber,
-      amount: data.amount.toDouble(),
-    );
+    return data;
   }
 }

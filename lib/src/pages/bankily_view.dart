@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/validators.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
@@ -24,7 +25,7 @@ class BankilyView extends StatelessWidget {
     required this.primaryColor,
   });
 
-  final PaymentMethod method;
+  final ConfigurationListDataInner method;
   final String publishableApiKey;
   final String transactionId;
   final FutureOr<void> Function()? onPaymentSuccess;
@@ -49,7 +50,7 @@ class _BankilyDialogContent extends StatelessWidget {
     required this.onClose,
   });
 
-  final PaymentMethod method;
+  final ConfigurationListDataInner method;
   final VoidCallback onClose;
   final Color primaryColor;
 
@@ -57,7 +58,7 @@ class _BankilyDialogContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
     final provider = context.watch<PayProvider>();
-    final platformIcon = method.method.icon;
+    final platformIcon = PaymentMethodTypes.fromString(method.type).icon;
 
     return Dialog(
       shadowColor: Theme.of(context).colorScheme.outline,
@@ -107,7 +108,8 @@ class _BankilyDialogContent extends StatelessWidget {
 
                 // Copyable container with BPay code
                 GestureDetector(
-                  onTap: () => Feedbacks.copy(method.bPayNumber, context),
+                  onTap: () => Feedbacks.copy(
+                      method.config?.asMap['code']?.toString() ?? '', context),
                   child: AppContainer(
                     color: Colors.grey.shade200,
                     border: Border.all(color: Colors.grey.shade300),
@@ -121,7 +123,7 @@ class _BankilyDialogContent extends StatelessWidget {
                       spacing: 8,
                       children: [
                         Text(
-                          method.bPayNumber,
+                          method.config?.asMap['code']?.toString() ?? '',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
@@ -283,7 +284,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   Future<void> _onPayPressed(
     BuildContext context,
     GetPaymentMethodsProvider provider,
-    PaymentMethod pendingSelection,
+    ConfigurationListDataInner pendingSelection,
     Color effectivePrimary,
   ) async {
     final methodToShow = await provider.setPaymentMethodWithValidation(
@@ -301,7 +302,8 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     final publishableApiKey = provider.publishableApiKey;
     final transactionId = provider.transactionId;
 
-    if (methodToShow.method == PaymentMethodTypes.bankily) {
+    if (PaymentMethodTypes.fromString(methodToShow.type) ==
+        PaymentMethodTypes.bankily) {
       _showBankilyDialog(
         context,
         publishableApiKey: publishableApiKey,
@@ -309,8 +311,10 @@ class _SelectPaymentMethodContent extends StatelessWidget {
         method: methodToShow,
         primaryColor: effectivePrimary,
       );
-    } else if (methodToShow.method == PaymentMethodTypes.sedad ||
-        methodToShow.method == PaymentMethodTypes.bimBank) {
+    } else if (PaymentMethodTypes.fromString(methodToShow.type) ==
+            PaymentMethodTypes.sedad ||
+        PaymentMethodTypes.fromString(methodToShow.type) ==
+            PaymentMethodTypes.bimBank) {
       _showSedadDialog(
         context,
         publishableApiKey: publishableApiKey,
@@ -325,7 +329,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
-    required PaymentMethod method,
+    required ConfigurationListDataInner method,
     required Color primaryColor,
   }) {
     final payProvider = PayProvider(
@@ -345,7 +349,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
           payProvider: payProvider,
           builder: (paymentRequest) => SedadView(
             primaryColor: primaryColor,
-            paymentCodeDisplay: method.bPayNumber,
+            paymentCodeDisplay: method.config?.asMap['code']?.toString() ?? '',
             paymentRequest: paymentRequest,
             onClose: () {
               Navigator.of(dialogContext).pop();
@@ -363,7 +367,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
-    required PaymentMethod method,
+    required ConfigurationListDataInner method,
     required Color primaryColor,
   }) {
     final payProvider = PayProvider(
@@ -571,7 +575,7 @@ class _MethodRow extends StatelessWidget {
     required this.onTap,
   });
 
-  final PaymentMethod method;
+  final ConfigurationListDataInner method;
   final bool isSelected;
   final Color primaryColor;
   final VoidCallback onTap;
@@ -601,12 +605,17 @@ class _MethodRow extends StatelessWidget {
               ),
               clipBehavior: Clip.antiAlias,
               child: Center(
-                child: provider.customIcons?[method.method] != null
+                child: provider.customIcons?[
+                            PaymentMethodTypes.fromString(method.type)] !=
+                        null
                     ? AppIcon(
-                        path: provider.customIcons?[method.method],
+                        path: provider.customIcons?[
+                            PaymentMethodTypes.fromString(method.type)],
                         size: 52,
                       )
-                    : method.method.icon.apply(size: 40),
+                    : PaymentMethodTypes.fromString(method.type)
+                        .icon
+                        .apply(size: 40),
               ),
             ),
             const SizedBox(width: 16),
@@ -617,7 +626,7 @@ class _MethodRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    method.method.title(context),
+                    PaymentMethodTypes.fromString(method.type).title(context),
                     style: textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
@@ -631,7 +640,7 @@ class _MethodRow extends StatelessWidget {
               ),
             ),
             // Radio
-            Radio<PaymentMethod>(
+            Radio<ConfigurationListDataInner>(
               value: method,
               groupValue: provider.pendingSelection,
               onChanged: (_) => onTap(),

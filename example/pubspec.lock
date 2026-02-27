@@ -265,10 +265,10 @@ packages:
     dependency: transitive
     description:
       name: moosyl
-      sha256: d20d5bd50de03cf89c821b63bdc948424794624424ed786e5ab54bf653faaf7e
+      sha256: "2caac058159e4399650d42ce76d5d1c589435e3e90de07aa59e9f739699005f4"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   moosyl_flutter:
     dependency: "direct main"
     description:

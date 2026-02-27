@@ -49,7 +49,7 @@ class PayService {
     final client = Moosyl(
       basePathOverride: baseUrlOverride ?? _defaultBaseUrl,
     );
-    client.dio.options.headers['Authorization'] = publishableApiKey;
+    client.setApiKey('ApiKey', publishableApiKey);
     return client;
   }
 }
