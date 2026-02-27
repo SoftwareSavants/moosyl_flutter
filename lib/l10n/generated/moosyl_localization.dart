@@ -181,7 +181,7 @@ abstract class MoosylLocalization {
   /// No description provided for @enterYourBankilyPhoneNumber.
   ///
   /// In en, this message translates to:
-  /// **'Enter your Bankily phone number'**
+  /// **'Enter phone number'**
   String get enterYourBankilyPhoneNumber;
 
   /// No description provided for @bankilyPhoneNumber.
@@ -193,20 +193,8 @@ abstract class MoosylLocalization {
   /// No description provided for @paymentPassCode.
   ///
   /// In en, this message translates to:
-  /// **'Payment Pass Code'**
+  /// **'Payment Code'**
   String get paymentPassCode;
-
-  /// No description provided for @paymentPassCodeFromBankily.
-  ///
-  /// In en, this message translates to:
-  /// **'Payment Pass Code from Bankily'**
-  String get paymentPassCodeFromBankily;
-
-  /// No description provided for @sendForVerification.
-  ///
-  /// In en, this message translates to:
-  /// **'Send for verification'**
-  String get sendForVerification;
 
   /// No description provided for @codeBPay.
   ///
@@ -219,6 +207,24 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Amount to pay'**
   String get amountToPay;
+
+  /// No description provided for @choosePaymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose payment method'**
+  String get choosePaymentMethods;
+
+  /// No description provided for @tax.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get tax;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get pay;
 
   /// No description provided for @retry.
   ///
@@ -388,6 +394,120 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Enter a valid 4-digit code'**
   String get validDigitCode;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get totalAmount;
+
+  /// No description provided for @paymentSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Summary'**
+  String get paymentSummary;
+
+  /// No description provided for @paymentCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Code'**
+  String get paymentCode;
+
+  /// No description provided for @ivePaid.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve paid'**
+  String get ivePaid;
+
+  /// No description provided for @usePaymentCodeAboveToComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the payment code above to complete your payment in the Sedad app, then tap the button below.'**
+  String get usePaymentCodeAboveToComplete;
+
+  /// No description provided for @paymentRequestFullyPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'This payment request has fully paid.'**
+  String get paymentRequestFullyPaid;
+
+  /// No description provided for @amountToPayShouldMatchPaymentRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to pay should match payment request amount.'**
+  String get amountToPayShouldMatchPaymentRequest;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @tapToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to use'**
+  String get tapToUse;
+
+  /// No description provided for @chooseHowYouWouldLikeToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you would like to pay'**
+  String get chooseHowYouWouldLikeToPay;
+
+  /// No description provided for @useThisCodeToCompletePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this code to complete payment'**
+  String get useThisCodeToCompletePayment;
+
+  /// No description provided for @sedadStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Open the Sedad app'**
+  String get sedadStep1;
+
+  /// No description provided for @sedadStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Go to payment'**
+  String get sedadStep2;
+
+  /// No description provided for @sedadStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Paste or enter the code to confirm payment'**
+  String get sedadStep3;
+
+  /// No description provided for @sedadStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Return to this page and click \"I\'ve paid\"'**
+  String get sedadStep4;
+
+  /// No description provided for @changePaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Change payment method'**
+  String get changePaymentMethod;
+
+  /// No description provided for @clickToCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to copy'**
+  String get clickToCopy;
+
+  /// No description provided for @bankilyStep1.
+  String get bankilyStep1;
+
+  /// No description provided for @bankilyStep2.
+  String get bankilyStep2;
+
+  /// No description provided for @bankilyStep3.
+  String get bankilyStep3;
+
+  /// No description provided for @bankilyStep4.
+  String get bankilyStep4;
 }
 
 class _MoosylLocalizationDelegate

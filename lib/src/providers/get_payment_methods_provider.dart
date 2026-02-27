@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:moosyl/src/helpers/exception_handling/error_handlers.dart';
-import 'package:moosyl/src/models/payment_method_model.dart';
-import 'package:moosyl/src/services/get_payment_methods_service.dart';
+import 'package:moosyl_flutter/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/models/payment_request_model.dart';
+import 'package:moosyl_flutter/src/services/get_payment_methods_service.dart';
+import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
 
 /// A provider class for managing and retrieving payment methods.
 ///
@@ -11,24 +13,37 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The API key used for authentication with the payment methods service.
   final String publishableApiKey;
 
+  /// The transaction ID for payment request validation.
+  final String transactionId;
+
+  /// The total amount to validate against payment request.
+  final double totalAmount;
+
   /// A map of custom icons for specific payment method types.
   final Map<PaymentMethodTypes, String>? customIcons;
 
-  /// A callback function that gets called when a payment method is selected.
+  /// The payment method selected for the payment process.
   PaymentMethod? selected;
 
-  /// The payment method selected for the payment process.
+  /// Whether the app is in testing mode.
   final bool isTestingMode;
 
-  /// Constructs a [GetPaymentMethodsProvider].
+  /// The payment method selected in the list (radio) before confirming with Pay.
+  PaymentMethod? pendingSelection;
 
-  /// Initiates fetching payment methods upon creation.
+  /// Error to show on payment method selection when validation fails.
+  String? selectionError;
+
+  /// Constructs a [GetPaymentMethodsProvider].
   GetPaymentMethodsProvider({
     required this.publishableApiKey,
+    required this.transactionId,
+    required this.totalAmount,
     required this.isTestingMode,
     required this.customIcons,
   }) {
     getMethods();
+    getPaymentRequest();
   }
 
   /// Holds any error messages that occur during method retrieval.
@@ -37,8 +52,70 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// Indicates whether the provider is currently loading data.
   bool isLoading = false;
 
+  /// Indicates whether validation is in progress (fetching payment request).
+  bool isValidating = false;
+
   /// List of available payment methods.
   final List<PaymentMethod> methods = [];
+
+  /// The payment request model.
+  PaymentRequestModel? paymentRequest;
+
+  /// Clears the selection error.
+  void clearSelectionError() {
+    if (selectionError != null) {
+      selectionError = null;
+      notifyListeners();
+    }
+  }
+
+  /// Validates payment request and sets or returns the payment method.
+  /// For Sedad/Bankily: returns the method to show dialog (caller shows dialog).
+  /// For Masrivi etc: calls setPaymentMethod and returns null.
+  /// On validation error: returns null and sets selectionError.
+  Future<PaymentMethod?> setPaymentMethodWithValidation(PaymentMethod method) async {
+    selectionError = null;
+    isValidating = true;
+    notifyListeners();
+
+    final result = await ErrorHandlers.catchErrors(
+      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
+      showFlashBar: false,
+    );
+
+    isValidating = false;
+
+    if (result.isError) {
+      selectionError = result.error?.toString();
+      notifyListeners();
+      return null;
+    }
+
+    final paymentRequest = result.result!;
+
+    if (paymentRequest.amount == 0) {
+      selectionError = 'paymentRequestFullyPaid';
+      notifyListeners();
+      return null;
+    }
+
+    if (totalAmount > 0 && (totalAmount - paymentRequest.amount).abs() > 0.01) {
+      selectionError = 'amountToPayShouldMatchPaymentRequest';
+      notifyListeners();
+      return null;
+    }
+
+    final isDialogMethod = method.method == PaymentMethodTypes.sedad ||
+        method.method == PaymentMethodTypes.bimBank ||
+        method.method == PaymentMethodTypes.bankily;
+
+    if (isDialogMethod) {
+      return method;
+    }
+
+    setPaymentMethod(method);
+    return null;
+  }
 
   /// Retrieves the list of supported payment method types.
   List<PaymentMethodTypes> get supportedTypes {
@@ -59,7 +136,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentMethodsService(publishableApiKey).get(isTestingMode),
+      () => GetPaymentMethodsService(publishableApiKey).get(),
       showFlashBar: false,
     );
 
@@ -73,7 +150,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
 
     // Add the retrieved methods to the methods list.
     methods.addAll(result.result!);
-
     // Notify listeners of the change in payment methods.
     notifyListeners();
   }
@@ -91,9 +167,36 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     setPaymentMethod(selected);
   }
 
-  /// Sets the selected payment method.
+  /// Sets the selected payment method (confirms and proceeds to payment).
   void setPaymentMethod(PaymentMethod? method) {
     selected = method;
+    pendingSelection = method;
+    notifyListeners();
+  }
+
+  /// Sets the pending selection (radio choice before Pay is tapped).
+  void setPendingSelection(PaymentMethod? method) {
+    pendingSelection = method;
+    clearSelectionError();
+    notifyListeners();
+  }
+
+  /// Confirms the pending selection and proceeds to payment.
+  void confirmSelection() {
+    if (pendingSelection != null) {
+      setPaymentMethod(pendingSelection);
+    }
+  }
+
+  /// Updates the payment request details and notifies listeners when the data changes.
+  void getPaymentRequest() async {
+    final result = await ErrorHandlers.catchErrors(
+      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
+      showFlashBar: false,
+    );
+
+    paymentRequest = result.result;
+
     notifyListeners();
   }
 }

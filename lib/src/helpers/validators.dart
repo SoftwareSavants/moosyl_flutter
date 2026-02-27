@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:moosyl/l10n/generated/moosyl_localization.dart';
+import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 
 /// A utility class for validating different input formats.
 class Validators {

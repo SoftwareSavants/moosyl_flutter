@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 
-import 'package:moosyl/src/widgets/container.dart';
+import 'package:moosyl_flutter/src/widgets/container.dart';
 
 class AppIcon extends StatelessWidget {
   final String? path;
@@ -96,37 +96,38 @@ class AppIcon extends StatelessWidget {
 class AppIcons {
   //payment methods
   static const bankily = AppIcon(
-    path: 'packages/moosyl/assets/icons/bankily.png',
+    path: 'packages/moosyl_flutter/assets/icons/bankily.png',
     useOriginalColor: true,
   );
   //masrivi
   static const masrivi = AppIcon(
-    path: 'packages/moosyl/assets/icons/masrivi.png',
+    path: 'packages/moosyl_flutter/assets/icons/masrivi.png',
     useOriginalColor: true,
   );
   //sedad
   static const sedad = AppIcon(
-    path: 'packages/moosyl/assets/icons/sedad.png',
+    path: 'packages/moosyl_flutter/assets/icons/sedad.png',
     useOriginalColor: true,
   );
   //bimBank
   static const bimBank = AppIcon(
-    path: 'packages/moosyl/assets/icons/bim_bank.png',
+    path: 'packages/moosyl_flutter/assets/icons/bim_bank.png',
     useOriginalColor: true,
   );
   //amanty
   static const amanty = AppIcon(
-    path: 'packages/moosyl/assets/icons/amanty.png',
+    path: 'packages/moosyl_flutter/assets/icons/amanty.png',
     useOriginalColor: true,
   );
 
   //bCIpay
   static const bCIpay = AppIcon(
-    path: 'packages/moosyl/assets/icons/bci_pay.png',
+    path: 'packages/moosyl_flutter/assets/icons/bci_pay.png',
     useOriginalColor: true,
   );
   //error
-  static const error = AppIcon(path: 'packages/moosyl/assets/icons/error.png');
+  static const error =
+      AppIcon(path: 'packages/moosyl_flutter/assets/icons/error.png');
 
   //closeError ,doneError
   static const done = AppIcon(iconData: Icons.done);

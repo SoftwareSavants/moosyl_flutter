@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moosyl/l10n/generated/moosyl_localization.dart';
+import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 
-import 'package:moosyl/src/widgets/icons.dart';
+import 'package:moosyl_flutter/src/widgets/icons.dart';
 
 class Feedbacks {
   static void flushBar({

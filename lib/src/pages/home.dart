@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:moosyl/src/models/payment_method_model.dart';
-import 'package:moosyl/src/pages/moosyl_view.dart';
+import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/pages/moosyl_view.dart';
 
 /// [Moosyl] provides a widget that handles the payment process.
 /// It allows you to customize the payment methods, icons, and success callbacks.
@@ -34,6 +34,9 @@ class Moosyl extends HookWidget {
   /// The payment method selected for the payment process.
   final bool isTestingMode;
 
+  /// When true, shows as full page. When false, shows as bottom sheet.
+  final bool isFullPage;
+
   /// Displays the [MoosylView] modal sheet to start the payment process.
   ///
   /// * [context]: The build context.
@@ -50,6 +53,7 @@ class Moosyl extends HookWidget {
     final FutureOr<void> Function()? onPaymentSuccess,
     Map<PaymentMethodTypes, String>? customIcons,
     bool isTestingMode = false,
+    bool isFullPage = false,
   }) {
     showBarModalBottomSheet(
       context: context,
@@ -60,6 +64,7 @@ class Moosyl extends HookWidget {
         onPaymentSuccess: onPaymentSuccess,
         customIcons: customIcons,
         isTestingMode: isTestingMode,
+        isFullPage: isFullPage,
       ),
     );
   }
@@ -81,6 +86,7 @@ class Moosyl extends HookWidget {
     this.inputBuilder,
     this.onPaymentSuccess,
     this.isTestingMode = false,
+    this.isFullPage = false,
   });
 
   @override
@@ -98,6 +104,7 @@ class Moosyl extends HookWidget {
               onPaymentSuccess: onPaymentSuccess,
               customIcons: customIcons,
               isTestingMode: isTestingMode,
+              isFullPage: isFullPage,
             ),
           );
         },
@@ -112,6 +119,7 @@ class Moosyl extends HookWidget {
       onPaymentSuccess: onPaymentSuccess,
       customIcons: customIcons,
       isTestingMode: isTestingMode,
+      isFullPage: isFullPage,
     );
   }
 }

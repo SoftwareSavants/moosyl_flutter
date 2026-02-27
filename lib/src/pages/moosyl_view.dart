@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
+import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
+import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:moosyl/src/models/payment_method_model.dart';
-import 'package:moosyl/src/pages/available_method_payments.dart';
-import 'package:moosyl/src/pages/automatic_pay_page.dart';
-import 'package:moosyl/src/providers/get_payment_methods_provider.dart';
 
 /// A widget that provides a payment interface for the Software Pay system.
 ///
 /// This widget allows users to select a payment method and proceed with the payment.
 /// It handles localization and manages the state of the selected payment method.
-class MoosylView extends HookWidget {
+class MoosylView extends StatelessWidget {
   /// Creates an instance of [MoosylView].
 
   /// Requires the [publishableApiKey] and [transactionId] for the payment transaction,
@@ -25,7 +24,11 @@ class MoosylView extends HookWidget {
     this.onPaymentSuccess,
     this.customIcons,
     this.isTestingMode = false,
-    this.fullPage = true,
+    this.primaryColor,
+    this.onBackPress,
+    this.amountToPay = 0.0,
+    this.tax = 0.0,
+    this.isFullPage = true,
   });
 
   /// The API key for authenticating the payment transaction.
@@ -46,8 +49,20 @@ class MoosylView extends HookWidget {
   /// A flag to indicate whether the widget is in testing mode.
   final bool isTestingMode;
 
-  /// A flag to indicate whether the widget is in full page mode.
-  final bool fullPage;
+  /// Primary color for the payment method selection page (radio, pay button).
+  final Color? primaryColor;
+
+  /// Callback when the back arrow is pressed on the payment method selection page.
+  final VoidCallback? onBackPress;
+
+  /// Amount to pay (displayed in summary). Defaults to 0.
+  final double amountToPay;
+
+  /// Tax amount (displayed in summary). Defaults to 0.
+  final double tax;
+
+  /// When true, payment method selection shows as full page. When false, shows as bottom sheet.
+  final bool isFullPage;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +72,8 @@ class MoosylView extends HookWidget {
           ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
               publishableApiKey: publishableApiKey,
+              transactionId: transactionId,
+              totalAmount: amountToPay + tax,
               isTestingMode: isTestingMode,
               customIcons: customIcons,
             ),
@@ -71,18 +88,28 @@ class MoosylView extends HookWidget {
 
             // If no payment method is selected, show the available methods page.
             if (selectedModeOfPayment == null) {
-              return SelectPaymentMethodPage(fullPage: fullPage);
+              return SelectPaymentMethodPage(
+                primaryColor: primaryColor,
+                onBackPress: onBackPress,
+                amountToPay: amountToPay,
+                tax: tax,
+                totalAmount: amountToPay + tax,
+                transactionId: transactionId,
+                onPaymentSuccess: onPaymentSuccess,
+                organizationLogo: organizationLogo,
+                isFullPage: isFullPage,
+              );
+            } else {
+              return MasriviView(
+                publishableApiKey: publishableApiKey,
+                transactionId: transactionId,
+                configurationId: selectedModeOfPayment.id,
+                onPaymentSuccess: onPaymentSuccess,
+                onBackPress: () => context
+                    .read<GetPaymentMethodsProvider>()
+                    .setPaymentMethod(null),
+              );
             }
-
-            // If a payment method is selected, proceed to the payment page.
-            return AutomaticPayPage(
-              publishableApiKey: publishableApiKey,
-              method: selectedModeOfPayment,
-              transactionId: transactionId,
-              organizationLogo: organizationLogo,
-              onPaymentSuccess: onPaymentSuccess,
-              fullPage: fullPage,
-            );
           },
         ),
       ),

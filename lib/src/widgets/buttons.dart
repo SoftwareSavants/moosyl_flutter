@@ -1,6 +1,18 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 
+/// Visual style variants for [AppButton].
+enum AppButtonStyle {
+  /// Filled button with primary background.
+  primary,
+
+  /// Outlined button with transparent background and border.
+  outline,
+
+  /// Disabled/grayed-out appearance.
+  disabled,
+}
+
 class AppButton extends StatelessWidget {
   final String labelText;
   final Widget? leading;
@@ -8,6 +20,7 @@ class AppButton extends StatelessWidget {
   final EdgeInsetsGeometry margin;
   final bool disabled, loading;
 
+  final AppButtonStyle style;
   final BorderRadius? borderRadius;
   final Color? background;
   final Color? textColor;
@@ -15,6 +28,7 @@ class AppButton extends StatelessWidget {
   final double? minHeight;
   final EdgeInsetsGeometry? padding;
   final BorderSide border;
+  final Color? primaryColor;
 
   const AppButton({
     super.key,
@@ -24,6 +38,7 @@ class AppButton extends StatelessWidget {
     this.margin = const EdgeInsets.only(top: 16),
     this.disabled = false,
     this.loading = false,
+    this.style = AppButtonStyle.primary,
     this.borderRadius,
     this.background,
     this.textColor,
@@ -31,27 +46,51 @@ class AppButton extends StatelessWidget {
     this.padding,
     this.minHeight = 60,
     this.border = BorderSide.none,
+    this.primaryColor,
   });
+
+  bool get _isDisabled =>
+      disabled || loading || style == AppButtonStyle.disabled;
 
   @override
   Widget build(BuildContext context) {
-    final background = loading || disabled
-        ? Theme.of(context).colorScheme.surface
-        : (this.background ?? Theme.of(context).colorScheme.primary);
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+    final onPrimary = colorScheme.onPrimary;
+    final surface = colorScheme.surface;
+    final onSurface = colorScheme.onSurface;
+    final outlineColor = colorScheme.outline;
 
-    final foregroundColor = loading || disabled
-        ? Theme.of(context).colorScheme.onSurface
-        : textColor ?? Theme.of(context).colorScheme.onPrimary;
+    Color bg;
+    Color fg;
+    BorderSide side;
+
+    if (_isDisabled) {
+      bg = surface;
+      fg = onSurface.withOpacity(0.6);
+      side = BorderSide(color: outlineColor.withOpacity(0.5));
+    } else if (style == AppButtonStyle.outline) {
+      bg = Colors.transparent;
+      fg = this.textColor ?? primaryColor ?? primary;
+      side = border == BorderSide.none
+          ? BorderSide(color: primaryColor ?? primary)
+          : border;
+    } else {
+      // primary
+      bg = this.background ?? primaryColor ?? primary;
+      fg = textColor ?? onPrimary;
+      side = border;
+    }
 
     final buttonStyle = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ?? BorderRadius.circular(8),
-        side: border,
+        side: side,
       ),
-      backgroundColor: background,
-      foregroundColor: foregroundColor,
-      textStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
-            fontSize: 14,
+      backgroundColor: bg,
+      foregroundColor: fg,
+      textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            fontSize: 16,
           ),
       elevation: 0,
       minimumSize: const Size(0, 40),
@@ -60,21 +99,29 @@ class AppButton extends StatelessWidget {
 
     final button = loading || leading != null
         ? ElevatedButton.icon(
-            onPressed: disabled || loading ? () {} : onPressed ?? () {},
+            onPressed: _isDisabled ? () {} : onPressed ?? () {},
             icon: loading
                 ? SizedBox(
                     width: 24,
                     height: 24,
-                    child: CircularProgressIndicator(color: foregroundColor),
+                    child: CircularProgressIndicator(color: fg),
                   )
                 : leading,
             style: buttonStyle,
-            label: Text(labelText),
+            label: Text(labelText,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontSize: 16,
+                      color: fg,
+                    )),
           )
         : ElevatedButton(
-            onPressed: disabled || loading ? () {} : onPressed ?? () {},
+            onPressed: _isDisabled ? () {} : onPressed ?? () {},
             style: buttonStyle,
-            child: Text(labelText),
+            child: Text(labelText,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontSize: 16,
+                      color: fg,
+                    )),
           );
 
     return Padding(

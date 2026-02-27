@@ -52,8 +52,7 @@ class MoosylLocalizationFr extends MoosylLocalization {
       'Après avoir effectué le paiement, remplissez les informations suivantes';
 
   @override
-  String get enterYourBankilyPhoneNumber =>
-      'Entrez votre numéro de téléphone Bankily';
+  String get enterYourBankilyPhoneNumber => 'Entrez votre numéro';
 
   @override
   String get bankilyPhoneNumber => 'Numéro de téléphone Bankily';
@@ -62,17 +61,19 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get paymentPassCode => 'Code de passe de paiement';
 
   @override
-  String get paymentPassCodeFromBankily =>
-      'Code de passe de paiement de Bankily';
-
-  @override
-  String get sendForVerification => 'Envoyer pour vérification';
-
-  @override
   String get codeBPay => 'Code BPay';
 
   @override
   String get amountToPay => 'Montant à payer';
+
+  @override
+  String get choosePaymentMethods => 'Choisir le mode de paiement';
+
+  @override
+  String get tax => 'Taxe';
+
+  @override
+  String get pay => 'Payer';
 
   @override
   String get retry => 'Réessayer';
@@ -165,4 +166,76 @@ class MoosylLocalizationFr extends MoosylLocalization {
 
   @override
   String get validDigitCode => 'Entrez un code à 4 chiffres valide';
+
+  @override
+  String get totalAmount => 'Montant total';
+
+  @override
+  String get paymentSummary => 'Résumé du paiement';
+
+  @override
+  String get paymentCode => 'Code de paiement';
+
+  @override
+  String get ivePaid => 'J\'ai payé';
+
+  @override
+  String get usePaymentCodeAboveToComplete =>
+      'Utilisez le code de paiement ci-dessus pour finaliser votre paiement dans l\'application Sedad, puis appuyez sur le bouton ci-dessous.';
+
+  @override
+  String get paymentRequestFullyPaid =>
+      'Cette demande de paiement est entièrement payée.';
+
+  @override
+  String get amountToPayShouldMatchPaymentRequest =>
+      'Le montant à payer doit correspondre au montant de la demande de paiement.';
+
+  @override
+  String get selected => 'Sélectionné';
+
+  @override
+  String get tapToUse => 'Appuyez pour utiliser';
+
+  @override
+  String get chooseHowYouWouldLikeToPay =>
+      'Choisissez comment vous souhaitez payer';
+
+  @override
+  String get useThisCodeToCompletePayment =>
+      'Utilisez ce code pour finaliser le paiement';
+
+  @override
+  String get sedadStep1 => '1. Ouvrez l\'application Sedad';
+
+  @override
+  String get sedadStep2 => '2. Allez dans paiement';
+
+  @override
+  String get sedadStep3 =>
+      '3. Collez ou saisissez le code pour confirmer le paiement';
+
+  @override
+  String get sedadStep4 =>
+      '4. Revenez sur cette page et cliquez sur \"J\'ai payé\"';
+
+  @override
+  String get changePaymentMethod => 'Changer de méthode de paiement';
+
+  @override
+  String get clickToCopy => 'Cliquez pour copier';
+
+  @override
+  String get bankilyStep1 => '1. Ouvrez l\'application Bankily';
+
+  @override
+  String get bankilyStep2 => '2. Allez dans BPay';
+
+  @override
+  String get bankilyStep3 =>
+      '3. Saisissez le code BPay et le montant à payer';
+
+  @override
+  String get bankilyStep4 =>
+      '4. Revenez ici, entrez votre numéro et code, puis cliquez sur Payer';
 }

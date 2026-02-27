@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
-import 'package:moosyl/src/widgets/icons.dart';
+import 'package:moosyl_flutter/src/widgets/icons.dart';
 
 class AppTextInput extends StatelessWidget {
   final String label;
@@ -94,23 +94,18 @@ class InputLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const horizontalPadding = EdgeInsetsDirectional.symmetric(horizontal: 16);
-
-    return Padding(
-      padding: horizontalPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              label,
-              style: style,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(
+            label,
+            style: style,
           ),
-          child,
-        ],
-      ),
+        ),
+        child,
+      ],
     );
   }
 }
