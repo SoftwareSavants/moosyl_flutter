@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/error_handlers.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
-import 'package:moosyl_flutter/src/models/payment_request_model.dart';
 import 'package:moosyl_flutter/src/services/get_payment_methods_service.dart';
 import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
 
@@ -23,10 +23,10 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   final Map<PaymentMethodTypes, String>? customIcons;
 
   /// The payment method selected for the payment process.
-  PaymentMethod? selected;
+  ConfigurationListDataInner? selected;
 
   /// The payment method selected in the list (radio) before confirming with Pay.
-  PaymentMethod? pendingSelection;
+  ConfigurationListDataInner? pendingSelection;
 
   /// Error to show on payment method selection when validation fails.
   String? selectionError;
@@ -52,10 +52,10 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   bool isValidating = false;
 
   /// List of available payment methods.
-  final List<PaymentMethod> methods = [];
+  final List<ConfigurationListDataInner> methods = [];
 
   /// The payment request model.
-  PaymentRequestModel? paymentRequest;
+  PaymentRequestGetData? paymentRequest;
 
   /// Clears the selection error.
   void clearSelectionError() {
@@ -69,8 +69,8 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// For Sedad/Bankily: returns the method to show dialog (caller shows dialog).
   /// For Masrivi etc: calls setPaymentMethod and returns null.
   /// On validation error: returns null and sets selectionError.
-  Future<PaymentMethod?> setPaymentMethodWithValidation(
-      PaymentMethod method) async {
+  Future<ConfigurationListDataInner?> setPaymentMethodWithValidation(
+      ConfigurationListDataInner method) async {
     selectionError = null;
     isValidating = true;
     notifyListeners();
@@ -102,9 +102,12 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
       return null;
     }
 
-    final isDialogMethod = method.method == PaymentMethodTypes.sedad ||
-        method.method == PaymentMethodTypes.bimBank ||
-        method.method == PaymentMethodTypes.bankily;
+    final isDialogMethod = PaymentMethodTypes.fromString(method.type) ==
+            PaymentMethodTypes.sedad ||
+        PaymentMethodTypes.fromString(method.type) ==
+            PaymentMethodTypes.bimBank ||
+        PaymentMethodTypes.fromString(method.type) ==
+            PaymentMethodTypes.bankily;
 
     if (isDialogMethod) {
       return method;
@@ -116,12 +119,14 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
 
   /// Retrieves the list of supported payment method types.
   List<PaymentMethodTypes> get supportedTypes {
-    return [...methods.map((method) => method.method)];
+    return [
+      ...methods.map((method) => PaymentMethodTypes.fromString(method.type))
+    ];
   }
 
   /// Retrieves the list of valid payment method types, including custom handlers.
   List<PaymentMethodTypes> get validMethods =>
-      [...methods.map((e) => e.method)];
+      [...methods.map((e) => PaymentMethodTypes.fromString(e.type))];
 
   /// Asynchronously fetches available payment methods from the service.
   ///
@@ -159,20 +164,21 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   void onTap(PaymentMethodTypes type, BuildContext context) async {
     // Find and select the payment method from the list.
 
-    final selected = methods.firstWhere((element) => element.method == type);
+    final selected = methods.firstWhere(
+        (element) => PaymentMethodTypes.fromString(element.type) == type);
 
     setPaymentMethod(selected);
   }
 
   /// Sets the selected payment method (confirms and proceeds to payment).
-  void setPaymentMethod(PaymentMethod? method) {
+  void setPaymentMethod(ConfigurationListDataInner? method) {
     selected = method;
     pendingSelection = method;
     notifyListeners();
   }
 
   /// Sets the pending selection (radio choice before Pay is tapped).
-  void setPendingSelection(PaymentMethod? method) {
+  void setPendingSelection(ConfigurationListDataInner? method) {
     pendingSelection = method;
     clearSelectionError();
     notifyListeners();

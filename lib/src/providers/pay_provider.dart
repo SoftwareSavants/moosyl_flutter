@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/error_handlers.dart';
-import 'package:moosyl_flutter/src/models/payment_request_model.dart';
-import 'package:moosyl_flutter/src/models/payment_method_model.dart';
 import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
 import 'package:moosyl_flutter/src/services/pay_service.dart';
 
@@ -18,7 +17,7 @@ class PayProvider extends ChangeNotifier {
   final String transactionId;
 
   /// The payment method selected for the payment process.
-  final PaymentMethod method;
+  final ConfigurationListDataInner method;
 
   /// Callback function that gets called on successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
@@ -45,7 +44,7 @@ class PayProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
   /// Holds the payment request details.
-  PaymentRequestModel? paymentRequest;
+  PaymentRequestGetData? paymentRequest;
 
   /// Holds any error messages that occur during payment processing.
   Object? error;

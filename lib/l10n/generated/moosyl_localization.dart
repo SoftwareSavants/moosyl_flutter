@@ -498,15 +498,27 @@ abstract class MoosylLocalization {
   String get clickToCopy;
 
   /// No description provided for @bankilyStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Open the Bankily app'**
   String get bankilyStep1;
 
   /// No description provided for @bankilyStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Go to BPay'**
   String get bankilyStep2;
 
   /// No description provided for @bankilyStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Enter the BPay code and amount to pay'**
   String get bankilyStep3;
 
   /// No description provided for @bankilyStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Return here, enter your phone and passcode, then click Pay'**
   String get bankilyStep4;
 }
 

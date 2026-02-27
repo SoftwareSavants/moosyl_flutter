@@ -1,5 +1,4 @@
 import 'package:moosyl/moosyl.dart';
-import 'package:moosyl_flutter/src/models/payment_method_model.dart';
 
 /// Base URL for the Moosyl API (matches the original fetcher endpoint).
 const String _defaultBaseUrl = 'https://moosyl.moosyl.workers.dev';
@@ -25,12 +24,12 @@ class GetPaymentMethodsService {
   ///
   /// Makes an API call via [ConfigurationApi] to retrieve the payment methods.
   /// Returns a list of [PaymentMethod] objects.
-  Future<List<PaymentMethod>> get() async {
+  Future<List<ConfigurationListDataInner>> get() async {
     final client = Moosyl(
       basePathOverride: baseUrlOverride ?? _defaultBaseUrl,
     );
 
-    client.dio.options.headers['Authorization'] = publishableApiKey;
+    client.setApiKey('ApiKey', publishableApiKey);
 
     final config = client.getConfigurationApi();
     final response = await config.getConfiguration();
@@ -40,21 +39,6 @@ class GetPaymentMethodsService {
       return [];
     }
 
-    return data.data
-        .map((e) => PaymentMethod.fromPaymentType(_toMap(e)))
-        .toList();
-  }
-
-  /// Converts [ConfigurationListDataInner] to [Map] for [PaymentMethod.fromPaymentType].
-  static Map<String, dynamic> _toMap(ConfigurationListDataInner inner) {
-    final config = inner.config;
-    final code = config != null && config.isMap
-        ? (config.asMap['code']?.toString() ?? '')
-        : '';
-    return {
-      'id': inner.id,
-      'type': inner.type,
-      'config': {'code': code},
-    };
+    return data.data.toList();
   }
 }

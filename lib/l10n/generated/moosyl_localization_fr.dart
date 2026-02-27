@@ -232,8 +232,7 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get bankilyStep2 => '2. Allez dans BPay';
 
   @override
-  String get bankilyStep3 =>
-      '3. Saisissez le code BPay et le montant à payer';
+  String get bankilyStep3 => '3. Saisissez le code BPay et le montant à payer';
 
   @override
   String get bankilyStep4 =>

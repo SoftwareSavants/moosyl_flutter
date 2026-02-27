@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
-import 'package:moosyl_flutter/src/models/payment_request_model.dart';
+import 'package:moosyl_flutter/src/models/payment_method_model.dart';
 import 'package:moosyl_flutter/src/providers/pay_provider.dart';
 import 'package:moosyl_flutter/src/widgets/buttons.dart';
 import 'package:moosyl_flutter/src/widgets/container.dart';
@@ -17,7 +18,7 @@ class SedadView extends StatelessWidget {
   final String paymentCodeDisplay;
 
   /// The payment request containing amount and other details.
-  final PaymentRequestModel paymentRequest;
+  final PaymentRequestGetData paymentRequest;
 
   /// Callback when the dialog is closed (e.g. to go back to payment method selection).
   final VoidCallback? onClose;
@@ -37,7 +38,8 @@ class SedadView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
     final payProvider = context.watch<PayProvider>();
-    final platformIcon = payProvider.method.method.icon;
+    final platformIcon =
+        PaymentMethodTypes.fromString(payProvider.method.type).icon;
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -93,7 +95,8 @@ class SedadView extends StatelessWidget {
                     spacing: 8,
                     children: [
                       Text(
-                        payProvider.method.bPayNumber,
+                        payProvider.method.config?.asMap['code']?.toString() ??
+                            '',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
