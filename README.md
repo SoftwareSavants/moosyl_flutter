@@ -91,8 +91,6 @@ async function createPaymentRequest() {
 createPaymentRequest();
 ```
 
-Once the payment request is created, the backend will return details including the **transactionId**, which you will pass to the Flutter app for further processing.
-
 ---
 
 ### Step 2: Display the Payment View
