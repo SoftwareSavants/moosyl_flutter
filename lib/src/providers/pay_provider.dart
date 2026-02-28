@@ -165,7 +165,6 @@ class PayProvider extends ChangeNotifier {
       return notifyListeners();
     }
     isLoading = false;
-    print('result.result!.status: ${result.result}');
 
     if (result.result!.status.name == 'completed') {
       onBeforePaymentSuccess?.call();
