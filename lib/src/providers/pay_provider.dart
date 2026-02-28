@@ -22,6 +22,10 @@ class PayProvider extends ChangeNotifier {
   /// Callback function that gets called on successful payment.
   final FutureOr<void> Function()? onPaymentSuccess;
 
+  /// Optional callback called before [onPaymentSuccess] when payment completes.
+  /// Use this to close the dialog before invoking the success callback.
+  VoidCallback? onBeforePaymentSuccess;
+
   /// Constructs a [PayProvider].
   ///
   /// Initiates fetching the payment request details upon creation.
@@ -130,6 +134,10 @@ class PayProvider extends ChangeNotifier {
     paymentCode =
         result.result?.metadata?.asMap['paymentCode'].toString() ?? '';
     notifyListeners();
+    if (result.result?.metadata?.asMap['provider'] == 'bankily') {
+      onBeforePaymentSuccess?.call();
+      onPaymentSuccess?.call();
+    }
   }
 
   /// Initiates Sedad/Bim Bank payment to get the payment code.
@@ -157,12 +165,15 @@ class PayProvider extends ChangeNotifier {
       return notifyListeners();
     }
     isLoading = false;
+    print('result.result!.status: ${result.result}');
 
-    if (result.result!.status == 'completed') {
+    if (result.result!.status.name == 'completed') {
+      onBeforePaymentSuccess?.call();
       onPaymentSuccess?.call();
     } else {
       error = 'Payment not completed';
       return notifyListeners();
     }
+    notifyListeners();
   }
 }
