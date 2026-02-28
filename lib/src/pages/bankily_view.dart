@@ -23,6 +23,7 @@ class BankilyView extends StatelessWidget {
     this.onPaymentSuccess,
     this.onClose,
     required this.primaryColor,
+    required this.paymentCodeDisplay,
   });
 
   final ConfigurationListDataInner method;
@@ -31,6 +32,7 @@ class BankilyView extends StatelessWidget {
   final FutureOr<void> Function()? onPaymentSuccess;
   final VoidCallback? onClose;
   final Color primaryColor;
+  final String? paymentCodeDisplay;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class BankilyView extends StatelessWidget {
       primaryColor: primaryColor,
       method: method,
       onClose: onClose ?? () => Navigator.of(context).pop(),
+      paymentCodeDisplay: paymentCodeDisplay,
     );
   }
 }
@@ -48,12 +51,13 @@ class _BankilyDialogContent extends StatelessWidget {
     required this.primaryColor,
     required this.method,
     required this.onClose,
+    required this.paymentCodeDisplay,
   });
 
   final ConfigurationListDataInner method;
   final VoidCallback onClose;
   final Color primaryColor;
-
+  final String? paymentCodeDisplay;
   @override
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
@@ -109,7 +113,10 @@ class _BankilyDialogContent extends StatelessWidget {
                 // Copyable container with BPay code
                 GestureDetector(
                   onTap: () => Feedbacks.copy(
-                      method.config?.asMap['code']?.toString() ?? '', context),
+                      paymentCodeDisplay ??
+                          method.config?.asMap['code']?.toString() ??
+                          '',
+                      context),
                   child: AppContainer(
                     color: Colors.grey.shade200,
                     border: Border.all(color: Colors.grey.shade300),
@@ -123,7 +130,9 @@ class _BankilyDialogContent extends StatelessWidget {
                       spacing: 8,
                       children: [
                         Text(
-                          method.config?.asMap['code']?.toString() ?? '',
+                          paymentCodeDisplay ??
+                              method.config?.asMap['code']?.toString() ??
+                              '',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,

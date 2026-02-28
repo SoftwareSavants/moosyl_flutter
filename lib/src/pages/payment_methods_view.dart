@@ -12,6 +12,7 @@ import 'package:moosyl_flutter/src/providers/pay_provider.dart';
 import 'package:moosyl_flutter/src/widgets/buttons.dart';
 import 'package:moosyl_flutter/src/widgets/container.dart';
 import 'package:moosyl_flutter/src/widgets/error_widget.dart';
+import 'package:moosyl_flutter/src/widgets/feedback.dart';
 import 'package:moosyl_flutter/src/widgets/icons.dart';
 import 'package:provider/provider.dart';
 
@@ -315,7 +316,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
             PaymentMethodTypes.sedad ||
         PaymentMethodTypes.fromString(methodToShow.type) ==
             PaymentMethodTypes.bimBank) {
-      _showSedadDialog(
+      await _showSedadDialog(
         context,
         publishableApiKey: publishableApiKey,
         transactionId: transactionId,
@@ -325,13 +326,13 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     }
   }
 
-  void _showSedadDialog(
+  Future<void> _showSedadDialog(
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
     required ConfigurationListDataInner method,
     required Color primaryColor,
-  }) {
+  }) async {
     final payProvider = PayProvider(
       publishableApiKey: publishableApiKey,
       transactionId: transactionId,
@@ -339,6 +340,33 @@ class _SelectPaymentMethodContent extends StatelessWidget {
       onPaymentSuccess: () async => await onPaymentSuccess?.call(),
     );
     final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
+
+    // Show loading while fetching payment code.
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // Call pay() to get the payment code before showing the Sedad dialog.
+    final paymentCode = await payProvider.getPaymentCodeForSedad();
+
+    if (context.mounted) {
+      Navigator.of(context).pop(); // Dismiss loading dialog
+    }
+    if (!context.mounted) return;
+    if (paymentCode == null || paymentCode.isEmpty) {
+      if (context.mounted && payProvider.error != null) {
+        Feedbacks.flushBar(
+          context: context,
+          message: ExceptionMapper.getErrorMessage(payProvider.error, context),
+          error: true,
+        );
+      }
+      return;
+    }
 
     showDialog<void>(
       context: context,
@@ -349,7 +377,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
           payProvider: payProvider,
           builder: (paymentRequest) => SedadView(
             primaryColor: primaryColor,
-            paymentCodeDisplay: method.config?.asMap['code']?.toString() ?? '',
+            paymentCodeDisplay: paymentCode,
             paymentRequest: paymentRequest,
             onClose: () {
               Navigator.of(dialogContext).pop();
@@ -390,6 +418,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
             method: method,
             publishableApiKey: publishableApiKey,
             transactionId: transactionId,
+            paymentCodeDisplay: payProvider.paymentCode,
             onClose: () {
               Navigator.of(dialogContext).pop();
               getPaymentMethodsProvider.setPaymentMethod(null);

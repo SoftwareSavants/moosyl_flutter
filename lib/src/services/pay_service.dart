@@ -25,7 +25,7 @@ class PayService {
   /// This method makes an API call to process a payment using the specified
   /// parameters. It requires the Transaction ID, phone number, passcode,
   /// and payment method ID.
-  Future<void> pay({
+  Future<PostPayment200Response> pay({
     required String transactionId,
     required String phoneNumber,
     required String passCode,
@@ -42,7 +42,12 @@ class PayService {
         ..passCode = passCode,
     );
 
-    await paymentApi.postPayment(paymentCreate: paymentCreate);
+    final response = await paymentApi.postPayment(paymentCreate: paymentCreate);
+    final data = response.data;
+    if (data == null) {
+      throw StateError('payment not found');
+    }
+    return data;
   }
 
   Moosyl _createClient() {
@@ -51,5 +56,22 @@ class PayService {
     );
     client.setApiKey('ApiKey', publishableApiKey);
     return client;
+  }
+
+  /// Fetches a payment by its ID.
+  ///
+  /// Makes an API call via [PaymentApi] to retrieve the payment.
+  /// Returns a [PaymentGet] object containing the payment details.
+  Future<PaymentGetData> getPayment({
+    required String transactionId,
+  }) async {
+    final client = _createClient();
+    final paymentApi = client.getPaymentApi();
+    final response = await paymentApi.getPaymentById(id: transactionId);
+    final data = response.data;
+    if (data == null) {
+      throw StateError('payment request not found');
+    }
+    return data.data;
   }
 }

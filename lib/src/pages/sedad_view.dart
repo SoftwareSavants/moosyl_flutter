@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 /// Displays payment code with copyable container, steps, and action buttons.
 class SedadView extends StatelessWidget {
   /// The payment code (merchant code) to display.
-  final String paymentCodeDisplay;
+  final String? paymentCodeDisplay;
 
   /// The payment request containing amount and other details.
   final PaymentRequestGetData paymentRequest;
@@ -83,7 +83,11 @@ class SedadView extends StatelessWidget {
 
               // Copyable container with payment code only
               GestureDetector(
-                onTap: () => Feedbacks.copy(paymentCodeDisplay, context),
+                onTap: () => Feedbacks.copy(
+                    paymentCodeDisplay ??
+                        payProvider.method.config?.asMap['code']?.toString() ??
+                        '',
+                    context),
                 child: AppContainer(
                   color: Colors.grey.shade200,
                   border: Border.all(color: Colors.grey.shade300),
@@ -95,7 +99,9 @@ class SedadView extends StatelessWidget {
                     spacing: 8,
                     children: [
                       Text(
-                        payProvider.method.config?.asMap['code']?.toString() ??
+                        paymentCodeDisplay ??
+                            payProvider.method.config?.asMap['code']
+                                ?.toString() ??
                             '',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
@@ -174,7 +180,7 @@ class _IvePaidButton extends StatelessWidget {
       style: AppButtonStyle.primary,
       labelText: localizationHelper.ivePaid,
       loading: payProvider.isLoading,
-      onPressed: () => payProvider.pay(context),
+      onPressed: () => payProvider.handleSedadPay(),
     );
   }
 }
