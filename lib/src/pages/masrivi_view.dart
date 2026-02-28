@@ -84,6 +84,7 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('/success')) {
+              widget.onBackPress();
               widget.onPaymentSuccess?.call();
               return NavigationDecision.prevent;
             }

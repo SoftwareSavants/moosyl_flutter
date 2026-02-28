@@ -371,21 +371,27 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) => ChangeNotifierProvider<PayProvider>.value(
-        value: payProvider,
-        child: _DialogWithPayProvider(
-          payProvider: payProvider,
-          builder: (paymentRequest) => SedadView(
-            primaryColor: primaryColor,
-            paymentCodeDisplay: paymentCode,
-            paymentRequest: paymentRequest,
-            onClose: () {
-              Navigator.of(dialogContext).pop();
-              getPaymentMethodsProvider.setPaymentMethod(null);
-            },
+      builder: (dialogContext) {
+        payProvider.onBeforePaymentSuccess = () {
+          Navigator.of(dialogContext).pop();
+          getPaymentMethodsProvider.setPaymentMethod(null);
+        };
+        return ChangeNotifierProvider<PayProvider>.value(
+          value: payProvider,
+          child: _DialogWithPayProvider(
+            payProvider: payProvider,
+            builder: (paymentRequest) => SedadView(
+              primaryColor: primaryColor,
+              paymentCodeDisplay: paymentCode,
+              paymentRequest: paymentRequest,
+              onClose: () {
+                Navigator.of(dialogContext).pop();
+                getPaymentMethodsProvider.setPaymentMethod(null);
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     ).then((_) {
       getPaymentMethodsProvider.setPaymentMethod(null);
     });
