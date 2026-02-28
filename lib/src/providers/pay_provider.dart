@@ -55,11 +55,23 @@ class PayProvider extends ChangeNotifier {
   /// The payment service used for processing payments.
   final PayService service;
 
+  /// Cached future for getPaymentRequest to avoid duplicate fetches.
+  Future<void>? _getPaymentRequestFuture;
+
+  ///
+  String? paymentCode;
+
   /// Asynchronously fetches payment request details from the service.
   ///
   /// Updates the loading state and handles any errors that occur during
   /// the fetching process. Notifies listeners when the data changes.
-  void getPaymentRequest() async {
+  Future<void> getPaymentRequest() async {
+    if (_getPaymentRequestFuture != null) return _getPaymentRequestFuture!;
+    _getPaymentRequestFuture = _getPaymentRequestImpl();
+    return _getPaymentRequestFuture!;
+  }
+
+  Future<void> _getPaymentRequestImpl() async {
     error = null;
     isLoading = true;
     notifyListeners();
@@ -95,9 +107,7 @@ class PayProvider extends ChangeNotifier {
   ///
   /// Validates the form, sets the loading state, and calls the payment service.
   /// If payment is successful, it invokes the [onPaymentSuccess] callback.
-  void pay(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return; // Ensure the form is valid.
-
+  Future<void> pay([BuildContext? context]) async {
     error = null;
     isLoading = true;
     notifyListeners();
@@ -117,11 +127,42 @@ class PayProvider extends ChangeNotifier {
       error = result.error;
       return notifyListeners();
     }
+    paymentCode =
+        result.result?.metadata?.asMap['paymentCode'].toString() ?? '';
+    notifyListeners();
+  }
 
-    if (context.mounted) {
-      Navigator.pop(context);
+  /// Initiates Sedad/Bim Bank payment to get the payment code.
+  /// Call this when user presses Pay on the selection screen (before showing the dialog).
+  /// Waits for payment request, then calls pay with phone from request and empty passcode.
+  Future<String?> getPaymentCodeForSedad() async {
+    await getPaymentRequest();
+    passCodeTextController.clear();
+    await pay();
+    return paymentCode;
+  }
+
+  /// Handles the payment for the payment request.
+  void handleSedadPay() async {
+    error = null;
+    isLoading = true;
+    notifyListeners();
+
+    final result = await ErrorHandlers.catchErrors(
+      () => service.getPayment(transactionId: transactionId),
+    );
+
+    if (result.isError) {
+      error = result.error;
+      return notifyListeners();
     }
+    isLoading = false;
 
-    await onPaymentSuccess?.call();
+    if (result.result!.status == 'completed') {
+      onPaymentSuccess?.call();
+    } else {
+      error = 'Payment not completed';
+      return notifyListeners();
+    }
   }
 }
