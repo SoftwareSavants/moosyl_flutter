@@ -48,26 +48,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _openPaymentFlow() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) => MoosylView(
-          publishableApiKey: 'your publishable api key',
-          transactionId: 'your transaction id',
-          onBackPress: () => Navigator.of(context).pop(),
-          onPaymentSuccess: (payment) async {
-            if (context.mounted) {
-              await showPaymentSuccessDialog(context, payment: payment);
-            }
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-            print(
-                'Payment was successful! id=${payment.id} amount=${payment.amount} status=${payment.status}');
-          },
-        ),
-      ),
+  void _openPaymentFlow() async {
+    final payment = await MoosylFlutter.show(
+      context,
+      publishableApiKey: 'your publishable api key',
+      transactionId: 'your transaction id',
+      isFullPage: false,
     );
+    if (!mounted) return;
+    if (payment != null) {
+      await showPaymentSuccessDialog(context, payment: payment);
+      print(
+          'Payment was successful! id=${payment.id} amount=${payment.amount} status=${payment.status}');
+    }
   }
 
   @override

@@ -32,7 +32,8 @@ class MoosylView extends StatelessWidget {
   /// The transaction ID for the specific payment transaction.
   final String transactionId;
 
-  /// Optional callback that is invoked when the payment is successful with [PaymentSuccess].
+  /// Optional callback invoked when the payment is successful with [PaymentSuccess].
+  /// The caller is responsible for closing the route (e.g. Navigator.pop).
   final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
 
   /// Callback when the back arrow is pressed on the payment method selection page.
