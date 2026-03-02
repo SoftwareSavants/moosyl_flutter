@@ -267,9 +267,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     if (!context.mounted) return;
 
     if (methodToShow == null) {
-      if (provider.selected != null) {
-        Navigator.pop(context, null);
-      }
+      // Masrivi etc: provider.selected is set, MoosylView will show the method's view.
       return;
     }
 
