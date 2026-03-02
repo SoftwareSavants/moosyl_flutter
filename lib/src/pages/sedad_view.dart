@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/models/selection_error.dart';
 import 'package:moosyl_flutter/src/providers/pay_provider.dart';
 import 'package:moosyl_flutter/src/widgets/buttons.dart';
 import 'package:moosyl_flutter/src/widgets/container.dart';
@@ -39,9 +40,8 @@ class SedadView extends StatelessWidget {
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     final errorMessage = payProvider.error != null
-        ? payProvider.error.toString() == 'PaymentNotCompleted'
-            ? localizationHelper.paymentNotCompleted
-            : payProvider.error.toString()
+        ? SelectionErrorType.fromStr(payProvider.error.toString())
+            .message(localizationHelper)
         : null;
 
     return Dialog(
