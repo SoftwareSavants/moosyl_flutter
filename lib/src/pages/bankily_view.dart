@@ -5,6 +5,7 @@ import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/validators.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/models/selection_error.dart';
 import 'package:moosyl_flutter/src/providers/pay_provider.dart';
 import 'package:moosyl_flutter/src/widgets/buttons.dart';
 import 'package:moosyl_flutter/src/widgets/container.dart';
@@ -58,7 +59,10 @@ class _BankilyDialogContent extends StatelessWidget {
     final localizationHelper = MoosylLocalization.of(context)!;
     final provider = context.watch<PayProvider>();
     final platformIcon = PaymentMethodTypes.fromString(method.type).icon;
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final errorMessage = provider.error != null
+        ? SelectionErrorType.fromStr(provider.error.toString())
+            .message(localizationHelper)
+        : null;
 
     return Dialog(
       shadowColor: Theme.of(context).colorScheme.outline,
@@ -158,6 +162,12 @@ class _BankilyDialogContent extends StatelessWidget {
                 _StepItem(text: localizationHelper.bankilyStep3),
                 _StepItem(text: localizationHelper.bankilyStep4),
                 const SizedBox(height: 16),
+                if (provider.error != null)
+                  Text(errorMessage!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.red)),
 
                 // Phone and passcode inputs in same container
                 AppContainer(

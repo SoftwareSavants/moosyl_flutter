@@ -135,8 +135,13 @@ class PayProvider extends ChangeNotifier {
         result.result?.metadata?.asMap['paymentCode'].toString() ?? '';
     notifyListeners();
     if (result.result?.metadata?.asMap['provider'] == 'bankily') {
-      onBeforePaymentSuccess?.call();
-      onPaymentSuccess?.call();
+      if (result.result!.status == 'completed') {
+        onBeforePaymentSuccess?.call();
+        onPaymentSuccess?.call();
+      } else {
+        error = 'PaymentNotCompleted';
+        return notifyListeners();
+      }
     }
   }
 
