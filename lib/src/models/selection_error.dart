@@ -9,7 +9,10 @@ enum SelectionErrorType {
   amountToPayShouldMatchPaymentRequest,
 
   /// The payment request has not been completed.
-  paymentNotCompleted;
+  paymentNotCompleted,
+
+  /// An unknown error occurred.
+  unknown;
 
   /// Creates a [SelectionErrorType] from its string representation.
   static SelectionErrorType fromStr(String value) {
@@ -18,7 +21,7 @@ enum SelectionErrorType {
       'amountToPayShouldMatchPaymentRequest' =>
         SelectionErrorType.amountToPayShouldMatchPaymentRequest,
       'paymentNotCompleted' => SelectionErrorType.paymentNotCompleted,
-      _ => throw Exception('Invalid selection error type: $value'),
+      _ => SelectionErrorType.unknown,
     };
   }
 }
@@ -32,6 +35,8 @@ extension SelectionErrorTypeExtension on SelectionErrorType {
         return l10n.amountToPayShouldMatchPaymentRequest;
       case SelectionErrorType.paymentNotCompleted:
         return l10n.paymentNotCompleted;
+      case SelectionErrorType.unknown:
+        return l10n.unknownError;
     }
   }
 }
