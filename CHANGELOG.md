@@ -1,8 +1,7 @@
 ## 2.0.0
 
+- Update Package UI
 - Add `MoosylFlutter.show()` — async helper for full page or bottom sheet, returns `PaymentSuccess?`.
-- **Breaking**: `MoosylView` no longer auto-pops; caller must close the route.
-- Fix Masrivi: selecting and paying no longer navigates back to home incorrectly.
 - Add Masrivi decline handling: show dialog when payment fails (e.g. insufficient balance).
 
 ## 1.0.12
