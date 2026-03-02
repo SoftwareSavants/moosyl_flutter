@@ -58,27 +58,15 @@ class SelectPaymentMethodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isFullPage) {
-      return _SelectPaymentMethodContent(
-        onBackPress: onBackPress,
-        amountToPay: amountToPay,
-        tax: tax,
-        totalAmount: totalAmount,
-        transactionId: transactionId,
-        onPaymentSuccess: onPaymentSuccess,
-        isFullPage: isFullPage,
-      );
-    } else {
-      return _SelectPaymentMethodBottomSheetTrigger(
-        onBackPress: onBackPress,
-        amountToPay: amountToPay,
-        tax: tax,
-        totalAmount: totalAmount,
-        transactionId: transactionId,
-        onPaymentSuccess: onPaymentSuccess,
-        isFullPage: isFullPage,
-      );
-    }
+    return _SelectPaymentMethodContent(
+      onBackPress: onBackPress,
+      amountToPay: amountToPay,
+      tax: tax,
+      totalAmount: totalAmount,
+      transactionId: transactionId,
+      onPaymentSuccess: onPaymentSuccess,
+      isFullPage: isFullPage,
+    );
   }
 }
 
@@ -92,7 +80,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     required this.transactionId,
     required this.onPaymentSuccess,
     required this.isFullPage,
-    this.onClose,
   });
 
   final VoidCallback? onBackPress;
@@ -102,7 +89,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   final String transactionId;
   final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
   final bool isFullPage;
-  final VoidCallback? onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -282,7 +268,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
 
     if (methodToShow == null) {
       if (provider.selected != null) {
-        onClose?.call();
+        Navigator.pop(context, null);
       }
       return;
     }
@@ -426,106 +412,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     ).then((_) {
       getPaymentMethodsProvider.setPaymentMethod(null);
     });
-  }
-}
-
-/// Triggers the payment method selection bottom sheet on mount.
-class _SelectPaymentMethodBottomSheetTrigger extends StatefulWidget {
-  const _SelectPaymentMethodBottomSheetTrigger({
-    required this.onBackPress,
-    required this.amountToPay,
-    required this.tax,
-    required this.totalAmount,
-    required this.transactionId,
-    required this.onPaymentSuccess,
-    required this.isFullPage,
-  });
-
-  final VoidCallback? onBackPress;
-  final double amountToPay;
-  final double tax;
-  final double totalAmount;
-  final String transactionId;
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
-  final bool isFullPage;
-  @override
-  State<_SelectPaymentMethodBottomSheetTrigger> createState() =>
-      _SelectPaymentMethodBottomSheetTriggerState();
-}
-
-class _SelectPaymentMethodBottomSheetTriggerState
-    extends State<_SelectPaymentMethodBottomSheetTrigger> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showBottomSheet());
-  }
-
-  void _showBottomSheet() {
-    if (!mounted) return;
-    final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
-
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) =>
-          ChangeNotifierProvider<GetPaymentMethodsProvider>.value(
-        value: getPaymentMethodsProvider,
-        child: DraggableScrollableSheet(
-          initialChildSize: 0.9,
-          minChildSize: 0.5,
-          maxChildSize: 1,
-          builder: (_, scrollController) => Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.of(sheetContext).pop();
-                        widget.onBackPress?.call();
-                      },
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: _SelectPaymentMethodContent(
-                    onBackPress: () {
-                      Navigator.of(sheetContext).pop();
-                      widget.onBackPress?.call();
-                    },
-                    amountToPay: widget.amountToPay,
-                    tax: widget.tax,
-                    totalAmount: widget.totalAmount,
-                    transactionId: widget.transactionId,
-                    onPaymentSuccess: widget.onPaymentSuccess,
-                    isFullPage: widget.isFullPage,
-                    onClose: () {
-                      Navigator.of(sheetContext).pop();
-                      widget.onBackPress?.call();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ).then((_) {
-      widget.onBackPress?.call();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox.shrink();
   }
 }
 
