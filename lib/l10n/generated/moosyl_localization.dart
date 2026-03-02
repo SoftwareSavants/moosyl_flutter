@@ -526,6 +526,24 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Payment not completed'**
   String get paymentNotCompleted;
+
+  /// No description provided for @paymentSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment successful'**
+  String get paymentSuccessful;
+
+  /// No description provided for @paymentId.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment ID'**
+  String get paymentId;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
 }
 
 class _MoosylLocalizationDelegate

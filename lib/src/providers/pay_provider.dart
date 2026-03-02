@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/error_handlers.dart';
+import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
 import 'package:moosyl_flutter/src/services/pay_service.dart';
 
@@ -19,8 +20,8 @@ class PayProvider extends ChangeNotifier {
   /// The payment method selected for the payment process.
   final ConfigurationListDataInner method;
 
-  /// Callback function that gets called on successful payment.
-  final FutureOr<void> Function()? onPaymentSuccess;
+  /// Callback function that gets called on successful payment with [PaymentSuccess].
+  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
 
   /// Optional callback called before [onPaymentSuccess] when payment completes.
   /// Use this to close the dialog before invoking the success callback.
@@ -136,8 +137,13 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
     if (result.result?.metadata?.asMap['provider'] == 'bankily') {
       if (result.result!.status == 'completed') {
+        final amount = paymentRequest?.amount ?? 0;
+        final payment = PaymentSuccess.fromPostPaymentResponse(
+          result.result!,
+          amountFallback: amount,
+        );
         onBeforePaymentSuccess?.call();
-        onPaymentSuccess?.call();
+        onPaymentSuccess?.call(payment);
       } else {
         error = 'PaymentNotCompleted';
         return notifyListeners();
@@ -172,8 +178,9 @@ class PayProvider extends ChangeNotifier {
     isLoading = false;
 
     if (result.result!.status.name == 'completed') {
+      final payment = PaymentSuccess.fromPaymentGetData(result.result!);
       onBeforePaymentSuccess?.call();
-      onPaymentSuccess?.call();
+      onPaymentSuccess?.call(payment);
     } else {
       error = 'PaymentNotCompleted';
       return notifyListeners();

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moosyl_flutter/src/models/payment_success.dart';
+import 'package:moosyl_flutter/src/services/pay_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// Base URL for Masrivi payment web view.
@@ -30,7 +32,7 @@ class MasriviView extends StatelessWidget {
   final String configurationId;
 
   /// Callback when payment is successful (URL contains "/success").
-  final FutureOr<void> Function()? onPaymentSuccess;
+  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
 
   /// Callback when the back button is pressed.
   final VoidCallback? onBackPress;
@@ -51,6 +53,8 @@ class MasriviView extends StatelessWidget {
   Widget build(BuildContext context) {
     return _MasriviWebView(
       payUrl: _payUrl,
+      publishableApiKey: publishableApiKey,
+      transactionId: transactionId,
       onPaymentSuccess: onPaymentSuccess,
       onBackPress: onBackPress ?? () => Navigator.of(context).pop(),
     );
@@ -60,12 +64,16 @@ class MasriviView extends StatelessWidget {
 class _MasriviWebView extends StatefulWidget {
   const _MasriviWebView({
     required this.payUrl,
+    required this.publishableApiKey,
+    required this.transactionId,
     this.onPaymentSuccess,
     required this.onBackPress,
   });
 
   final String payUrl;
-  final FutureOr<void> Function()? onPaymentSuccess;
+  final String publishableApiKey;
+  final String transactionId;
+  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
   final VoidCallback onBackPress;
 
   @override
@@ -85,7 +93,7 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('/success')) {
               widget.onBackPress();
-              widget.onPaymentSuccess?.call();
+              _fetchPaymentAndNotify();
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -93,6 +101,23 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
         ),
       )
       ..loadRequest(Uri.parse(widget.payUrl));
+  }
+
+  Future<void> _fetchPaymentAndNotify() async {
+    final onSuccess = widget.onPaymentSuccess;
+    if (onSuccess == null) return;
+    try {
+      final paymentData = await PayService(widget.publishableApiKey)
+          .getPayment(transactionId: widget.transactionId);
+      final payment = PaymentSuccess.fromPaymentGetData(paymentData);
+      await onSuccess(payment);
+    } catch (_) {
+      await onSuccess(PaymentSuccess(
+        id: widget.transactionId,
+        amount: 0,
+        status: 'completed',
+      ));
+    }
   }
 
   @override

@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:moosyl_flutter/moosyl.dart';
 
+import 'payment_success_dialog.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -10,7 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static const colorScheme = ColorScheme.light(
-    primary: Color(0xFF4445F4),
+    primary: Color.fromARGB(255, 244, 68, 147),
     onPrimary: Color(0xFFFFFFFF),
     surface: Color(0xFFF0F0F0),
     onSurface: Color(0xFF000000),
@@ -46,18 +48,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  void _openPaymentFlow() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => MoosylView(
+          publishableApiKey: 'your publishable api key',
+          transactionId: 'your transaction id',
+          onBackPress: () => Navigator.of(context).pop(),
+          onPaymentSuccess: (payment) async {
+            if (context.mounted) {
+              await showPaymentSuccessDialog(context, payment: payment);
+            }
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+            print(
+                'Payment was successful! id=${payment.id} amount=${payment.amount} status=${payment.status}');
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MoosylView(
-      publishableApiKey: 'your publishable api key',
-      transactionId: 'your transaction id',
-      primaryColor: Colors.red,
-      onBackPress: () => print('Back pressed'),
-      // amountToPay: 5,
-      // tax: 5,
-      onPaymentSuccess: () {
-        print('Payment was successful!');
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 16,
+                ),
+          ),
+          onPressed: _openPaymentFlow,
+          child: const Text('Test payment flow'),
+        ),
+      ),
     );
   }
 }

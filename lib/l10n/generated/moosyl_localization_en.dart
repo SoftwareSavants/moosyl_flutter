@@ -234,4 +234,13 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String get paymentNotCompleted => 'Payment not completed';
+
+  @override
+  String get paymentSuccessful => 'Payment successful';
+
+  @override
+  String get paymentId => 'Payment ID';
+
+  @override
+  String get status => 'Status';
 }
