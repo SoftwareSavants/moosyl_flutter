@@ -74,6 +74,7 @@
   "paymentSuccessful": "Payment successful",
   "paymentId": "Payment ID",
   "status": "Status",
+  "tryAgain": "Try again",
   "paymentFailed": "Payment failed",
-  "paymentDeclined": "Payment failed. Your balance may be insufficient or your account may not be active."
+  "paymentDeclined": "Your balance may be insufficient or your account may not be active."
 }

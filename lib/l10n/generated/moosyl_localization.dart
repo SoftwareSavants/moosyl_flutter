@@ -545,6 +545,12 @@ abstract class MoosylLocalization {
   /// **'Status'**
   String get status;
 
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
+
   /// No description provided for @paymentFailed.
   ///
   /// In en, this message translates to:
@@ -554,7 +560,7 @@ abstract class MoosylLocalization {
   /// No description provided for @paymentDeclined.
   ///
   /// In en, this message translates to:
-  /// **'Payment failed. Your balance may be insufficient or your account may not be active.'**
+  /// **'Your balance may be insufficient or your account may not be active.'**
   String get paymentDeclined;
 }
 
