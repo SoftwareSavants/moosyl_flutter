@@ -245,9 +245,12 @@ class MoosylLocalizationEn extends MoosylLocalization {
   String get status => 'Status';
 
   @override
+  String get tryAgain => 'Try again';
+
+  @override
   String get paymentFailed => 'Payment failed';
 
   @override
   String get paymentDeclined =>
-      'Payment failed. Your balance may be insufficient or your account may not be active.';
+      'Your balance may be insufficient or your account may not be active.';
 }

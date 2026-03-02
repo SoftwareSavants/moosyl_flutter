@@ -251,9 +251,12 @@ class MoosylLocalizationFr extends MoosylLocalization {
   String get status => 'Statut';
 
   @override
+  String get tryAgain => 'Réessayer';
+
+  @override
   String get paymentFailed => 'Échec du paiement';
 
   @override
   String get paymentDeclined =>
-      'Le paiement a échoué. Votre solde est peut-être insuffisant ou votre compte n\'est peut-être pas actif.';
+      'Votre solde est peut-être insuffisant ou votre compte n\'est peut-être pas actif.';
 }

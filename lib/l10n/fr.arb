@@ -74,6 +74,7 @@
   "paymentSuccessful": "Paiement réussi",
   "paymentId": "ID de paiement",
   "status": "Statut",
+  "tryAgain": "Réessayer",
   "paymentFailed": "Échec du paiement",
-  "paymentDeclined": "Le paiement a échoué. Votre solde est peut-être insuffisant ou votre compte n'est peut-être pas actif."
+  "paymentDeclined": "Votre solde est peut-être insuffisant ou votre compte n'est peut-être pas actif."
 }

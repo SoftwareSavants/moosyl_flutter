@@ -5,6 +5,7 @@ import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
+import 'package:moosyl_flutter/src/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
 /// A widget that provides a payment interface for the Software Pay system.
@@ -98,21 +99,24 @@ class MoosylView extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        title: Text(
-                          l10n.paymentFailed,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
+                        title: Text(l10n.paymentFailed),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(l10n.paymentDeclined),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                  height: 44,
+                                  child: AppButton(
+                                    style: AppButtonStyle.outline,
+                                    borderRadius: BorderRadius.circular(16),
+                                    labelText: l10n.tryAgain,
+                                    onPressed: () => Navigator.of(ctx).pop(),
+                                  )),
+                            ),
+                          ],
                         ),
-                        content: Text(l10n.paymentDeclined),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: Text(
-                                MaterialLocalizations.of(ctx).okButtonLabel),
-                          ),
-                        ],
                       ),
                     );
                   }
