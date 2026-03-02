@@ -38,6 +38,12 @@ class SedadView extends StatelessWidget {
         PaymentMethodTypes.fromString(payProvider.method.type).icon;
     final primaryColor = Theme.of(context).colorScheme.primary;
 
+    final errorMessage = payProvider.error != null
+        ? payProvider.error.toString() == 'PaymentNotCompleted'
+            ? localizationHelper.paymentNotCompleted
+            : payProvider.error.toString()
+        : null;
+
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -124,6 +130,13 @@ class SedadView extends StatelessWidget {
               _StepItem(text: localizationHelper.sedadStep2),
               _StepItem(text: localizationHelper.sedadStep3),
               _StepItem(text: localizationHelper.sedadStep4),
+
+              if (payProvider.error != null)
+                Text(errorMessage!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.red)),
               // I've paid button
               _IvePaidButton(primaryColor: primaryColor),
 

@@ -230,4 +230,7 @@ class MoosylLocalizationAr extends MoosylLocalization {
   @override
   String get bankilyStep4 =>
       '4. ارجع هنا، أدخل رقمك ورمز المرور، ثم انقر على ادفع';
+
+  @override
+  String get paymentNotCompleted => 'لم يتم إكمال الدفع';
 }

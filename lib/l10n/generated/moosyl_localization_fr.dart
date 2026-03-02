@@ -237,4 +237,7 @@ class MoosylLocalizationFr extends MoosylLocalization {
   @override
   String get bankilyStep4 =>
       '4. Revenez ici, entrez votre numéro et code, puis cliquez sur Payer';
+
+  @override
+  String get paymentNotCompleted => 'Paiement non terminé';
 }

@@ -69,5 +69,6 @@
   "bankilyStep1": "1. Open the Bankily app",
   "bankilyStep2": "2. Go to BPay",
   "bankilyStep3": "3. Enter the BPay code and amount to pay",
-  "bankilyStep4": "4. Return here, enter your phone and passcode, then click Pay"
+  "bankilyStep4": "4. Return here, enter your phone and passcode, then click Pay",
+  "paymentNotCompleted": "Payment not completed"
 }

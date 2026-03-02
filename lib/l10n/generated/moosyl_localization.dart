@@ -520,6 +520,12 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'4. Return here, enter your phone and passcode, then click Pay'**
   String get bankilyStep4;
+
+  /// No description provided for @paymentNotCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment not completed'**
+  String get paymentNotCompleted;
 }
 
 class _MoosylLocalizationDelegate
