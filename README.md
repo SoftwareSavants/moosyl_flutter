@@ -1,6 +1,6 @@
 # Moosyl Flutter SDK
 
-[![Pub Version](https://img.shields.io/pub/v/moosyl.svg)](https://pub.dev/packages/moosyl)  
+[![Pub Version](https://img.shields.io/pub/v/moosyl_flutter.svg)](https://pub.dev/packages/moosyl_flutter)  
 The **Moosyl Flutter SDK** is a powerful tool for integrating payment solutions with Mauritania's popular banking apps, such as **Bankily**, **Sedad**, and **Masrivi**. Simplify the payment process in your Flutter applications with features like webhooks and an easy-to-use interface.
 
 ---
@@ -95,7 +95,7 @@ createPaymentRequest();
 
 ### Step 2: Display the Payment View
 
-Before instantiating `MoosylView`, make sure your `MaterialApp` registers the Moosyl localization delegates and supported locales:
+Before displaying the payment UI, make sure your `MaterialApp` registers the Moosyl localization delegates and supported locales:
 
 ```dart
 return MaterialApp(
@@ -105,35 +105,56 @@ return MaterialApp(
 );
 ```
 
-Here’s how you can use the **MoosylView** widget in your Flutter app:
+#### Option A: MoosylFlutter (recommended)
+
+Use `MoosylFlutter.show()` for a simple, async API. It returns `PaymentSuccess?` — non-null on success, `null` when the user closes without paying:
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:moosyl/moosyl.dart';
+import 'package:moosyl_flutter/moosyl.dart';
 
 class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MoosylView(
-      publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
-      transactionId: 'TRANSACTION_ID', // Retrieved from your backend
-      onPaymentSuccess: () {
-        print('Payment was successful!');
+    return ElevatedButton(
+      onPressed: () async {
+        final payment = await MoosylFlutter.show(
+          context,
+          publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
+          transactionId: 'TRANSACTION_ID', // From your backend
+          isFullPage: true,  // false for bottom sheet
+        );
+        if (payment != null) {
+          print('Payment successful! id=${payment.id} amount=${payment.amount}');
+        }
       },
-      onBackPress: () => print('Back pressed'),
+      child: const Text('Pay'),
     );
   }
 }
 ```
 
-This example showcases the essential **MoosylView** widget, where you can configure:
+**Parameters:** `publishableApiKey`, `transactionId`, `isFullPage` (true = full page, false = bottom sheet), `amountToPay`, `tax`.
 
-- **`publishableApiKey`**: Your Moosyl publishable API Key.
-- **`transactionId`**: The unique transaction identifier returned by your backend.
-- **`onPaymentSuccess`**: Handle successful payment events.
-- **`onBackPress`**: Handle back press events.
+#### Option B: MoosylView (custom embedding)
 
-For detailed API documentation, visit the [Moosyl API Documentation](https://pub.dev/documentation/moosyl/latest/moosyl/moosyl-library.html).
+Use `MoosylView` when you need to embed the payment UI in your own navigation:
+
+```dart
+MoosylView(
+  publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
+  transactionId: 'TRANSACTION_ID',
+  onPaymentSuccess: (payment) async {
+    Navigator.pop(context);
+    print('Payment successful! id=${payment.id}');
+  },
+  onBackPress: () => Navigator.pop(context),
+)
+```
+
+**Parameters:** `publishableApiKey`, `transactionId`, `onPaymentSuccess` (receives `PaymentSuccess` with id, amount, status — you must close the route yourself), `onBackPress`, `amountToPay`, `tax`, `isFullPage`.
+
+For detailed API documentation, visit the [Moosyl Flutter API Documentation](https://pub.dev/documentation/moosyl_flutter/latest/moosyl_flutter/moosyl_flutter-library.html).
 
 ---
 
