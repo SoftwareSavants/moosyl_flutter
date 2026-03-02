@@ -10,8 +10,9 @@ const String _masriviPayBaseUrl = 'https://payments.moosyl.com/masrivi/pay';
 
 /// A view that displays Masrivi payment in a WebView.
 ///
-/// Loads the Masrivi pay URL and listens for navigation to a success URL.
+/// Loads the Masrivi pay URL and listens for navigation to success/decline URLs.
 /// When the URL contains "/success", [onPaymentSuccess] is invoked.
+/// When the URL contains "/decline", [onPaymentDeclined] is invoked and the view goes back.
 class MasriviView extends StatelessWidget {
   const MasriviView({
     super.key,
@@ -20,6 +21,7 @@ class MasriviView extends StatelessWidget {
     required this.configurationId,
     this.onPaymentSuccess,
     this.onBackPress,
+    this.onPaymentDeclined,
   });
 
   /// The API key for authenticating the payment.
@@ -36,6 +38,10 @@ class MasriviView extends StatelessWidget {
 
   /// Callback when the back button is pressed.
   final VoidCallback? onBackPress;
+
+  /// Callback when payment is declined (URL contains "/decline").
+  /// Called after going back to the payment method list. Use to show an error message.
+  final VoidCallback? onPaymentDeclined;
 
   /// Builds the Masrivi pay URL with query parameters.
   String get _payUrl {
@@ -57,6 +63,7 @@ class MasriviView extends StatelessWidget {
       transactionId: transactionId,
       onPaymentSuccess: onPaymentSuccess,
       onBackPress: onBackPress ?? () => Navigator.of(context).pop(),
+      onPaymentDeclined: onPaymentDeclined,
     );
   }
 }
@@ -68,6 +75,7 @@ class _MasriviWebView extends StatefulWidget {
     required this.transactionId,
     this.onPaymentSuccess,
     required this.onBackPress,
+    this.onPaymentDeclined,
   });
 
   final String payUrl;
@@ -75,6 +83,7 @@ class _MasriviWebView extends StatefulWidget {
   final String transactionId;
   final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
   final VoidCallback onBackPress;
+  final VoidCallback? onPaymentDeclined;
 
   @override
   State<_MasriviWebView> createState() => _MasriviWebViewState();
@@ -94,6 +103,10 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
             if (request.url.contains('/success')) {
               widget.onBackPress();
               _fetchPaymentAndNotify();
+              return NavigationDecision.prevent;
+            } else if (request.url.contains('/decline')) {
+              widget.onBackPress();
+              widget.onPaymentDeclined?.call();
               return NavigationDecision.prevent;
             } else if (request.url.contains('/cancel')) {
               widget.onBackPress();

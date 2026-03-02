@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
@@ -88,6 +89,34 @@ class MoosylView extends StatelessWidget {
                 onBackPress: () => context
                     .read<GetPaymentMethodsProvider>()
                     .setPaymentMethod(null),
+                onPaymentDeclined: () {
+                  final l10n = MoosylLocalization.of(context);
+                  if (l10n != null && context.mounted) {
+                    showDialog<void>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: Text(
+                          l10n.paymentFailed,
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                        ),
+                        content: Text(l10n.paymentDeclined),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: Text(
+                                MaterialLocalizations.of(ctx).okButtonLabel),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
               );
             }
           },

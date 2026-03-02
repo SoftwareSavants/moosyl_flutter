@@ -242,4 +242,11 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get status => 'الحالة';
+
+  @override
+  String get paymentFailed => 'فشل الدفع';
+
+  @override
+  String get paymentDeclined =>
+      'فشل الدفع. قد يكون رصيدك غير كافٍ أو قد يكون حسابك غير نشط.';
 }
