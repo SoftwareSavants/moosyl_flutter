@@ -170,7 +170,7 @@ class PayProvider extends ChangeNotifier {
       onBeforePaymentSuccess?.call();
       onPaymentSuccess?.call();
     } else {
-      error = 'Payment not completed';
+      error = 'PaymentNotCompleted';
       return notifyListeners();
     }
     notifyListeners();

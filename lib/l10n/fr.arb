@@ -69,5 +69,6 @@
   "bankilyStep1": "1. Ouvrez l'application Bankily",
   "bankilyStep2": "2. Allez dans BPay",
   "bankilyStep3": "3. Saisissez le code BPay et le montant à payer",
-  "bankilyStep4": "4. Revenez ici, entrez votre numéro et code, puis cliquez sur Payer"
+  "bankilyStep4": "4. Revenez ici, entrez votre numéro et code, puis cliquez sur Payer",
+  "paymentNotCompleted": "Paiement non terminé"
 }

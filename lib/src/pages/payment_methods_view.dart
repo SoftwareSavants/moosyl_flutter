@@ -5,6 +5,7 @@ import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/models/selection_error.dart';
 import 'package:moosyl_flutter/src/pages/bankily_view.dart';
 import 'package:moosyl_flutter/src/pages/sedad_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
@@ -121,11 +122,8 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     }
 
     final selectionErrorMessage = provider.selectionError != null
-        ? (provider.selectionError == 'paymentRequestFullyPaid'
-            ? localizationHelper.paymentRequestFullyPaid
-            : provider.selectionError == 'amountToPayShouldMatchPaymentRequest'
-                ? localizationHelper.amountToPayShouldMatchPaymentRequest
-                : provider.selectionError)
+        ? SelectionErrorType.fromStr(provider.selectionError!)
+            .message(localizationHelper)
         : null;
 
     final methods = provider.methods;
