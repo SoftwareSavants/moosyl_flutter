@@ -73,5 +73,7 @@
   "paymentNotCompleted": "لم يتم إكمال الدفع",
   "paymentSuccessful": "تم الدفع بنجاح",
   "paymentId": "معرف الدفع",
-  "status": "الحالة"
+  "status": "الحالة",
+  "paymentFailed": "فشل الدفع",
+  "paymentDeclined": "فشل الدفع. قد يكون رصيدك غير كافٍ أو قد يكون حسابك غير نشط."
 }

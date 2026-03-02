@@ -73,5 +73,7 @@
   "paymentNotCompleted": "Paiement non terminé",
   "paymentSuccessful": "Paiement réussi",
   "paymentId": "ID de paiement",
-  "status": "Statut"
+  "status": "Statut",
+  "paymentFailed": "Échec du paiement",
+  "paymentDeclined": "Le paiement a échoué. Votre solde est peut-être insuffisant ou votre compte n'est peut-être pas actif."
 }
