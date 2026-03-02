@@ -50,7 +50,6 @@ class Moosyl extends HookWidget {
         publishableApiKey: publishableApiKey,
         transactionId: transactionId,
         onPaymentSuccess: onPaymentSuccess,
-        customIcons: customIcons,
         isFullPage: isFullPage,
       ),
     );
@@ -85,7 +84,6 @@ class Moosyl extends HookWidget {
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
               onPaymentSuccess: onPaymentSuccess,
-              customIcons: customIcons,
               isFullPage: isFullPage,
             ),
           );
@@ -98,7 +96,6 @@ class Moosyl extends HookWidget {
       publishableApiKey: publishableApiKey,
       transactionId: transactionId,
       onPaymentSuccess: onPaymentSuccess,
-      customIcons: customIcons,
       isFullPage: isFullPage,
     );
   }

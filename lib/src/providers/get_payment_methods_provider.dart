@@ -19,9 +19,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// The total amount to validate against payment request.
   final double totalAmount;
 
-  /// A map of custom icons for specific payment method types.
-  final Map<PaymentMethodTypes, String>? customIcons;
-
   /// The payment method selected for the payment process.
   ConfigurationListDataInner? selected;
 
@@ -36,7 +33,6 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     required this.publishableApiKey,
     required this.transactionId,
     required this.totalAmount,
-    required this.customIcons,
   }) {
     getMethods();
     getPaymentRequest();

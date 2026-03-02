@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:moosyl_flutter/src/models/payment_method_model.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
@@ -14,14 +13,12 @@ class MoosylView extends StatelessWidget {
   /// Creates an instance of [MoosylView].
 
   /// Requires the [publishableApiKey] and [transactionId] for the payment transaction,
-  /// and optional handlers for custom payment methods,
-  /// success callbacks, and custom icons.
+  /// and optional handlers for success callbacks.
   const MoosylView({
     super.key,
     required this.publishableApiKey,
     required this.transactionId,
     this.onPaymentSuccess,
-    this.customIcons,
     this.primaryColor,
     this.onBackPress,
     this.amountToPay = 0.0,
@@ -37,9 +34,6 @@ class MoosylView extends StatelessWidget {
 
   /// Optional callback that is invoked when the payment is successful.
   final FutureOr<void> Function()? onPaymentSuccess;
-
-  /// Optional custom icons for different payment methods.
-  final Map<PaymentMethodTypes, String>? customIcons;
 
   /// Primary color for the payment method selection page (radio, pay button).
   final Color? primaryColor;
@@ -66,7 +60,6 @@ class MoosylView extends StatelessWidget {
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
               totalAmount: amountToPay + tax,
-              customIcons: customIcons,
             ),
           ),
         ],
