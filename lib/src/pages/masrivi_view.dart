@@ -95,6 +95,9 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
               widget.onBackPress();
               _fetchPaymentAndNotify();
               return NavigationDecision.prevent;
+            } else if (request.url.contains('/cancel')) {
+              widget.onBackPress();
+              return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
           },
