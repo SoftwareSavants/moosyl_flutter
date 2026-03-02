@@ -19,7 +19,6 @@ class MoosylView extends StatelessWidget {
     required this.publishableApiKey,
     required this.transactionId,
     this.onPaymentSuccess,
-    this.primaryColor,
     this.onBackPress,
     this.amountToPay = 0.0,
     this.tax = 0.0,
@@ -34,9 +33,6 @@ class MoosylView extends StatelessWidget {
 
   /// Optional callback that is invoked when the payment is successful.
   final FutureOr<void> Function()? onPaymentSuccess;
-
-  /// Primary color for the payment method selection page (radio, pay button).
-  final Color? primaryColor;
 
   /// Callback when the back arrow is pressed on the payment method selection page.
   final VoidCallback? onBackPress;
@@ -73,7 +69,6 @@ class MoosylView extends StatelessWidget {
             // If no payment method is selected, show the available methods page.
             if (selectedModeOfPayment == null) {
               return SelectPaymentMethodPage(
-                primaryColor: primaryColor,
                 onBackPress: onBackPress,
                 amountToPay: amountToPay,
                 tax: tax,

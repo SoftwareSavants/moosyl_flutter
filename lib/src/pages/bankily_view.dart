@@ -22,7 +22,6 @@ class BankilyView extends StatelessWidget {
     required this.transactionId,
     this.onPaymentSuccess,
     this.onClose,
-    required this.primaryColor,
     required this.paymentCodeDisplay,
   });
 
@@ -31,13 +30,11 @@ class BankilyView extends StatelessWidget {
   final String transactionId;
   final FutureOr<void> Function()? onPaymentSuccess;
   final VoidCallback? onClose;
-  final Color primaryColor;
   final String? paymentCodeDisplay;
 
   @override
   Widget build(BuildContext context) {
     return _BankilyDialogContent(
-      primaryColor: primaryColor,
       method: method,
       onClose: onClose ?? () => Navigator.of(context).pop(),
       paymentCodeDisplay: paymentCodeDisplay,
@@ -48,7 +45,6 @@ class BankilyView extends StatelessWidget {
 /// Dialog content for Bankily payment. Expects [PayProvider] from context.
 class _BankilyDialogContent extends StatelessWidget {
   const _BankilyDialogContent({
-    required this.primaryColor,
     required this.method,
     required this.onClose,
     required this.paymentCodeDisplay,
@@ -56,13 +52,13 @@ class _BankilyDialogContent extends StatelessWidget {
 
   final ConfigurationListDataInner method;
   final VoidCallback onClose;
-  final Color primaryColor;
   final String? paymentCodeDisplay;
   @override
   Widget build(BuildContext context) {
     final localizationHelper = MoosylLocalization.of(context)!;
     final provider = context.watch<PayProvider>();
     final platformIcon = PaymentMethodTypes.fromString(method.type).icon;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Dialog(
       shadowColor: Theme.of(context).colorScheme.outline,
@@ -195,7 +191,6 @@ class _BankilyDialogContent extends StatelessWidget {
                 ),
                 // Pay button
                 AppButton(
-                  primaryColor: primaryColor,
                   minHeight: 40,
                   style: AppButtonStyle.primary,
                   labelText: localizationHelper.pay,
@@ -205,7 +200,6 @@ class _BankilyDialogContent extends StatelessWidget {
 
                 // Change payment method button
                 AppButton(
-                  primaryColor: primaryColor,
                   margin: const EdgeInsets.only(top: 8),
                   minHeight: 40,
                   style: AppButtonStyle.outline,

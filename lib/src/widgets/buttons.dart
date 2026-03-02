@@ -28,7 +28,6 @@ class AppButton extends StatelessWidget {
   final double? minHeight;
   final EdgeInsetsGeometry? padding;
   final BorderSide border;
-  final Color? primaryColor;
 
   const AppButton({
     super.key,
@@ -46,7 +45,6 @@ class AppButton extends StatelessWidget {
     this.padding,
     this.minHeight = 60,
     this.border = BorderSide.none,
-    this.primaryColor,
   });
 
   bool get _isDisabled =>
@@ -71,13 +69,11 @@ class AppButton extends StatelessWidget {
       side = BorderSide(color: outlineColor.withOpacity(0.5));
     } else if (style == AppButtonStyle.outline) {
       bg = Colors.transparent;
-      fg = this.textColor ?? primaryColor ?? primary;
-      side = border == BorderSide.none
-          ? BorderSide(color: primaryColor ?? primary)
-          : border;
+      fg = this.textColor ?? primary;
+      side = border == BorderSide.none ? BorderSide(color: primary) : border;
     } else {
       // primary
-      bg = this.background ?? primaryColor ?? primary;
+      bg = this.background ?? primary;
       fg = textColor ?? onPrimary;
       side = border;
     }

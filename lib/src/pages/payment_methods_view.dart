@@ -13,7 +13,6 @@ import 'package:moosyl_flutter/src/widgets/buttons.dart';
 import 'package:moosyl_flutter/src/widgets/container.dart';
 import 'package:moosyl_flutter/src/widgets/error_widget.dart';
 import 'package:moosyl_flutter/src/widgets/feedback.dart';
-import 'package:moosyl_flutter/src/widgets/icons.dart';
 import 'package:provider/provider.dart';
 
 /// A widget that displays the available payment methods for selection.
@@ -25,7 +24,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
   /// Creates an instance of [SelectPaymentMethodPage].
   const SelectPaymentMethodPage({
     super.key,
-    this.primaryColor,
     this.onBackPress,
     this.amountToPay = 0.0,
     this.tax = 0.0,
@@ -37,9 +35,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
 
   /// When true, shows as full page. When false, shows as bottom sheet.
   final bool isFullPage;
-
-  /// The primary color for the page (e.g. for radio, pay button).
-  final Color? primaryColor;
 
   /// Callback when the back arrow is pressed.
   final VoidCallback? onBackPress;
@@ -63,7 +58,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isFullPage) {
       return _SelectPaymentMethodContent(
-        primaryColor: primaryColor,
         onBackPress: onBackPress,
         amountToPay: amountToPay,
         tax: tax,
@@ -74,7 +68,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
       );
     } else {
       return _SelectPaymentMethodBottomSheetTrigger(
-        primaryColor: primaryColor,
         onBackPress: onBackPress,
         amountToPay: amountToPay,
         tax: tax,
@@ -90,7 +83,6 @@ class SelectPaymentMethodPage extends StatelessWidget {
 /// Full page or bottom sheet content for payment method selection.
 class _SelectPaymentMethodContent extends StatelessWidget {
   const _SelectPaymentMethodContent({
-    required this.primaryColor,
     required this.onBackPress,
     required this.amountToPay,
     required this.tax,
@@ -101,7 +93,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     this.onClose,
   });
 
-  final Color? primaryColor;
   final VoidCallback? onBackPress;
   final double amountToPay;
   final double tax;
@@ -114,8 +105,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<GetPaymentMethodsProvider>();
-    final effectivePrimary =
-        primaryColor ?? Theme.of(context).colorScheme.primary;
+    final effectivePrimary = Theme.of(context).colorScheme.primary;
     final localizationHelper = MoosylLocalization.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
@@ -170,7 +160,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
                           return _MethodRow(
                             method: method,
                             isSelected: pendingSelection?.id == method.id,
-                            primaryColor: effectivePrimary,
                             onTap: () => provider.setPendingSelection(method),
                           );
                         }),
@@ -240,7 +229,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
                       ],
                     )),
                 AppButton(
-                  primaryColor: effectivePrimary,
                   minHeight: 50,
                   labelText: provider.isValidating
                       ? localizationHelper.sending
@@ -310,7 +298,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
         publishableApiKey: publishableApiKey,
         transactionId: transactionId,
         method: methodToShow,
-        primaryColor: effectivePrimary,
       );
     } else if (PaymentMethodTypes.fromString(methodToShow.type) ==
             PaymentMethodTypes.sedad ||
@@ -381,7 +368,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
           child: _DialogWithPayProvider(
             payProvider: payProvider,
             builder: (paymentRequest) => SedadView(
-              primaryColor: primaryColor,
               paymentCodeDisplay: paymentCode,
               paymentRequest: paymentRequest,
               onClose: () {
@@ -402,7 +388,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     required String publishableApiKey,
     required String transactionId,
     required ConfigurationListDataInner method,
-    required Color primaryColor,
   }) {
     final payProvider = PayProvider(
       publishableApiKey: publishableApiKey,
@@ -425,7 +410,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
           child: _DialogWithPayProvider(
             payProvider: payProvider,
             builder: (_) => BankilyView(
-              primaryColor: primaryColor,
               method: method,
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
@@ -447,7 +431,6 @@ class _SelectPaymentMethodContent extends StatelessWidget {
 /// Triggers the payment method selection bottom sheet on mount.
 class _SelectPaymentMethodBottomSheetTrigger extends StatefulWidget {
   const _SelectPaymentMethodBottomSheetTrigger({
-    required this.primaryColor,
     required this.onBackPress,
     required this.amountToPay,
     required this.tax,
@@ -457,7 +440,6 @@ class _SelectPaymentMethodBottomSheetTrigger extends StatefulWidget {
     required this.isFullPage,
   });
 
-  final Color? primaryColor;
   final VoidCallback? onBackPress;
   final double amountToPay;
   final double tax;
@@ -514,7 +496,6 @@ class _SelectPaymentMethodBottomSheetTriggerState
                 ),
                 Expanded(
                   child: _SelectPaymentMethodContent(
-                    primaryColor: widget.primaryColor,
                     onBackPress: () {
                       Navigator.of(sheetContext).pop();
                       widget.onBackPress?.call();
@@ -612,13 +593,12 @@ class _MethodRow extends StatelessWidget {
   const _MethodRow({
     required this.method,
     required this.isSelected,
-    required this.primaryColor,
     required this.onTap,
   });
 
   final ConfigurationListDataInner method;
   final bool isSelected;
-  final Color primaryColor;
+
   final VoidCallback onTap;
 
   @override
@@ -626,6 +606,7 @@ class _MethodRow extends StatelessWidget {
     final provider = context.watch<GetPaymentMethodsProvider>();
     final localizationHelper = MoosylLocalization.of(context)!;
     final textTheme = Theme.of(context).textTheme;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return InkWell(
       onTap: onTap,
