@@ -105,9 +105,7 @@ return MaterialApp(
 );
 ```
 
-#### Option A: MoosylFlutter (recommended)
-
-Use `MoosylFlutter.show()` for a simple, async API. It returns `PaymentSuccess?` — non-null on success, `null` when the user closes without paying:
+Use `MoosylFlutter.show()` to open the payment flow. It returns `PaymentSuccess?` — non-null on success, `null` when the user closes without paying:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -135,24 +133,6 @@ class PaymentScreen extends StatelessWidget {
 ```
 
 **Parameters:** `publishableApiKey`, `transactionId`, `isFullPage` (true = full page, false = bottom sheet), `amountToPay`, `tax`.
-
-#### Option B: MoosylView (custom embedding)
-
-Use `MoosylView` when you need to embed the payment UI in your own navigation:
-
-```dart
-MoosylView(
-  publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
-  transactionId: 'TRANSACTION_ID',
-  onPaymentSuccess: (payment) async {
-    Navigator.pop(context);
-    print('Payment successful! id=${payment.id}');
-  },
-  onBackPress: () => Navigator.pop(context),
-)
-```
-
-**Parameters:** `publishableApiKey`, `transactionId`, `onPaymentSuccess` (receives `PaymentSuccess` with id, amount, status — you must close the route yourself), `onBackPress`, `amountToPay`, `tax`, `isFullPage`.
 
 For detailed API documentation, visit the [Moosyl Flutter API Documentation](https://pub.dev/documentation/moosyl_flutter/latest/moosyl_flutter/moosyl_flutter-library.html).
 
