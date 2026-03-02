@@ -435,8 +435,8 @@ class _SelectPaymentMethodContent extends StatelessWidget {
                 getPaymentMethodsProvider.setPaymentMethod(null);
               },
             ),
-        ),
-      );
+          ),
+        );
       },
     ).then((_) {
       getPaymentMethodsProvider.setPaymentMethod(null);
@@ -646,17 +646,9 @@ class _MethodRow extends StatelessWidget {
               ),
               clipBehavior: Clip.antiAlias,
               child: Center(
-                child: provider.customIcons?[
-                            PaymentMethodTypes.fromString(method.type)] !=
-                        null
-                    ? AppIcon(
-                        path: provider.customIcons?[
-                            PaymentMethodTypes.fromString(method.type)],
-                        size: 52,
-                      )
-                    : PaymentMethodTypes.fromString(method.type)
-                        .icon
-                        .apply(size: 40),
+                child: PaymentMethodTypes.fromString(method.type)
+                    .icon
+                    .apply(size: 40),
               ),
             ),
             const SizedBox(width: 16),
