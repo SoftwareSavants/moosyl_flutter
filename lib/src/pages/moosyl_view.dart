@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
@@ -31,8 +32,8 @@ class MoosylView extends StatelessWidget {
   /// The transaction ID for the specific payment transaction.
   final String transactionId;
 
-  /// Optional callback that is invoked when the payment is successful.
-  final FutureOr<void> Function()? onPaymentSuccess;
+  /// Optional callback that is invoked when the payment is successful with [PaymentSuccess].
+  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
 
   /// Callback when the back arrow is pressed on the payment method selection page.
   final VoidCallback? onBackPress;

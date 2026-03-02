@@ -70,5 +70,8 @@
   "bankilyStep2": "2. انتقل إلى BPay",
   "bankilyStep3": "3. أدخل رمز BPay والمبلغ المطلوب دفعه",
   "bankilyStep4": "4. ارجع هنا، أدخل رقمك ورمز المرور، ثم انقر على ادفع",
-  "paymentNotCompleted": "لم يتم إكمال الدفع"
+  "paymentNotCompleted": "لم يتم إكمال الدفع",
+  "paymentSuccessful": "تم الدفع بنجاح",
+  "paymentId": "معرف الدفع",
+  "status": "الحالة"
 }

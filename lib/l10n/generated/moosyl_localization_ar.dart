@@ -233,4 +233,13 @@ class MoosylLocalizationAr extends MoosylLocalization {
 
   @override
   String get paymentNotCompleted => 'لم يتم إكمال الدفع';
+
+  @override
+  String get paymentSuccessful => 'تم الدفع بنجاح';
+
+  @override
+  String get paymentId => 'معرف الدفع';
+
+  @override
+  String get status => 'الحالة';
 }
