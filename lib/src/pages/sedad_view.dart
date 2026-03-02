@@ -23,15 +23,11 @@ class SedadView extends StatelessWidget {
   /// Callback when the dialog is closed (e.g. to go back to payment method selection).
   final VoidCallback? onClose;
 
-  /// The primary color of the app.
-  final Color primaryColor;
-
   const SedadView({
     super.key,
     required this.paymentCodeDisplay,
     required this.paymentRequest,
     this.onClose,
-    required this.primaryColor,
   });
 
   @override
@@ -40,6 +36,7 @@ class SedadView extends StatelessWidget {
     final payProvider = context.watch<PayProvider>();
     final platformIcon =
         PaymentMethodTypes.fromString(payProvider.method.type).icon;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -132,7 +129,6 @@ class SedadView extends StatelessWidget {
 
               // Change payment method button
               AppButton(
-                primaryColor: primaryColor,
                 margin: const EdgeInsets.only(top: 0),
                 minHeight: 40,
                 style: AppButtonStyle.outline,
@@ -175,7 +171,6 @@ class _IvePaidButton extends StatelessWidget {
     final payProvider = context.watch<PayProvider>();
 
     return AppButton(
-      primaryColor: primaryColor,
       minHeight: 40,
       style: AppButtonStyle.primary,
       labelText: localizationHelper.ivePaid,
