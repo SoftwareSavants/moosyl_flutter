@@ -20,10 +20,6 @@ class Moosyl extends HookWidget {
   /// [open] is the callback to open the payment sheet.
   final Widget Function(VoidCallback open)? inputBuilder;
 
-  /// Optional map to provide custom icons for each payment method type.
-  /// The keys are [PaymentMethodTypes] and the values are the paths to the custom icons.
-  final Map<PaymentMethodTypes, String>? customIcons;
-
   /// Optional callback to be triggered upon successful payment with [PaymentSuccess].
   final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
 
@@ -35,14 +31,12 @@ class Moosyl extends HookWidget {
   /// * [context]: The build context.
   /// * [publishableApiKey]: The API key to authenticate the payment.
   /// * [transactionId]: The transaction ID for the current session.
-  /// * [customIcons]: Map for custom icons for payment methods.
   /// * [onPaymentSuccess]: Callback for when payment is successful.
   static void show(
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
     final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess,
-    Map<PaymentMethodTypes, String>? customIcons,
     bool isFullPage = false,
   }) {
     showBarModalBottomSheet(
@@ -60,14 +54,12 @@ class Moosyl extends HookWidget {
   ///
   /// * [publishableApiKey]: The API key for payment authentication.
   /// * [transactionId]: The transaction ID for the current payment session.
-  /// * [customIcons]: Optional custom icons for specific payment methods.
   /// * [inputBuilder]: A function to build a custom input widget.
   /// * [onPaymentSuccess]: Callback when the payment is successful.
   const Moosyl({
     super.key,
     required this.publishableApiKey,
     required this.transactionId,
-    this.customIcons,
     this.inputBuilder,
     this.onPaymentSuccess,
     this.isFullPage = false,

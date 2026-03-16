@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:moosyl_flutter/src/models/payment_success.dart';
+import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
 import 'package:moosyl_flutter/src/services/pay_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -123,9 +124,10 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
     final onSuccess = widget.onPaymentSuccess;
     if (onSuccess == null) return;
     try {
-      final paymentData = await PayService(widget.publishableApiKey)
-          .getPayment(transactionId: widget.transactionId);
-      final payment = PaymentSuccess.fromPaymentGetData(paymentData);
+      final paymentData =
+          await GetPaymentRequestService(widget.publishableApiKey)
+              .get(widget.transactionId);
+      final payment = PaymentSuccess.fromPaymentRequestGetData(paymentData);
       await onSuccess(payment);
     } catch (_) {
       await onSuccess(PaymentSuccess(

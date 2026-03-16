@@ -1,3 +1,8 @@
+## 2.0.1
+
+- Remove Get Payment Method
+- update package screenshot desc 
+
 ## 2.0.0
 
 - Update Package UI

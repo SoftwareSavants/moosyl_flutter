@@ -168,7 +168,7 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => service.getPayment(transactionId: transactionId),
+      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
     );
 
     if (result.isError) {
@@ -177,8 +177,8 @@ class PayProvider extends ChangeNotifier {
     }
     isLoading = false;
 
-    if (result.result!.status.name == 'completed') {
-      final payment = PaymentSuccess.fromPaymentGetData(result.result!);
+    if (result.result!.amount == 0) {
+      final payment = PaymentSuccess.fromPaymentRequestGetData(result.result!);
       onBeforePaymentSuccess?.call();
       onPaymentSuccess?.call(payment);
     } else {

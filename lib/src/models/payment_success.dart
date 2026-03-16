@@ -21,11 +21,11 @@ class PaymentSuccess {
   final String status;
 
   /// Creates from [PaymentGetData] (Sedad - from getPayment).
-  factory PaymentSuccess.fromPaymentGetData(PaymentGetData data) {
+  factory PaymentSuccess.fromPaymentRequestGetData(PaymentRequestGetData data) {
     return PaymentSuccess(
       id: data.id,
       amount: data.amount,
-      status: data.status.name,
+      status: 'completed',
     );
   }
 
