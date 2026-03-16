@@ -24,6 +24,11 @@ class SedadView extends StatelessWidget {
   /// Callback when the dialog is closed (e.g. to go back to payment method selection).
   final VoidCallback? onClose;
 
+  /// Creates a new [SedadView] instance.
+  ///
+  /// * [paymentCodeDisplay]: The code to display.
+  /// * [paymentRequest]: The payment request containing amount and other details.
+  /// * [onClose]: The callback to call when the dialog is closed.
   const SedadView({
     super.key,
     required this.paymentCodeDisplay,

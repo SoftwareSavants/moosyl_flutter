@@ -26,7 +26,11 @@ enum SelectionErrorType {
   }
 }
 
+/// Extension methods for [SelectionErrorType] to provide string messages.
 extension SelectionErrorTypeExtension on SelectionErrorType {
+  /// Returns the string message for the selection error type.
+  ///
+  /// * [l10n]: The localization object to get the message from.
   String message(MoosylLocalization l10n) {
     switch (this) {
       case SelectionErrorType.paymentRequestFullyPaid:

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
-import 'package:moosyl_flutter/src/services/pay_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// Base URL for Masrivi payment web view.
@@ -15,6 +14,14 @@ const String _masriviPayBaseUrl = 'https://payments.moosyl.com/masrivi/pay';
 /// When the URL contains "/success", [onPaymentSuccess] is invoked.
 /// When the URL contains "/decline", [onPaymentDeclined] is invoked and the view goes back.
 class MasriviView extends StatelessWidget {
+  /// Creates a new [MasriviView] instance.
+  ///
+  /// * [publishableApiKey]: The API key for authenticating the payment.
+  /// * [transactionId]: The transaction ID for the payment.
+  /// * [configurationId]: The configuration ID (payment method ID) from [PaymentMethod.id].
+  /// * [onPaymentSuccess]: The callback to call when the payment is successful.
+  /// * [onBackPress]: The callback to call when the back button is pressed.
+  /// * [onPaymentDeclined]: The callback to call when the payment is declined.
   const MasriviView({
     super.key,
     required this.publishableApiKey,

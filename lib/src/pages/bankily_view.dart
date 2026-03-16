@@ -16,6 +16,14 @@ import 'package:provider/provider.dart';
 
 /// A widget that represents the Bankily payment process.
 class BankilyView extends StatelessWidget {
+  /// Creates a new [BankilyView] instance.
+  ///
+  /// * [method]: The payment method to use.
+  /// * [publishableApiKey]: The publishable API key to use.
+  /// * [transactionId]: The transaction ID to use.
+  /// * [onPaymentSuccess]: The callback to call when the payment is successful.
+  /// * [onClose]: The callback to call when the payment is closed.
+  /// * [paymentCodeDisplay]: The code to display.
   const BankilyView({
     super.key,
     required this.method,
@@ -26,11 +34,22 @@ class BankilyView extends StatelessWidget {
     required this.paymentCodeDisplay,
   });
 
+  /// The payment method to use.
   final ConfigurationListDataInner method;
+
+  /// The publishable API key to use.
   final String publishableApiKey;
+
+  /// The transaction ID to use.
   final String transactionId;
+
+  /// The callback to call when the payment is successful.
   final FutureOr<void> Function()? onPaymentSuccess;
+
+  /// The callback to call when the payment is closed.
   final VoidCallback? onClose;
+
+  /// The code to display.
   final String? paymentCodeDisplay;
 
   @override
