@@ -7,8 +7,8 @@ import 'package:moosyl/moosyl.dart';
 class PaymentSuccess {
   /// Creates a new [PaymentSuccess] instance.
   ///
-  /// * [id]: The ID of the payment.
-  /// * [amount]: The amount of the payment.
+  /// * [id]: The ID of the transaction.
+  /// * [amount]: The amount of the transaction.
   /// * [status]: The status of the payment.
   const PaymentSuccess({
     required this.id,

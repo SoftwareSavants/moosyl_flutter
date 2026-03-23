@@ -74,7 +74,9 @@ return MaterialApp(
 );
 ```
 
-Use `MoosylFlutter.show()` to open the payment flow. It returns `PaymentSuccess?` — non-null on success, `null` when the user closes without paying:
+Use `MoosylFlutter.show()` to open the payment flow. It returns `PaymentSuccess?` — non-null on success, `null` when the user closes without paying.
+
+**Note:** `PaymentSuccess` provides a summary of the completed payment — `id`, `amount`, and `status` — for use in your success handling.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -92,7 +94,8 @@ class PaymentScreen extends StatelessWidget {
           isFullPage: true,  // false for bottom sheet
         );
         if (payment != null) {
-          print('Payment successful! id=${payment.id} amount=${payment.amount}');
+          // payment.id = transaction ID, payment.amount, payment.status
+          print('Payment successful! id=${payment.id} amount=${payment.amount} status=${payment.status}');
         }
       },
       child: const Text('Pay'),

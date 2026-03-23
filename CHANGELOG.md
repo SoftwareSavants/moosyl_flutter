@@ -1,3 +1,9 @@
+## 2.0.2
+
+
+- Remove node.js Example
+- update the returned payment model desc
+
 ## 2.0.1
 
 - Remove Get Payment Method
