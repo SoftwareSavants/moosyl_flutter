@@ -87,15 +87,15 @@ class PaymentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        final payment = await MoosylFlutter.show(
+        final isSuccess = await MoosylFlutter.show(
           context,
           publishableApiKey: 'YOUR_PUBLISHABLE_API_KEY',
           transactionId: 'TRANSACTION_ID', // From your backend
           isFullPage: true,  // false for bottom sheet
         );
-        if (payment != null) {
+        if (isSuccess != null) {
           // status
-        print('Payment was successful! isSuccess=${payment}');
+        print('Payment was successful! isSuccess=$isSuccess ');
         }
       },
       child: const Text('Pay'),

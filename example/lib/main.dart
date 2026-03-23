@@ -49,16 +49,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _openPaymentFlow() async {
-    final payment = await MoosylFlutter.show(
+    final isSuccess = await MoosylFlutter.show(
       context,
       publishableApiKey: 'your publishable api key',
       transactionId: 'your transaction id',
       isFullPage: false,
     );
     if (!mounted) return;
-    if (payment != null) {
-      await showPaymentSuccessDialog(context, isSuccess: payment);
-      print('Payment was successful! isSuccess=${payment}');
+    if (isSuccess != null) {
+      await showPaymentSuccessDialog(context, isSuccess: isSuccess);
+      print('Payment was successful! isSuccess=$isSuccess');
     }
   }
 
