@@ -132,23 +132,29 @@ class _SelectPaymentMethodContent extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     border: Border.all(color: Colors.grey.shade300),
                     borderRadius: BorderRadius.circular(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 8,
-                      children: [
-                        Text(localizationHelper.chooseHowYouWouldLikeToPay,
-                            style: textTheme.titleMedium),
-                        const SizedBox(height: 10),
-                        ...methods.asMap().entries.map((e) {
-                          final method = e.value;
-                          return _MethodRow(
-                            method: method,
-                            isSelected: pendingSelection?.id == method.id,
-                            onTap: () => provider.setPendingSelection(method),
-                          );
-                        }),
-                      ],
+                    child: RadioGroup<ConfigurationListDataInner>(
+                      groupValue: pendingSelection,
+                      onChanged: (value) {
+                        if (value != null) provider.setPendingSelection(value);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8,
+                        children: [
+                          Text(localizationHelper.chooseHowYouWouldLikeToPay,
+                              style: textTheme.titleMedium),
+                          const SizedBox(height: 10),
+                          ...methods.asMap().entries.map((e) {
+                            final method = e.value;
+                            return _MethodRow(
+                              method: method,
+                              isSelected: pendingSelection?.id == method.id,
+                              onTap: () => provider.setPendingSelection(method),
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -488,7 +494,6 @@ class _MethodRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<GetPaymentMethodsProvider>();
     final localizationHelper = MoosylLocalization.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final primaryColor = Theme.of(context).colorScheme.primary;
@@ -541,10 +546,7 @@ class _MethodRow extends StatelessWidget {
             // Radio
             Radio<ConfigurationListDataInner>(
               value: method,
-              groupValue: provider.pendingSelection,
-              onChanged: (_) => onTap(),
-              fillColor: MaterialStateProperty.all(primaryColor),
-              activeColor: primaryColor,
+              fillColor: WidgetStateProperty.all(primaryColor),
             ),
           ],
         ),

@@ -21,7 +21,7 @@ Future<void> showPaymentSuccessDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.check_circle,
             color: Colors.green,
             size: 64,

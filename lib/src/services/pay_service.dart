@@ -57,21 +57,4 @@ class PayService {
     client.setApiKey('ApiKey', publishableApiKey);
     return client;
   }
-
-  /// Fetches a payment by its ID.
-  ///
-  /// Makes an API call via [PaymentApi] to retrieve the payment.
-  /// Returns a [PaymentGet] object containing the payment details.
-  Future<PaymentGetData> getPayment({
-    required String transactionId,
-  }) async {
-    final client = _createClient();
-    final paymentApi = client.getPaymentApi();
-    final response = await paymentApi.getPaymentById(id: transactionId);
-    final data = response.data;
-    if (data == null) {
-      throw StateError('payment request not found');
-    }
-    return data.data;
-  }
 }

@@ -65,15 +65,15 @@ class AppButton extends StatelessWidget {
 
     if (_isDisabled) {
       bg = surface;
-      fg = onSurface.withOpacity(0.6);
-      side = BorderSide(color: outlineColor.withOpacity(0.5));
+      fg = onSurface.withValues(alpha: 0.6);
+      side = BorderSide(color: outlineColor.withValues(alpha: 0.5));
     } else if (style == AppButtonStyle.outline) {
       bg = Colors.transparent;
-      fg = this.textColor ?? primary;
+      fg = textColor ?? primary;
       side = border == BorderSide.none ? BorderSide(color: primary) : border;
     } else {
       // primary
-      bg = this.background ?? primary;
+      bg = background ?? primary;
       fg = textColor ?? onPrimary;
       side = border;
     }
