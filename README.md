@@ -60,37 +60,6 @@ curl -X POST https://api.moosyl.com/payment-request \
 }'
 ```
 
-#### Node.js Example:
-
-```javascript
-const axios = require("axios");
-
-async function createPaymentRequest() {
-  try {
-    const response = await axios.post(
-      "https://api.moosyl.com/payment-request",
-      {
-        phoneNumber: "+22212345678", // Optional
-        transactionId: "your-unique-transaction-id",
-        amount: 5000, // Amount in MRU
-      },
-      {
-        headers: {
-          Authorization: "YOUR_SECRET_API_KEY",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    console.log("Payment Request Created:", response.data);
-  } catch (error) {
-    console.error("Error creating payment request:", error.response.data);
-  }
-}
-
-createPaymentRequest();
-```
-
 ---
 
 ### Step 2: Display the Payment View
