@@ -5,7 +5,6 @@ import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
-import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/models/selection_error.dart';
 import 'package:moosyl_flutter/src/pages/bankily_view.dart';
 import 'package:moosyl_flutter/src/pages/sedad_view.dart';
@@ -54,7 +53,7 @@ class SelectPaymentMethodPage extends StatelessWidget {
   final String transactionId;
 
   /// Callback when payment succeeds (for Sedad/Bankily dialogs).
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +86,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   final double tax;
   final double totalAmount;
   final String transactionId;
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
   final bool isFullPage;
 
   @override

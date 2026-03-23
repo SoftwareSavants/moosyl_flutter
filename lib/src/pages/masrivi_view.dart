@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -42,7 +41,7 @@ class MasriviView extends StatelessWidget {
   final String configurationId;
 
   /// Callback when payment is successful (URL contains "/success").
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
 
   /// Callback when the back button is pressed.
   final VoidCallback? onBackPress;
@@ -89,7 +88,7 @@ class _MasriviWebView extends StatefulWidget {
   final String payUrl;
   final String publishableApiKey;
   final String transactionId;
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
   final VoidCallback onBackPress;
   final VoidCallback? onPaymentDeclined;
 
@@ -131,17 +130,10 @@ class _MasriviWebViewState extends State<_MasriviWebView> {
     final onSuccess = widget.onPaymentSuccess;
     if (onSuccess == null) return;
     try {
-      final paymentData =
-          await GetPaymentRequestService(widget.publishableApiKey)
-              .get(widget.transactionId);
-      final payment = PaymentSuccess.fromPaymentRequestGetData(paymentData);
-      await onSuccess(payment);
+      final isSuccess = true;
+      await onSuccess(isSuccess);
     } catch (_) {
-      await onSuccess(PaymentSuccess(
-        id: widget.transactionId,
-        amount: 0,
-        status: 'completed',
-      ));
+      await onSuccess(false);
     }
   }
 

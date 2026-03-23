@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
-import 'package:moosyl_flutter/moosyl.dart' show PaymentSuccess;
 
 /// Shows a dialog with a green check icon, payment success message, and summary.
 /// Returns a [Future] that completes when the dialog is dismissed.
 Future<void> showPaymentSuccessDialog(
   BuildContext context, {
-  required PaymentSuccess payment,
+  required bool isSuccess,
 }) async {
   if (!context.mounted) return;
   final l10n = MoosylLocalization.of(context)!;
@@ -44,18 +43,8 @@ Future<void> showPaymentSuccessDialog(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _SummaryRow(
-                  label: l10n.paymentId,
-                  value: payment.id,
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
-                  label: l10n.amountToPay,
-                  value: '${payment.amount} MRU',
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
                   label: l10n.status,
-                  value: payment.status,
+                  value: isSuccess.toString(),
                 ),
               ],
             ),

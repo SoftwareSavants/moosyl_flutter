@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/pages/moosyl_view.dart';
 
 /// Convenience class to open the payment flow.
@@ -13,7 +12,7 @@ class MoosylFlutter {
   MoosylFlutter._();
 
   /// Opens the payment flow. Returns [PaymentSuccess] on success, `null` when closed without payment.
-  static Future<PaymentSuccess?> show(
+  static Future<bool?> show(
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
@@ -22,9 +21,9 @@ class MoosylFlutter {
     bool isFullPage = true,
   }) async {
     if (isFullPage) {
-      return Navigator.push<PaymentSuccess?>(
+      return Navigator.push<bool?>(
         context,
-        MaterialPageRoute<PaymentSuccess?>(
+        MaterialPageRoute<bool?>(
           builder: (ctx) => MoosylView(
             publishableApiKey: publishableApiKey,
             transactionId: transactionId,
@@ -39,7 +38,7 @@ class MoosylFlutter {
         ),
       );
     } else {
-      return showModalBottomSheet<PaymentSuccess?>(
+      return showModalBottomSheet<bool?>(
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,

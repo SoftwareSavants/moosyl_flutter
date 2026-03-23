@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
-import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
@@ -36,7 +35,7 @@ class MoosylView extends StatelessWidget {
 
   /// Optional callback invoked when the payment is successful with [PaymentSuccess].
   /// The caller is responsible for closing the route (e.g. Navigator.pop).
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
 
   /// Callback when the back arrow is pressed on the payment method selection page.
   final VoidCallback? onBackPress;

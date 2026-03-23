@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:moosyl_flutter/src/models/payment_success.dart';
 import 'package:moosyl_flutter/src/pages/moosyl_view.dart';
 
 /// [Moosyl] provides a widget that handles the payment process.
@@ -20,7 +19,7 @@ class Moosyl extends HookWidget {
   final Widget Function(VoidCallback open)? inputBuilder;
 
   /// Optional callback to be triggered upon successful payment with [PaymentSuccess].
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
 
   /// When true, shows as full page. When false, shows as bottom sheet.
   final bool isFullPage;
@@ -35,7 +34,7 @@ class Moosyl extends HookWidget {
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
-    final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess,
+    final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess,
     bool isFullPage = false,
   }) {
     showBarModalBottomSheet(

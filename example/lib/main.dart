@@ -57,9 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (!mounted) return;
     if (payment != null) {
-      await showPaymentSuccessDialog(context, payment: payment);
-      print(
-          'Payment was successful! id=${payment.id} amount=${payment.amount} status=${payment.status}');
+      await showPaymentSuccessDialog(context, isSuccess: payment);
+      print('Payment was successful! isSuccess=${payment}');
     }
   }
 
