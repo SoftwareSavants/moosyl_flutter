@@ -36,6 +36,9 @@ class Moosyl extends HookWidget {
     required String transactionId,
     final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess,
     bool isFullPage = false,
+    bool isMasriviInBottomSheet = true,
+    String? masriviPhoneNumber,
+    double masriviBottomSheetHeight = 0.88,
   }) {
     showBarModalBottomSheet(
       context: context,
@@ -44,6 +47,9 @@ class Moosyl extends HookWidget {
         transactionId: transactionId,
         onPaymentSuccess: onPaymentSuccess,
         isFullPage: isFullPage,
+        isMasriviInBottomSheet: isMasriviInBottomSheet,
+        masriviPhoneNumber: masriviPhoneNumber,
+        masriviBottomSheetHeight: masriviBottomSheetHeight,
       ),
     );
   }
@@ -61,7 +67,19 @@ class Moosyl extends HookWidget {
     this.inputBuilder,
     this.onPaymentSuccess,
     this.isFullPage = false,
+    this.isMasriviInBottomSheet = false,
+    this.masriviPhoneNumber,
+    this.masriviBottomSheetHeight = 0.88,
   });
+
+  /// When true, Masrivi opens inside bottom-sheet content.
+  final bool isMasriviInBottomSheet;
+
+  /// Optional phone number to prefill when the selected method opens Masrivi.
+  final String? masriviPhoneNumber;
+
+  /// Height factor used when Masrivi is rendered as bottom-sheet content.
+  final double masriviBottomSheetHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +94,9 @@ class Moosyl extends HookWidget {
               transactionId: transactionId,
               onPaymentSuccess: onPaymentSuccess,
               isFullPage: isFullPage,
+              isMasriviInBottomSheet: isMasriviInBottomSheet,
+              masriviPhoneNumber: masriviPhoneNumber,
+              masriviBottomSheetHeight: masriviBottomSheetHeight,
             ),
           );
         },
@@ -88,6 +109,9 @@ class Moosyl extends HookWidget {
       transactionId: transactionId,
       onPaymentSuccess: onPaymentSuccess,
       isFullPage: isFullPage,
+      isMasriviInBottomSheet: isMasriviInBottomSheet,
+      masriviPhoneNumber: masriviPhoneNumber,
+      masriviBottomSheetHeight: masriviBottomSheetHeight,
     );
   }
 }

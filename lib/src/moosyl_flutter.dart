@@ -19,6 +19,9 @@ class MoosylFlutter {
     double amountToPay = 0.0,
     double tax = 0.0,
     bool isFullPage = true,
+    bool isMasriviInBottomSheet = false,
+    String? masriviPhoneNumber,
+    double masriviBottomSheetHeight = 0.88,
   }) async {
     if (isFullPage) {
       return Navigator.push<bool?>(
@@ -30,6 +33,9 @@ class MoosylFlutter {
             amountToPay: amountToPay,
             tax: tax,
             isFullPage: true,
+            isMasriviInBottomSheet: isMasriviInBottomSheet,
+            masriviPhoneNumber: masriviPhoneNumber,
+            masriviBottomSheetHeight: masriviBottomSheetHeight,
             onBackPress: () => Navigator.pop(ctx, null),
             onPaymentSuccess: (payment) async {
               Navigator.pop(ctx, payment);
@@ -56,6 +62,9 @@ class MoosylFlutter {
               amountToPay: amountToPay,
               tax: tax,
               isFullPage: false,
+              isMasriviInBottomSheet: isMasriviInBottomSheet,
+              masriviPhoneNumber: masriviPhoneNumber,
+              masriviBottomSheetHeight: masriviBottomSheetHeight,
               onBackPress: () => Navigator.pop(ctx, null),
               onPaymentSuccess: (payment) async {
                 Navigator.pop(ctx, payment);

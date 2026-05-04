@@ -25,6 +25,9 @@ class MoosylView extends StatelessWidget {
     this.amountToPay = 0.0,
     this.tax = 0.0,
     this.isFullPage = true,
+    this.isMasriviInBottomSheet = true,
+    this.masriviPhoneNumber,
+    this.masriviBottomSheetHeight = 0.88,
   });
 
   /// The API key for authenticating the payment transaction.
@@ -48,6 +51,15 @@ class MoosylView extends StatelessWidget {
 
   /// When true, payment method selection shows as full page. When false, shows as bottom sheet.
   final bool isFullPage;
+
+  /// When true, Masrivi opens inside bottom-sheet content.
+  final bool isMasriviInBottomSheet;
+
+  /// Optional phone number to prefill when the selected method opens Masrivi.
+  final String? masriviPhoneNumber;
+
+  /// Height factor used when Masrivi is rendered as bottom-sheet content.
+  final double masriviBottomSheetHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +101,12 @@ class MoosylView extends StatelessWidget {
                 onBackPress: () => context
                     .read<GetPaymentMethodsProvider>()
                     .setPaymentMethod(null),
+                presentation: isMasriviInBottomSheet
+                    ? MasriviWebViewPresentation.bottomSheet
+                    : MasriviWebViewPresentation.fullPage,
+                bottomSheetHeight: masriviBottomSheetHeight,
+                phoneNumber:
+                    masriviPhoneNumber ?? provider.paymentRequest?.phoneNumber,
                 onPaymentDeclined: () {
                   final l10n = MoosylLocalization.of(context);
                   if (l10n != null && context.mounted) {
