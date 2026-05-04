@@ -15,7 +15,9 @@ enum AppButtonStyle {
 
 class AppButton extends StatelessWidget {
   final String labelText;
+  final String? suffixLabelText;
   final Widget? leading;
+  final Widget? trailing;
   final VoidCallback? onPressed;
   final EdgeInsetsGeometry margin;
   final bool disabled, loading;
@@ -32,8 +34,10 @@ class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.labelText,
+    this.suffixLabelText,
     this.onPressed,
     this.leading,
+    this.trailing,
     this.margin = const EdgeInsets.only(top: 16),
     this.disabled = false,
     this.loading = false,
@@ -93,32 +97,71 @@ class AppButton extends StatelessWidget {
       padding: padding,
     );
 
-    final button = loading || leading != null
-        ? ElevatedButton.icon(
+    final labelStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
+          fontSize: 16,
+          color: fg,
+        );
+    final suffix = trailing ??
+        (suffixLabelText == null
+            ? null
+            : Text(
+                suffixLabelText!,
+                style: labelStyle.copyWith(fontWeight: FontWeight.w600),
+              ));
+
+    final button = suffix != null
+        ? ElevatedButton(
             onPressed: _isDisabled ? () {} : onPressed ?? () {},
-            icon: loading
-                ? SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(color: fg),
-                  )
-                : leading,
             style: buttonStyle,
-            label: Text(labelText,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 16,
-                      color: fg,
-                    )),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (loading || leading != null) ...[
+                        loading
+                            ? SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(color: fg),
+                              )
+                            : leading!,
+                        const SizedBox(width: 8),
+                      ],
+                      Flexible(
+                        child: Text(
+                          labelText,
+                          overflow: TextOverflow.ellipsis,
+                          style: labelStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                suffix,
+              ],
+            ),
           )
-        : ElevatedButton(
-            onPressed: _isDisabled ? () {} : onPressed ?? () {},
-            style: buttonStyle,
-            child: Text(labelText,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 16,
-                      color: fg,
-                    )),
-          );
+        : loading || leading != null
+            ? ElevatedButton.icon(
+                onPressed: _isDisabled ? () {} : onPressed ?? () {},
+                icon: loading
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(color: fg),
+                      )
+                    : leading,
+                style: buttonStyle,
+                label: Text(labelText, style: labelStyle),
+              )
+            : ElevatedButton(
+                onPressed: _isDisabled ? () {} : onPressed ?? () {},
+                style: buttonStyle,
+                child: Text(labelText, style: labelStyle),
+              );
 
     return Padding(
       padding: margin,

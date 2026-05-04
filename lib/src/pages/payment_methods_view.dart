@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show NumberFormat;
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
+import 'package:moosyl_flutter/src/models/payment_summary_item.dart';
 import 'package:moosyl_flutter/src/models/selection_error.dart';
 import 'package:moosyl_flutter/src/pages/bankily_view.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
@@ -58,6 +60,31 @@ typedef MoosylPaymentMethodBuilder = Widget Function(
   MoosylPaymentMethodRenderProps props,
 );
 
+/// Data passed to [MoosylPaymentMethodsLoadingBuilder].
+class MoosylPaymentMethodsLoadingProps {
+  /// Creates render props for the payment methods loading state.
+  const MoosylPaymentMethodsLoadingProps({
+    required this.primaryColor,
+    required this.locale,
+    required this.isRTL,
+  });
+
+  /// Accent color used by the default UI.
+  final Color primaryColor;
+
+  /// Active locale from the surrounding localization.
+  final Locale locale;
+
+  /// Whether the surrounding directionality is RTL.
+  final bool isRTL;
+}
+
+/// Builds custom loading content for [MoosylPaymentMethods].
+typedef MoosylPaymentMethodsLoadingBuilder = Widget Function(
+  BuildContext context,
+  MoosylPaymentMethodsLoadingProps props,
+);
+
 /// Controller for [MoosylPaymentMethods].
 class MoosylPaymentMethodsController extends ChangeNotifier {
   _MoosylPaymentMethodsContentState? _state;
@@ -106,6 +133,8 @@ class MoosylPaymentMethods extends StatelessWidget {
     this.controller,
     this.primaryColor,
     this.renderMethod,
+    this.loadingComponent,
+    this.loadingBuilder,
     this.showDefaultTitle = true,
     this.isMasriviInBottomSheet = true,
     this.masriviPresentation = MasriviWebViewPresentation.fullPage,
@@ -152,6 +181,12 @@ class MoosylPaymentMethods extends StatelessWidget {
   /// Custom row builder. Call `props.onSelect()` inside the returned widget.
   final MoosylPaymentMethodBuilder? renderMethod;
 
+  /// Custom loading widget shown while payment methods are loading.
+  final Widget? loadingComponent;
+
+  /// Custom loading builder shown while payment methods are loading.
+  final MoosylPaymentMethodsLoadingBuilder? loadingBuilder;
+
   /// Whether the default UI should include the section title.
   final bool showDefaultTitle;
 
@@ -180,6 +215,8 @@ class MoosylPaymentMethods extends StatelessWidget {
         controller: controller,
         primaryColor: primaryColor,
         renderMethod: renderMethod,
+        loadingComponent: loadingComponent,
+        loadingBuilder: loadingBuilder,
         showDefaultTitle: showDefaultTitle,
         isMasriviInBottomSheet: isMasriviInBottomSheet,
         masriviPresentation: masriviPresentation,
@@ -203,6 +240,8 @@ class MoosylPaymentMethods extends StatelessWidget {
           controller: controller,
           primaryColor: primaryColor,
           renderMethod: renderMethod,
+          loadingComponent: loadingComponent,
+          loadingBuilder: loadingBuilder,
           showDefaultTitle: showDefaultTitle,
           isMasriviInBottomSheet: isMasriviInBottomSheet,
           masriviPresentation: masriviPresentation,
@@ -225,6 +264,8 @@ class _MoosylPaymentMethodsContent extends StatefulWidget {
     required this.controller,
     required this.primaryColor,
     required this.renderMethod,
+    required this.loadingComponent,
+    required this.loadingBuilder,
     required this.showDefaultTitle,
     required this.isMasriviInBottomSheet,
     required this.masriviPresentation,
@@ -241,6 +282,8 @@ class _MoosylPaymentMethodsContent extends StatefulWidget {
   final MoosylPaymentMethodsController? controller;
   final Color? primaryColor;
   final MoosylPaymentMethodBuilder? renderMethod;
+  final Widget? loadingComponent;
+  final MoosylPaymentMethodsLoadingBuilder? loadingBuilder;
   final bool showDefaultTitle;
   final bool isMasriviInBottomSheet;
   final MasriviWebViewPresentation masriviPresentation;
@@ -388,23 +431,23 @@ class _MoosylPaymentMethodsContentState
     final isRTL = Directionality.of(context) == TextDirection.rtl;
 
     if (provider.isLoading) {
-      return AppContainer(
-        padding: const EdgeInsets.all(24),
-        border: widget.renderMethod == null
-            ? Border.all(color: Colors.grey.shade300)
-            : null,
-        borderRadius: BorderRadius.circular(8),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(color: primaryColor),
-              const SizedBox(height: 12),
-              Text(localizationHelper.sending),
-            ],
-          ),
-        ),
+      final loadingProps = MoosylPaymentMethodsLoadingProps(
+        primaryColor: primaryColor,
+        locale: Localizations.localeOf(context),
+        isRTL: isRTL,
       );
+      final loadingContent = widget.loadingBuilder?.call(
+            context,
+            loadingProps,
+          ) ??
+          widget.loadingComponent ??
+          _PaymentMethodsLoadingSkeleton(isRTL: isRTL);
+
+      if (widget.renderMethod != null) {
+        return loadingContent;
+      }
+
+      return AppContainer(child: loadingContent);
     }
 
     if (provider.error != null) {
@@ -441,7 +484,6 @@ class _MoosylPaymentMethodsContentState
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
-      spacing: 10,
       children: [
         if (widget.renderMethod == null && widget.showDefaultTitle) ...[
           Text(
@@ -449,6 +491,9 @@ class _MoosylPaymentMethodsContentState
             style: textTheme.titleMedium
                 ?.copyWith(fontWeight: FontWeight.w600, fontSize: 18),
           ),
+          const SizedBox(
+            height: 10,
+          )
         ],
         ...provider.methods.map((method) {
           final type = PaymentMethodTypes.fromString(method.type);
@@ -516,6 +561,7 @@ class SelectPaymentMethodPage extends StatelessWidget {
     this.onBackPress,
     this.amountToPay = 0.0,
     this.tax = 0.0,
+    this.items,
     this.totalAmount = 0.0,
     required this.transactionId,
     this.onPaymentSuccess,
@@ -534,6 +580,9 @@ class SelectPaymentMethodPage extends StatelessWidget {
   /// The tax amount (displayed in summary).
   final double tax;
 
+  /// Summary rows displayed under the payment methods.
+  final List<MoosylPaymentSummaryItem>? items;
+
   /// The total amount including tax (displayed on the pay button).
   final double totalAmount;
 
@@ -549,6 +598,7 @@ class SelectPaymentMethodPage extends StatelessWidget {
       onBackPress: onBackPress,
       amountToPay: amountToPay,
       tax: tax,
+      items: items,
       totalAmount: totalAmount,
       transactionId: transactionId,
       onPaymentSuccess: onPaymentSuccess,
@@ -563,6 +613,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     required this.onBackPress,
     required this.amountToPay,
     required this.tax,
+    required this.items,
     required this.totalAmount,
     required this.transactionId,
     required this.onPaymentSuccess,
@@ -572,6 +623,7 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   final VoidCallback? onBackPress;
   final double amountToPay;
   final double tax;
+  final List<MoosylPaymentSummaryItem>? items;
   final double totalAmount;
   final String transactionId;
   final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
@@ -585,14 +637,26 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     if (provider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      final loading = const Center(child: CircularProgressIndicator());
+      return isFullPage
+          ? loading
+          : ColoredBox(
+              color: Colors.white,
+              child: loading,
+            );
     }
 
     if (provider.error != null) {
-      return AppErrorWidget(
+      final errorView = AppErrorWidget(
         message: ExceptionMapper.getErrorMessage(provider.error, context),
         onRetry: provider.getMethods,
       );
+      return isFullPage
+          ? errorView
+          : ColoredBox(
+              color: Colors.white,
+              child: errorView,
+            );
     }
 
     final selectionErrorMessage = provider.selectionError != null
@@ -601,6 +665,23 @@ class _SelectPaymentMethodContent extends StatelessWidget {
         : null;
 
     final pendingSelection = provider.pendingSelection;
+    final summaryItems = items ??
+        [
+          if (amountToPay > 0)
+            MoosylPaymentSummaryItem(
+              label: 'amountToPay',
+              amount: amountToPay,
+            ),
+          if (tax > 0)
+            MoosylPaymentSummaryItem(
+              label: 'tax',
+              amount: tax,
+            ),
+        ];
+    final shouldShowSummary = items != null || summaryItems.isNotEmpty;
+    final displayTotal = provider.paymentRequest?.amount ??
+        (totalAmount > 0 ? totalAmount : _calculateSummaryTotal(summaryItems));
+    final displayTotalText = '${_formatAmount(displayTotal)} MRU';
 
     final bodyContent = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -635,59 +716,19 @@ class _SelectPaymentMethodContent extends StatelessWidget {
                   Text(selectionErrorMessage,
                       style: textTheme.bodyMedium?.copyWith(color: Colors.red)),
                 const SizedBox(height: 16),
-                AppContainer(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    color: Colors.grey.shade100,
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (amountToPay > 0 && tax > 0)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(localizationHelper.amountToPay,
-                                  style: textTheme.bodyLarge),
-                              Text(
-                                  '${amountToPay > 0 ? amountToPay.toStringAsFixed(0) : (provider.paymentRequest?.amount.toStringAsFixed(0) ?? '0')} MRU',
-                                  style: textTheme.bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        if (tax > 0) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(localizationHelper.tax,
-                                  style: textTheme.bodyLarge),
-                              Text('${tax.toStringAsFixed(0)} MRU',
-                                  style: textTheme.bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          Divider(color: Colors.grey.shade300),
-                        ],
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(localizationHelper.totalAmount,
-                                style: textTheme.bodyLarge),
-                            Text(
-                                '${totalAmount > 0 ? totalAmount.toStringAsFixed(0) : (provider.paymentRequest?.amount.toStringAsFixed(0) ?? '0')} MRU',
-                                style: textTheme.bodyLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ],
-                    )),
+                if (shouldShowSummary)
+                  _PaymentSummary(
+                    items: summaryItems,
+                    totalText: displayTotalText,
+                    localization: localizationHelper,
+                  ),
                 AppButton(
-                  minHeight: 50,
+                  minHeight: 60,
+                  borderRadius: BorderRadius.circular(18),
                   labelText: provider.isValidating
                       ? localizationHelper.sending
                       : localizationHelper.pay,
+                  suffixLabelText: displayTotalText,
                   onPressed: pendingSelection == null || provider.isValidating
                       ? null
                       : () => _onPayPressed(
@@ -734,7 +775,10 @@ class _SelectPaymentMethodContent extends StatelessWidget {
       );
     }
 
-    return bodyContent;
+    return ColoredBox(
+      color: Colors.white,
+      child: bodyContent,
+    );
   }
 
   Future<void> _onPayPressed(
@@ -892,6 +936,127 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     ).then((_) {
       getPaymentMethodsProvider.setPaymentMethod(null);
     });
+  }
+}
+
+class _PaymentSummary extends StatelessWidget {
+  const _PaymentSummary({
+    required this.items,
+    required this.totalText,
+    required this.localization,
+  });
+
+  final List<MoosylPaymentSummaryItem> items;
+  final String totalText;
+  final MoosylLocalization localization;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final labelStyle = textTheme.bodyLarge?.copyWith(
+      color: Colors.grey.shade700,
+    );
+    final valueStyle = textTheme.bodyLarge?.copyWith(
+      color: const Color(0xFF111111),
+    );
+    final totalStyle = textTheme.bodyLarge?.copyWith(
+      color: const Color(0xFF111111),
+      fontWeight: FontWeight.w600,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ...items.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _PaymentSummaryRow(
+                label: _localizedSummaryLabel(item.label, localization),
+                value: '${_formatAmount(item.amount)} MRU',
+                labelStyle: labelStyle,
+                valueStyle: valueStyle,
+              ),
+            ),
+          ),
+          if (items.isNotEmpty)
+            Divider(
+              height: 18,
+              thickness: 2,
+              color: Colors.grey.shade300,
+            ),
+          _PaymentSummaryRow(
+            label: localization.totalAmount,
+            value: totalText,
+            labelStyle: totalStyle,
+            valueStyle: totalStyle,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PaymentSummaryRow extends StatelessWidget {
+  const _PaymentSummaryRow({
+    required this.label,
+    required this.value,
+    required this.labelStyle,
+    required this.valueStyle,
+  });
+
+  final String label;
+  final String value;
+  final TextStyle? labelStyle;
+  final TextStyle? valueStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: labelStyle,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          value,
+          style: valueStyle,
+        ),
+      ],
+    );
+  }
+}
+
+double _calculateSummaryTotal(List<MoosylPaymentSummaryItem> items) {
+  return items.fold<double>(
+    0,
+    (total, item) => total + item.amount,
+  );
+}
+
+String _formatAmount(num value) {
+  return NumberFormat.decimalPattern('fr_FR').format(value.round());
+}
+
+String _localizedSummaryLabel(
+  String label,
+  MoosylLocalization localization,
+) {
+  switch (label) {
+    case 'amountToPay':
+      return localization.amountToPay;
+    case 'tax':
+      return localization.tax;
+    case 'total':
+    case 'totalAmount':
+      return localization.totalAmount;
+    default:
+      return label;
   }
 }
 
@@ -1102,6 +1267,153 @@ class _DialogWithPayProvider extends StatelessWidget {
   }
 }
 
+class _PaymentMethodsLoadingSkeleton extends StatefulWidget {
+  const _PaymentMethodsLoadingSkeleton({required this.isRTL});
+
+  final bool isRTL;
+
+  @override
+  State<_PaymentMethodsLoadingSkeleton> createState() =>
+      _PaymentMethodsLoadingSkeletonState();
+}
+
+class _PaymentMethodsLoadingSkeletonState
+    extends State<_PaymentMethodsLoadingSkeleton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _shimmerAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    )..repeat();
+    _shimmerAnimation = Tween<double>(begin: -80, end: 80).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.linear),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: widget.isRTL ? TextDirection.rtl : TextDirection.ltr,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          3,
+          (index) => _PaymentMethodsLoadingSkeletonRow(
+            shimmerAnimation: _shimmerAnimation,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PaymentMethodsLoadingSkeletonRow extends StatelessWidget {
+  const _PaymentMethodsLoadingSkeletonRow({
+    required this.shimmerAnimation,
+  });
+
+  final Animation<double> shimmerAnimation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+        child: Row(
+          children: [
+            _LoadingShimmerBlock(
+              width: 46,
+              height: 46,
+              borderRadius: BorderRadius.circular(8),
+              shimmerAnimation: shimmerAnimation,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: FractionallySizedBox(
+                  widthFactor: 0.68,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: _LoadingShimmerBlock(
+                    height: 15,
+                    borderRadius: BorderRadius.circular(8),
+                    shimmerAnimation: shimmerAnimation,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            _LoadingShimmerBlock(
+              width: 18,
+              height: 18,
+              borderRadius: BorderRadius.circular(9),
+              shimmerAnimation: shimmerAnimation,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingShimmerBlock extends StatelessWidget {
+  const _LoadingShimmerBlock({
+    required this.height,
+    required this.borderRadius,
+    required this.shimmerAnimation,
+    this.width,
+  });
+
+  final double? width;
+  final double height;
+  final BorderRadius borderRadius;
+  final Animation<double> shimmerAnimation;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: borderRadius,
+      child: ColoredBox(
+        color: const Color(0xFFECEFF1),
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: AnimatedBuilder(
+            animation: shimmerAnimation,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(shimmerAnimation.value, 0),
+                child: child,
+              );
+            },
+            child: FractionallySizedBox(
+              widthFactor: 0.55,
+              alignment: Alignment.centerLeft,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 255, 255, 0.55),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _MethodRow extends StatelessWidget {
   const _MethodRow({
     required this.method,
@@ -1118,82 +1430,134 @@ class _MethodRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizationHelper = MoosylLocalization.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final effectivePrimary =
         primaryColor ?? Theme.of(context).colorScheme.primary;
 
-    return InkWell(
-      onTap: onTap,
-      child: AppContainer(
-        padding: const EdgeInsetsDirectional.all(10),
-        border: Border.all(
-          color: isSelected ? effectivePrimary : Colors.grey.shade300,
-        ),
-        borderRadius: BorderRadius.circular(8),
-        child: Row(
-          children: [
-            // Icon - square bordered
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Center(
-                child: PaymentMethodTypes.fromString(method.type)
-                    .icon
-                    .apply(size: 40),
-              ),
-            ),
-            const SizedBox(width: 16),
-            // Name + subtitle
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    PaymentMethodTypes.fromString(method.type).title(context),
-                    style: textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    isSelected
-                        ? localizationHelper.selected
-                        : localizationHelper.tapToUse,
-                    style: textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: effectivePrimary,
-                  width: isSelected ? 2 : 1.5,
-                ),
-              ),
-              child: isSelected
-                  ? Center(
-                      child: Container(
-                        width: 12,
-                        height: 12,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(end: isSelected ? 1 : 0),
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        builder: (context, value, _) {
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(
+                top: -2,
+                right: -2,
+                bottom: -2,
+                left: -2,
+                child: IgnorePointer(
+                  child: Transform.scale(
+                    scale: 0.98 + (0.02 * value),
+                    child: Opacity(
+                      opacity: value,
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: effectivePrimary,
+                          border: Border.all(
+                            color: effectivePrimary,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(18),
                         ),
                       ),
-                    )
-                  : null,
-            ),
-          ],
-        ),
+                    ),
+                  ),
+                ),
+              ),
+              Transform.scale(
+                scale: 1 - (0.005 * value),
+                child: Material(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: onTap,
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xFFEDF3FF),
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF7F8FB),
+                              border: Border.all(
+                                color: const Color(0xFFEDF3FF),
+                              ),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: Center(
+                              child: PaymentMethodTypes.fromString(method.type)
+                                  .icon
+                                  .apply(size: 40),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                PaymentMethodTypes.fromString(method.type)
+                                    .title(context),
+                                style: textTheme.titleMedium?.copyWith(
+                                  color: const Color(0xFF111111),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 22,
+                            height: 22,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: effectivePrimary,
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Center(
+                              child: Transform.scale(
+                                scale: 0.4 + (0.6 * value),
+                                child: Opacity(
+                                  opacity: value,
+                                  child: Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: effectivePrimary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

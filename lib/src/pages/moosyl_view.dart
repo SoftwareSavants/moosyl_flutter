@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
+import 'package:moosyl_flutter/src/models/payment_summary_item.dart';
 import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/payment_methods_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
@@ -24,6 +25,7 @@ class MoosylView extends StatelessWidget {
     this.onBackPress,
     this.amountToPay = 0.0,
     this.tax = 0.0,
+    this.items,
     this.isFullPage = true,
     this.isMasriviInBottomSheet = true,
     this.masriviPhoneNumber,
@@ -49,6 +51,12 @@ class MoosylView extends StatelessWidget {
   /// Tax amount (displayed in summary). Defaults to 0.
   final double tax;
 
+  /// Summary rows displayed under the payment methods.
+  ///
+  /// When supplied, the sum of all item amounts is validated against the
+  /// payment request amount before continuing.
+  final List<MoosylPaymentSummaryItem>? items;
+
   /// When true, payment method selection shows as full page. When false, shows as bottom sheet.
   final bool isFullPage;
 
@@ -63,14 +71,21 @@ class MoosylView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final totalAmount = _calculateTotalAmount(
+      items: items,
+      amountToPay: amountToPay,
+      tax: tax,
+    );
+
     return Material(
+      color: Colors.white,
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(
             create: (_) => GetPaymentMethodsProvider(
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
-              totalAmount: amountToPay + tax,
+              totalAmount: totalAmount,
             ),
           ),
         ],
@@ -87,7 +102,8 @@ class MoosylView extends StatelessWidget {
                 onBackPress: onBackPress,
                 amountToPay: amountToPay,
                 tax: tax,
-                totalAmount: amountToPay + tax,
+                items: items,
+                totalAmount: totalAmount,
                 transactionId: transactionId,
                 onPaymentSuccess: onPaymentSuccess,
                 isFullPage: isFullPage,
@@ -145,4 +161,19 @@ class MoosylView extends StatelessWidget {
       ),
     );
   }
+}
+
+double _calculateTotalAmount({
+  required List<MoosylPaymentSummaryItem>? items,
+  required double amountToPay,
+  required double tax,
+}) {
+  if (items != null) {
+    return items.fold<double>(
+      0,
+      (total, item) => total + item.amount,
+    );
+  }
+
+  return amountToPay + tax;
 }
