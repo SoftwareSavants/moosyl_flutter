@@ -19,6 +19,7 @@ dependencies:
   intl: ^0.20.2
   http: ^1.2.2
   provider: ^6.1.2
+  shimmer: ^3.0.0
   modal_bottom_sheet: ^3.0.0
   file_picker: ^8.1.2
   mime: ^2.0.0

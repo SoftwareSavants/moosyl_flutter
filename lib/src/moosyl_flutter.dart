@@ -20,13 +20,10 @@ class MoosylFlutter {
     BuildContext context, {
     required String publishableApiKey,
     required String transactionId,
-    double amountToPay = 0.0,
-    double tax = 0.0,
     List<MoosylPaymentSummaryItem>? items,
     bool isFullPage = true,
     bool isMasriviInBottomSheet = false,
     String? masriviPhoneNumber,
-    double masriviBottomSheetHeight = 0.88,
   }) async {
     if (isFullPage) {
       return Navigator.push<bool?>(
@@ -35,13 +32,10 @@ class MoosylFlutter {
           builder: (ctx) => MoosylView(
             publishableApiKey: publishableApiKey,
             transactionId: transactionId,
-            amountToPay: amountToPay,
-            tax: tax,
             items: items,
             isFullPage: true,
             isMasriviInBottomSheet: isMasriviInBottomSheet,
             masriviPhoneNumber: masriviPhoneNumber,
-            masriviBottomSheetHeight: masriviBottomSheetHeight,
             onBackPress: () => Navigator.pop(ctx, null),
             onPaymentSuccess: (payment) async {
               Navigator.pop(ctx, payment);
@@ -67,13 +61,10 @@ class MoosylFlutter {
             child: MoosylView(
               publishableApiKey: publishableApiKey,
               transactionId: transactionId,
-              amountToPay: amountToPay,
-              tax: tax,
               items: items,
               isFullPage: false,
               isMasriviInBottomSheet: isMasriviInBottomSheet,
               masriviPhoneNumber: masriviPhoneNumber,
-              masriviBottomSheetHeight: masriviBottomSheetHeight,
               onBackPress: () => Navigator.pop(ctx, null),
               onPaymentSuccess: (payment) async {
                 Navigator.pop(ctx, payment);

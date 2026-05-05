@@ -57,7 +57,6 @@ class MasriviView extends StatelessWidget {
     this.onBackPress,
     this.onPaymentDeclined,
     this.presentation = MasriviWebViewPresentation.fullPage,
-    this.bottomSheetHeight = 0.88,
     this.phoneNumber,
   });
 
@@ -82,9 +81,6 @@ class MasriviView extends StatelessWidget {
 
   /// Display as a full page or bottom-sheet content.
   final MasriviWebViewPresentation presentation;
-
-  /// Height factor used by hosts that size the Masrivi bottom sheet.
-  final double bottomSheetHeight;
 
   /// Phone number to prefill in the Masrivi page when a matching input is found.
   final String? phoneNumber;
@@ -111,7 +107,6 @@ class MasriviView extends StatelessWidget {
       onBackPress: onBackPress ?? () => Navigator.of(context).pop(),
       onPaymentDeclined: onPaymentDeclined,
       presentation: presentation,
-      bottomSheetHeight: bottomSheetHeight,
       phoneNumber: phoneNumber,
     );
   }
@@ -126,7 +121,6 @@ class _MasriviWebView extends StatefulWidget {
     required this.onBackPress,
     this.onPaymentDeclined,
     required this.presentation,
-    required this.bottomSheetHeight,
     this.phoneNumber,
   });
 
@@ -137,7 +131,6 @@ class _MasriviWebView extends StatefulWidget {
   final VoidCallback onBackPress;
   final VoidCallback? onPaymentDeclined;
   final MasriviWebViewPresentation presentation;
-  final double bottomSheetHeight;
   final String? phoneNumber;
 
   @override
@@ -259,7 +252,7 @@ true;
     final webView = WebViewWidget(controller: _controller);
 
     if (widget.presentation == MasriviWebViewPresentation.bottomSheet) {
-      final heightFactor = widget.bottomSheetHeight.clamp(0.2, 1.0).toDouble();
+      final heightFactor = (0.88).clamp(0.2, 1.0).toDouble();
 
       return LayoutBuilder(
         builder: (context, constraints) {

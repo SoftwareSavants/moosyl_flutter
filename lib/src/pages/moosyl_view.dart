@@ -23,13 +23,10 @@ class MoosylView extends StatelessWidget {
     required this.transactionId,
     this.onPaymentSuccess,
     this.onBackPress,
-    this.amountToPay = 0.0,
-    this.tax = 0.0,
     this.items,
     this.isFullPage = true,
     this.isMasriviInBottomSheet = true,
     this.masriviPhoneNumber,
-    this.masriviBottomSheetHeight = 0.88,
   });
 
   /// The API key for authenticating the payment transaction.
@@ -44,12 +41,6 @@ class MoosylView extends StatelessWidget {
 
   /// Callback when the back arrow is pressed on the payment method selection page.
   final VoidCallback? onBackPress;
-
-  /// Amount to pay (displayed in summary). Defaults to 0.
-  final double amountToPay;
-
-  /// Tax amount (displayed in summary). Defaults to 0.
-  final double tax;
 
   /// Summary rows displayed under the payment methods.
   ///
@@ -66,15 +57,10 @@ class MoosylView extends StatelessWidget {
   /// Optional phone number to prefill when the selected method opens Masrivi.
   final String? masriviPhoneNumber;
 
-  /// Height factor used when Masrivi is rendered as bottom-sheet content.
-  final double masriviBottomSheetHeight;
-
   @override
   Widget build(BuildContext context) {
     final totalAmount = _calculateTotalAmount(
       items: items,
-      amountToPay: amountToPay,
-      tax: tax,
     );
 
     return Material(
@@ -100,8 +86,6 @@ class MoosylView extends StatelessWidget {
             if (selectedModeOfPayment == null) {
               return SelectPaymentMethodPage(
                 onBackPress: onBackPress,
-                amountToPay: amountToPay,
-                tax: tax,
                 items: items,
                 totalAmount: totalAmount,
                 transactionId: transactionId,
@@ -120,7 +104,6 @@ class MoosylView extends StatelessWidget {
                 presentation: isMasriviInBottomSheet
                     ? MasriviWebViewPresentation.bottomSheet
                     : MasriviWebViewPresentation.fullPage,
-                bottomSheetHeight: masriviBottomSheetHeight,
                 phoneNumber:
                     masriviPhoneNumber ?? provider.paymentRequest?.phoneNumber,
                 onPaymentDeclined: () {
@@ -165,8 +148,6 @@ class MoosylView extends StatelessWidget {
 
 double _calculateTotalAmount({
   required List<MoosylPaymentSummaryItem>? items,
-  required double amountToPay,
-  required double tax,
 }) {
   if (items != null) {
     return items.fold<double>(
@@ -175,5 +156,5 @@ double _calculateTotalAmount({
     );
   }
 
-  return amountToPay + tax;
+  return 0;
 }

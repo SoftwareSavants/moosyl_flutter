@@ -49,7 +49,6 @@ class Moosyl extends HookWidget {
         isFullPage: isFullPage,
         isMasriviInBottomSheet: isMasriviInBottomSheet,
         masriviPhoneNumber: masriviPhoneNumber,
-        masriviBottomSheetHeight: masriviBottomSheetHeight,
       ),
     );
   }
@@ -96,7 +95,6 @@ class Moosyl extends HookWidget {
               isFullPage: isFullPage,
               isMasriviInBottomSheet: isMasriviInBottomSheet,
               masriviPhoneNumber: masriviPhoneNumber,
-              masriviBottomSheetHeight: masriviBottomSheetHeight,
             ),
           );
         },
@@ -111,7 +109,6 @@ class Moosyl extends HookWidget {
       isFullPage: isFullPage,
       isMasriviInBottomSheet: isMasriviInBottomSheet,
       masriviPhoneNumber: masriviPhoneNumber,
-      masriviBottomSheetHeight: masriviBottomSheetHeight,
     );
   }
 }
