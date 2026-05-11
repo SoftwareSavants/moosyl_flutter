@@ -31,11 +31,13 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// Constructs a [GetPaymentMethodsProvider].
   GetPaymentMethodsProvider({
     required this.publishableApiKey,
-    required this.transactionId,
+    this.transactionId = '',
     required this.totalAmount,
   }) {
     getMethods();
-    getPaymentRequest();
+    if (transactionId.isNotEmpty) {
+      getPaymentRequest();
+    }
   }
 
   /// Holds any error messages that occur during method retrieval.
@@ -85,6 +87,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     }
 
     final paymentRequest = result.result!;
+    this.paymentRequest = paymentRequest;
 
     if (paymentRequest.amount == 0) {
       selectionError = 'paymentRequestFullyPaid';
@@ -189,6 +192,10 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
 
   /// Updates the payment request details and notifies listeners when the data changes.
   void getPaymentRequest() async {
+    if (transactionId.isEmpty) {
+      return;
+    }
+
     final result = await ErrorHandlers.catchErrors(
       () => GetPaymentRequestService(publishableApiKey).get(transactionId),
       showFlashBar: false,

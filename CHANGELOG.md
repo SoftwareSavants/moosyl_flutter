@@ -1,3 +1,10 @@
+## 2.0.2
+
+
+- Remove node.js Example
+- update the returned payment model desc
+- payment view return bool instead of model
+
 ## 2.0.1
 
 - Remove Get Payment Method

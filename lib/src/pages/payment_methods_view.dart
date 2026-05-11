@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show NumberFormat;
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
-import 'package:moosyl_flutter/src/models/payment_success.dart';
+import 'package:moosyl_flutter/src/models/payment_summary_item.dart';
 import 'package:moosyl_flutter/src/models/selection_error.dart';
 import 'package:moosyl_flutter/src/pages/bankily_view.dart';
+import 'package:moosyl_flutter/src/pages/masrivi_view.dart';
 import 'package:moosyl_flutter/src/pages/sedad_view.dart';
 import 'package:moosyl_flutter/src/providers/get_payment_methods_provider.dart';
 import 'package:moosyl_flutter/src/providers/pay_provider.dart';
@@ -16,6 +18,11 @@ import 'package:moosyl_flutter/src/widgets/container.dart';
 import 'package:moosyl_flutter/src/widgets/error_widget.dart';
 import 'package:moosyl_flutter/src/widgets/feedback.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+
+part 'payment_dialogs.dart';
+part 'payment_methods.dart';
+part 'payment_summary.dart';
 
 /// A widget that displays the available payment methods for selection.
 ///
@@ -27,8 +34,7 @@ class SelectPaymentMethodPage extends StatelessWidget {
   const SelectPaymentMethodPage({
     super.key,
     this.onBackPress,
-    this.amountToPay = 0.0,
-    this.tax = 0.0,
+    this.items,
     this.totalAmount = 0.0,
     required this.transactionId,
     this.onPaymentSuccess,
@@ -41,27 +47,23 @@ class SelectPaymentMethodPage extends StatelessWidget {
   /// Callback when the back arrow is pressed.
   final VoidCallback? onBackPress;
 
-  /// The amount to pay (displayed in summary).
-  final double amountToPay;
+  /// Summary rows displayed under the payment methods.
+  final List<MoosylPaymentSummaryItem>? items;
 
-  /// The tax amount (displayed in summary).
-  final double tax;
-
-  /// The total amount including tax (displayed on the pay button).
+  /// The expected total amount from [items].
   final double totalAmount;
 
   /// The transaction ID (displayed in the payment request).
   final String transactionId;
 
   /// Callback when payment succeeds (for Sedad/Bankily dialogs).
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
 
   @override
   Widget build(BuildContext context) {
     return _SelectPaymentMethodContent(
       onBackPress: onBackPress,
-      amountToPay: amountToPay,
-      tax: tax,
+      items: items,
       totalAmount: totalAmount,
       transactionId: transactionId,
       onPaymentSuccess: onPaymentSuccess,
@@ -70,12 +72,10 @@ class SelectPaymentMethodPage extends StatelessWidget {
   }
 }
 
-/// Full page or bottom sheet content for payment method selection.
 class _SelectPaymentMethodContent extends StatelessWidget {
   const _SelectPaymentMethodContent({
     required this.onBackPress,
-    required this.amountToPay,
-    required this.tax,
+    required this.items,
     required this.totalAmount,
     required this.transactionId,
     required this.onPaymentSuccess,
@@ -83,11 +83,10 @@ class _SelectPaymentMethodContent extends StatelessWidget {
   });
 
   final VoidCallback? onBackPress;
-  final double amountToPay;
-  final double tax;
+  final List<MoosylPaymentSummaryItem>? items;
   final double totalAmount;
   final String transactionId;
-  final FutureOr<void> Function(PaymentSuccess payment)? onPaymentSuccess;
+  final FutureOr<void> Function(bool isSuccess)? onPaymentSuccess;
   final bool isFullPage;
 
   @override
@@ -97,24 +96,29 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     final localizationHelper = MoosylLocalization.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
-    if (provider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     if (provider.error != null) {
-      return AppErrorWidget(
+      final errorView = AppErrorWidget(
         message: ExceptionMapper.getErrorMessage(provider.error, context),
         onRetry: provider.getMethods,
       );
+      return isFullPage
+          ? errorView
+          : ColoredBox(
+              color: Colors.white,
+              child: errorView,
+            );
     }
 
     final selectionErrorMessage = provider.selectionError != null
         ? SelectionErrorType.fromStr(provider.selectionError!)
             .message(localizationHelper)
         : null;
-
-    final methods = provider.methods;
     final pendingSelection = provider.pendingSelection;
+    final summaryItems = items ?? const <MoosylPaymentSummaryItem>[];
+    final shouldShowSummary = items != null;
+    final displayTotal = provider.paymentRequest?.amount ??
+        (totalAmount > 0 ? totalAmount : _calculateSummaryTotal(summaryItems));
+    final displayTotalText = '${_formatAmount(displayTotal)} MRU';
 
     final bodyContent = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -128,114 +132,54 @@ class _SelectPaymentMethodContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 8),
-                  AppContainer(
-                    padding: const EdgeInsets.all(16),
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(8),
-                    child: RadioGroup<ConfigurationListDataInner>(
-                      groupValue: pendingSelection,
-                      onChanged: (value) {
-                        if (value != null) provider.setPendingSelection(value);
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 8,
-                        children: [
-                          Text(localizationHelper.chooseHowYouWouldLikeToPay,
-                              style: textTheme.titleMedium),
-                          const SizedBox(height: 10),
-                          ...methods.asMap().entries.map((e) {
-                            final method = e.value;
-                            return _MethodRow(
-                              method: method,
-                              isSelected: pendingSelection?.id == method.id,
-                              onTap: () => provider.setPendingSelection(method),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
+                  MoosylPaymentMethods(
+                    publishableApiKey: provider.publishableApiKey,
+                    transactionId: provider.transactionId,
+                    totalAmount: totalAmount,
+                    showDefaultTitle: !isFullPage,
                   ),
                 ],
               ),
             ),
           ),
-          SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (selectionErrorMessage != null)
-                  Text(selectionErrorMessage,
-                      style: textTheme.bodyMedium?.copyWith(color: Colors.red)),
-                const SizedBox(height: 16),
-                AppContainer(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    color: Colors.grey.shade100,
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (amountToPay > 0 && tax > 0)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(localizationHelper.amountToPay,
-                                  style: textTheme.bodyLarge),
-                              Text(
-                                  '${amountToPay > 0 ? amountToPay.toStringAsFixed(0) : (provider.paymentRequest?.amount.toStringAsFixed(0) ?? '0')} MRU',
-                                  style: textTheme.bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        if (tax > 0) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(localizationHelper.tax,
-                                  style: textTheme.bodyLarge),
-                              Text('${tax.toStringAsFixed(0)} MRU',
-                                  style: textTheme.bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          Divider(color: Colors.grey.shade300),
-                        ],
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(localizationHelper.totalAmount,
-                                style: textTheme.bodyLarge),
-                            Text(
-                                '${totalAmount > 0 ? totalAmount.toStringAsFixed(0) : (provider.paymentRequest?.amount.toStringAsFixed(0) ?? '0')} MRU',
-                                style: textTheme.bodyLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ],
-                    )),
-                AppButton(
-                  minHeight: 50,
-                  labelText: provider.isValidating
-                      ? localizationHelper.sending
-                      : localizationHelper.pay,
-                  onPressed: pendingSelection == null || provider.isValidating
-                      ? null
-                      : () => _onPayPressed(
-                            context,
-                            provider,
-                            pendingSelection,
-                            effectivePrimary,
-                          ),
-                ),
-              ],
+          if (!provider.isLoading)
+            SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (selectionErrorMessage != null)
+                    Text(
+                      selectionErrorMessage,
+                      style: textTheme.bodyMedium?.copyWith(color: Colors.red),
+                    ),
+                  const SizedBox(height: 16),
+                  if (shouldShowSummary)
+                    _PaymentSummary(
+                      items: summaryItems,
+                      totalText: displayTotalText,
+                      localization: localizationHelper,
+                    ),
+                  AppButton(
+                    minHeight: 60,
+                    borderRadius: BorderRadius.circular(18),
+                    labelText: provider.isValidating
+                        ? localizationHelper.sending
+                        : localizationHelper.pay,
+                    suffixLabelText: displayTotalText,
+                    onPressed: pendingSelection == null || provider.isValidating
+                        ? null
+                        : () => _onPayPressed(
+                              context,
+                              provider,
+                              pendingSelection,
+                              effectivePrimary,
+                            ),
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -245,7 +189,19 @@ class _SelectPaymentMethodContent extends StatelessWidget {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text(localizationHelper.choosePaymentMethods),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          centerTitle: false,
+          leadingWidth: onBackPress != null ? 48 : 0,
+          titleSpacing: onBackPress != null ? 0 : 16,
+          title: Text(
+            localizationHelper.chooseHowYouWouldLikeToPay,
+            style: textTheme.titleMedium?.copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
           leading: onBackPress != null
               ? IconButton(
                   onPressed: onBackPress,
@@ -258,7 +214,10 @@ class _SelectPaymentMethodContent extends StatelessWidget {
       );
     }
 
-    return bodyContent;
+    return ColoredBox(
+      color: Colors.white,
+      child: bodyContent,
+    );
   }
 
   Future<void> _onPayPressed(
@@ -270,287 +229,17 @@ class _SelectPaymentMethodContent extends StatelessWidget {
     final methodToShow = await provider.setPaymentMethodWithValidation(
       pendingSelection,
     );
-    if (!context.mounted) return;
-
-    if (methodToShow == null) {
-      // Masrivi etc: provider.selected is set, MoosylView will show the method's view.
+    if (!context.mounted || methodToShow == null) {
       return;
     }
 
-    final publishableApiKey = provider.publishableApiKey;
-    final transactionId = provider.transactionId;
-
-    if (PaymentMethodTypes.fromString(methodToShow.type) ==
-        PaymentMethodTypes.bankily) {
-      _showBankilyDialog(
-        context,
-        publishableApiKey: publishableApiKey,
-        transactionId: transactionId,
-        method: methodToShow,
-      );
-    } else if (PaymentMethodTypes.fromString(methodToShow.type) ==
-            PaymentMethodTypes.sedad ||
-        PaymentMethodTypes.fromString(methodToShow.type) ==
-            PaymentMethodTypes.bimBank) {
-      await _showSedadDialog(
-        context,
-        publishableApiKey: publishableApiKey,
-        transactionId: transactionId,
-        method: methodToShow,
-        primaryColor: effectivePrimary,
-      );
-    }
-  }
-
-  Future<void> _showSedadDialog(
-    BuildContext context, {
-    required String publishableApiKey,
-    required String transactionId,
-    required ConfigurationListDataInner method,
-    required Color primaryColor,
-  }) async {
-    final payProvider = PayProvider(
-      publishableApiKey: publishableApiKey,
-      transactionId: transactionId,
-      method: method,
-      onPaymentSuccess: (payment) async =>
-          await onPaymentSuccess?.call(payment),
-    );
-    final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
-
-    // Show loading while fetching payment code.
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
-    // Call pay() to get the payment code before showing the Sedad dialog.
-    final paymentCode = await payProvider.getPaymentCodeForSedad();
-
-    if (context.mounted) {
-      Navigator.of(context).pop(); // Dismiss loading dialog
-    }
-    if (!context.mounted) return;
-    if (paymentCode == null || paymentCode.isEmpty) {
-      if (context.mounted && payProvider.error != null) {
-        Feedbacks.flushBar(
-          context: context,
-          message: ExceptionMapper.getErrorMessage(payProvider.error, context),
-          error: true,
-        );
-      }
-      return;
-    }
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        payProvider.onBeforePaymentSuccess = () {
-          Navigator.of(dialogContext).pop();
-          getPaymentMethodsProvider.setPaymentMethod(null);
-        };
-        return ChangeNotifierProvider<PayProvider>.value(
-          value: payProvider,
-          child: _DialogWithPayProvider(
-            payProvider: payProvider,
-            builder: (paymentRequest) => SedadView(
-              paymentCodeDisplay: paymentCode,
-              paymentRequest: paymentRequest,
-              onClose: () {
-                Navigator.of(dialogContext).pop();
-                getPaymentMethodsProvider.setPaymentMethod(null);
-              },
-            ),
-          ),
-        );
-      },
-    ).then((_) {
-      getPaymentMethodsProvider.setPaymentMethod(null);
-    });
-  }
-
-  void _showBankilyDialog(
-    BuildContext context, {
-    required String publishableApiKey,
-    required String transactionId,
-    required ConfigurationListDataInner method,
-  }) {
-    final payProvider = PayProvider(
-      publishableApiKey: publishableApiKey,
-      transactionId: transactionId,
-      method: method,
-      onPaymentSuccess: (payment) async =>
-          await onPaymentSuccess?.call(payment),
-    );
-    final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        payProvider.onBeforePaymentSuccess = () {
-          Navigator.of(dialogContext).pop();
-          getPaymentMethodsProvider.setPaymentMethod(null);
-        };
-        return ChangeNotifierProvider<PayProvider>.value(
-          value: payProvider,
-          child: _DialogWithPayProvider(
-            payProvider: payProvider,
-            builder: (_) => BankilyView(
-              method: method,
-              publishableApiKey: publishableApiKey,
-              transactionId: transactionId,
-              paymentCodeDisplay: payProvider.paymentCode,
-              onClose: () {
-                Navigator.of(dialogContext).pop();
-                getPaymentMethodsProvider.setPaymentMethod(null);
-              },
-            ),
-          ),
-        );
-      },
-    ).then((_) {
-      getPaymentMethodsProvider.setPaymentMethod(null);
-    });
-  }
-}
-
-/// Shows loading until [PayProvider] has payment request, then builds content.
-class _DialogWithPayProvider extends StatelessWidget {
-  const _DialogWithPayProvider({
-    required this.payProvider,
-    required this.builder,
-  });
-
-  final PayProvider payProvider;
-  final Widget Function(dynamic paymentRequest) builder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final provider = context.watch<PayProvider>();
-
-        if (provider.paymentRequest == null) {
-          if (provider.isLoading) {
-            return Dialog(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(),
-                    const SizedBox(height: 16),
-                    Text(MoosylLocalization.of(context)?.sending ?? ''),
-                  ],
-                ),
-              ),
-            );
-          }
-          if (provider.error != null) {
-            return Dialog(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(provider.error.toString()),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      onPressed: provider.getPaymentRequest,
-                      child: Text(
-                          MoosylLocalization.of(context)?.retry ?? 'Retry'),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-        }
-
-        return provider.paymentRequest != null
-            ? builder(provider.paymentRequest!)
-            : const SizedBox.shrink();
-      },
-    );
-  }
-}
-
-class _MethodRow extends StatelessWidget {
-  const _MethodRow({
-    required this.method,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final ConfigurationListDataInner method;
-  final bool isSelected;
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final localizationHelper = MoosylLocalization.of(context)!;
-    final textTheme = Theme.of(context).textTheme;
-    final primaryColor = Theme.of(context).colorScheme.primary;
-
-    return InkWell(
-      onTap: onTap,
-      child: AppContainer(
-        padding: const EdgeInsetsDirectional.all(10),
-        border:
-            Border.all(color: isSelected ? primaryColor : Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8),
-        child: Row(
-          children: [
-            // Icon - square bordered
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Center(
-                child: PaymentMethodTypes.fromString(method.type)
-                    .icon
-                    .apply(size: 40),
-              ),
-            ),
-            const SizedBox(width: 16),
-            // Name + subtitle
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    PaymentMethodTypes.fromString(method.type).title(context),
-                    style: textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    isSelected
-                        ? localizationHelper.selected
-                        : localizationHelper.tapToUse,
-                    style: textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            ),
-            // Radio
-            Radio<ConfigurationListDataInner>(
-              value: method,
-              fillColor: WidgetStateProperty.all(primaryColor),
-            ),
-          ],
-        ),
-      ),
+    await _showPaymentDialogForMethod(
+      context,
+      publishableApiKey: provider.publishableApiKey,
+      transactionId: provider.transactionId,
+      method: methodToShow,
+      primaryColor: effectivePrimary,
+      onPaymentSuccess: onPaymentSuccess,
     );
   }
 }
