@@ -14,15 +14,6 @@ jobs:
       contents: write
     
     steps:
-      - name: Ensure PAT_TOKEN is configured
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          if [ -z "$PAT_TOKEN" ]; then
-            echo "::error::PAT_TOKEN is required so the pushed tag can trigger the publish workflow. Add a repository secret named PAT_TOKEN with contents write access."
-            exit 1
-          fi
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -88,9 +79,6 @@ jobs:
       - name: Check if tag exists and create new tag
         run: |
           NEW_TAG="${{ steps.determine-tag.outputs.new-tag }}"
-
-          # Configure git to use the PAT token for remote tag checks and pushes.
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
           
           # Check if tag already exists
           if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
