@@ -1,9 +1,12 @@
 ## 2.0.2
 
-
 - Remove node.js Example
 - update the returned payment model desc
 - payment view return bool instead of model
+- Add `MoosylPaymentMethods` for embedding Moosyl payment method selection inside custom checkout UIs.
+- Add `MoosylPaymentMethodsController` to continue payment from host app buttons.
+- Add custom payment method row rendering with `renderMethod`.
+- Update README.md with all current payment view, embedded payment methods, and custom methods UI options.
 
 ## 2.0.1
 
