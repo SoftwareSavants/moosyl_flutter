@@ -1,3 +1,7 @@
+## 2.0.3
+
+-remove react props naming...etc
+
 ## 2.0.2
 
 - Remove node.js Example

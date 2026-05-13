@@ -197,7 +197,7 @@ class _EmbeddedPaymentScreenState extends State<EmbeddedPaymentScreen> {
 
 ## Custom Payment Method UI
 
-Pass `renderMethod` to draw each payment method row with your own widgets. Call `props.onSelect()` from your custom row so Moosyl can track the selected method.
+Pass `renderMethod` to draw each payment method row with your own widgets. Call `data.onSelect()` from your custom row so Moosyl can track the selected method.
 
 ```dart
 MoosylPaymentMethods(
@@ -215,19 +215,19 @@ MoosylPaymentMethods(
     print('Payment finished. isSuccess=$isSuccess');
   },
   primaryColor: const Color(0xFFF55E1E),
-  renderMethod: (context, props) {
+  renderMethod: (context, data) {
     return ListTile(
-      onTap: props.onSelect,
-      leading: props.type.icon.apply(size: 36),
-      title: Text(props.title),
-      subtitle: Text(props.method.type),
-      trailing: props.isSelected ? const Icon(Icons.check_circle) : null,
+      onTap: data.onSelect,
+      leading: data.type.icon.apply(size: 36),
+      title: Text(data.title),
+      subtitle: Text(data.method.type),
+      trailing: data.isSelected ? const Icon(Icons.check_circle) : null,
     );
   },
 )
 ```
 
-`MoosylPaymentMethodRenderProps` gives your row everything it needs:
+`MoosylPaymentMethodRenderData` gives your row everything it needs:
 
 | Property | Description |
 | --- | --- |
@@ -259,7 +259,7 @@ MoosylPaymentMethods(
 | `primaryColor` | `Color?` | Accent color for default rows and dialogs. Defaults to the theme primary color. |
 | `renderMethod` | `MoosylPaymentMethodBuilder?` | Custom builder for each payment method row. |
 | `loadingComponent` | `Widget?` | Custom widget shown while payment methods are loading. |
-| `loadingBuilder` | `MoosylPaymentMethodsLoadingBuilder?` | Builder for custom loading content with locale, color, and RTL props. |
+| `loadingBuilder` | `MoosylPaymentMethodsLoadingBuilder?` | Builder for custom loading content with locale, color, and RTL data. |
 | `showDefaultTitle` | `bool` | Whether the default UI includes its section title. Defaults to `true`. |
 | `isMasriviInBottomSheet` | `bool` | Whether Masrivi opens in a bottom sheet from custom platform UIs. Defaults to `true`. |
 | `masriviPresentation` | `MasriviWebViewPresentation` | Presentation used when `isMasriviInBottomSheet` is `false`. Defaults to `MasriviWebViewPresentation.fullPage`. |

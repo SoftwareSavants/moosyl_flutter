@@ -7,7 +7,7 @@ import 'payment_success_dialog.dart';
 
 const _apiKey = 'your_api_key';
 const _transactionId = 'transaction_id';
-const _primaryColor = Color(0xFFF55E1E);
+const _primaryColor = Color(0xFF000000);
 
 void main() {
   runApp(const MyApp());
@@ -79,8 +79,8 @@ class _DemoHomePageState extends State<DemoHomePage> {
         transactionId: _transactionId,
         isFullPage: true,
         items: [
-          const MoosylPaymentSummaryItem(amount: 5, label: 'amount'),
-          const MoosylPaymentSummaryItem(amount: 0, label: 'tax')
+          const MoosylPaymentSummaryItem(amount: 2000, label: 'Subtotal'),
+          const MoosylPaymentSummaryItem(amount: 150, label: 'Tax')
         ]);
     if (!mounted) return;
     if (isSuccess != null) {
@@ -350,7 +350,7 @@ class _CustomPlatformsScreen extends StatelessWidget {
             onContinueLoadingChange: onContinueLoadingChange,
             onPaymentSuccess: onPaymentSuccess,
             primaryColor: _primaryColor,
-            renderMethod: (context, props) => _CustomMethodRow(props: props),
+            renderMethod: (context, data) => _CustomMethodRow(data: data),
           ),
         ],
       ),
@@ -391,9 +391,9 @@ class _CustomPlatformsScreen extends StatelessWidget {
 }
 
 class _CustomMethodRow extends StatelessWidget {
-  const _CustomMethodRow({required this.props});
+  const _CustomMethodRow({required this.data});
 
-  final MoosylPaymentMethodRenderProps props;
+  final MoosylPaymentMethodRenderData data;
 
   @override
   Widget build(BuildContext context) {
@@ -401,7 +401,7 @@ class _CustomMethodRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
-        onTap: props.onSelect,
+        onTap: data.onSelect,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 160),
           constraints: const BoxConstraints(minHeight: 78),
@@ -410,10 +410,10 @@ class _CustomMethodRow extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: props.isSelected
+              color: data.isSelected
                   ? const Color(0xFF171713)
                   : const Color(0xFFEEE9E2),
-              width: props.isSelected ? 2 : 1,
+              width: data.isSelected ? 2 : 1,
             ),
             boxShadow: const [
               BoxShadow(
@@ -430,11 +430,11 @@ class _CustomMethodRow extends StatelessWidget {
                 height: 34,
                 decoration: BoxDecoration(
                   color:
-                      props.isSelected ? const Color(0xFF171713) : Colors.white,
+                      data.isSelected ? const Color(0xFF171713) : Colors.white,
                   border: Border.all(color: const Color(0xFFD1D1CD)),
                   shape: BoxShape.circle,
                 ),
-                child: props.isSelected
+                child: data.isSelected
                     ? const Icon(Icons.check, color: Colors.white, size: 20)
                     : null,
               ),
@@ -445,7 +445,7 @@ class _CustomMethodRow extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      props.title,
+                      data.title,
                       textAlign: TextAlign.right,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w800,
@@ -453,9 +453,9 @@ class _CustomMethodRow extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      props.type == PaymentMethodTypes.bankily
+                      data.type == PaymentMethodTypes.bankily
                           ? 'Confirm with passcode'
-                          : props.type == PaymentMethodTypes.masrivi
+                          : data.type == PaymentMethodTypes.masrivi
                               ? 'Mauritel Money'
                               : 'Payment wallet',
                       textAlign: TextAlign.right,
@@ -472,7 +472,7 @@ class _CustomMethodRow extends StatelessWidget {
                   color: const Color(0xFFF4F4F1),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Center(child: props.type.icon.apply(size: 46)),
+                child: Center(child: data.type.icon.apply(size: 46)),
               ),
             ],
           ),

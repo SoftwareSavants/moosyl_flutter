@@ -9,9 +9,9 @@ export 'src/pages/masrivi_view.dart'
 export 'src/pages/payment_methods_view.dart'
     show
         MoosylPaymentMethodBuilder,
-        MoosylPaymentMethodRenderProps,
+        MoosylPaymentMethodRenderData,
         MoosylPaymentMethodsLoadingBuilder,
-        MoosylPaymentMethodsLoadingProps,
+        MoosylPaymentMethodsLoadingData,
         MoosylPaymentMethods,
         MoosylPaymentMethodsController;
 export 'src/models/payment_method_model.dart';
