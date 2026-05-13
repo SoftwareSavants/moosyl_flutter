@@ -1,9 +1,9 @@
 part of 'payment_methods_view.dart';
 
 /// Data passed to [MoosylPaymentMethodBuilder] for each payment method row.
-class MoosylPaymentMethodRenderProps {
-  /// Creates render props for a payment method row.
-  const MoosylPaymentMethodRenderProps({
+class MoosylPaymentMethodRenderData {
+  /// Creates render data for a payment method row.
+  const MoosylPaymentMethodRenderData({
     required this.method,
     required this.type,
     required this.title,
@@ -38,13 +38,13 @@ class MoosylPaymentMethodRenderProps {
 /// Builds a custom payment method row.
 typedef MoosylPaymentMethodBuilder = Widget Function(
   BuildContext context,
-  MoosylPaymentMethodRenderProps props,
+  MoosylPaymentMethodRenderData data,
 );
 
 /// Data passed to [MoosylPaymentMethodsLoadingBuilder].
-class MoosylPaymentMethodsLoadingProps {
-  /// Creates render props for the payment methods loading state.
-  const MoosylPaymentMethodsLoadingProps({
+class MoosylPaymentMethodsLoadingData {
+  /// Creates render data for the payment methods loading state.
+  const MoosylPaymentMethodsLoadingData({
     required this.primaryColor,
     required this.locale,
     required this.isRTL,
@@ -63,7 +63,7 @@ class MoosylPaymentMethodsLoadingProps {
 /// Builds custom loading content for [MoosylPaymentMethods].
 typedef MoosylPaymentMethodsLoadingBuilder = Widget Function(
   BuildContext context,
-  MoosylPaymentMethodsLoadingProps props,
+  MoosylPaymentMethodsLoadingData data,
 );
 
 /// Controller for [MoosylPaymentMethods].
@@ -159,7 +159,7 @@ class MoosylPaymentMethods extends StatelessWidget {
   /// Accent color for the default rows and dialogs.
   final Color? primaryColor;
 
-  /// Custom row builder. Call `props.onSelect()` inside the returned widget.
+  /// Custom row builder. Call `data.onSelect()` inside the returned widget.
   final MoosylPaymentMethodBuilder? renderMethod;
 
   /// Custom loading widget shown while payment methods are loading.
@@ -407,14 +407,14 @@ class _MoosylPaymentMethodsContentState
     final isRTL = Directionality.of(context) == TextDirection.rtl;
 
     if (provider.isLoading) {
-      final loadingProps = MoosylPaymentMethodsLoadingProps(
+      final loadingData = MoosylPaymentMethodsLoadingData(
         primaryColor: primaryColor,
         locale: Localizations.localeOf(context),
         isRTL: isRTL,
       );
       final loadingContent = widget.loadingBuilder?.call(
             context,
-            loadingProps,
+            loadingData,
           ) ??
           widget.loadingComponent ??
           _PaymentMethodsLoadingSkeleton(
@@ -475,7 +475,7 @@ class _MoosylPaymentMethodsContentState
         ...provider.methods.map((method) {
           final type = PaymentMethodTypes.fromString(method.type);
           final isSelected = selectedId == method.id;
-          final props = MoosylPaymentMethodRenderProps(
+          final methodData = MoosylPaymentMethodRenderData(
             method: method,
             type: type,
             title: type.title(context),
@@ -492,13 +492,13 @@ class _MoosylPaymentMethodsContentState
           );
 
           if (widget.renderMethod != null) {
-            return widget.renderMethod!(context, props);
+            return widget.renderMethod!(context, methodData);
           }
 
           return _MethodRow(
             method: method,
             isSelected: isSelected,
-            onTap: props.onSelect,
+            onTap: methodData.onSelect,
             primaryColor: primaryColor,
           );
         }),
