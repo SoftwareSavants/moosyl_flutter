@@ -1,3 +1,7 @@
+## 2.0.4
+
+-Fix MoosylView UI
+
 ## 2.0.3
 
 -remove react props naming...etc

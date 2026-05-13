@@ -736,27 +736,30 @@ class _MethodRow extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          Container(
-                            width: 22,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: effectivePrimary,
-                                width: 1.5,
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(end: 12),
+                            child: Container(
+                              width: 22,
+                              height: 22,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: effectivePrimary,
+                                  width: 1.5,
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Transform.scale(
-                                scale: 0.4 + (0.6 * value),
-                                child: Opacity(
-                                  opacity: value,
-                                  child: Container(
-                                    width: 12,
-                                    height: 12,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: effectivePrimary,
+                              child: Center(
+                                child: Transform.scale(
+                                  scale: 0.4 + (0.6 * value),
+                                  child: Opacity(
+                                    opacity: value,
+                                    child: Container(
+                                      width: 12,
+                                      height: 12,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: effectivePrimary,
+                                      ),
                                     ),
                                   ),
                                 ),
