@@ -147,6 +147,32 @@ void main() {
     expect(_asset(tester), _screens[1].asset);
   });
 
+  testWidgets('a pause partway resumes with only the time left',
+      (tester) async {
+    final duration = gimtelScreenDurationMs(_screens[0]);
+    await _pump(tester);
+    // The long press is recognized kLongPressTimeout after the press, so
+    // playback pauses halfway through screen 1.
+    await tester.pump(_ms(duration ~/ 2) - kLongPressTimeout);
+    final gesture =
+        await tester.startGesture(tester.getCenter(find.byKey(_phone)));
+    // Tick a frame just before recognition: the timer fires before the next
+    // frame, so the pause freezes the value of this one.
+    await tester.pump(kLongPressTimeout - _ms(1));
+    await tester.pump(_ms(1));
+    await tester.pump(_ms(5000));
+    await gesture.up();
+    await tester.pump();
+
+    final left = duration - duration ~/ 2;
+    await tester.pump(_ms(left - 200));
+    expect(_asset(tester), _screens[0].asset);
+    // Restarting the screen from zero would still be on screen 1 here.
+    await tester.pump(_ms(300));
+    await tester.pump(_ms(1));
+    expect(_asset(tester), _screens[1].asset);
+  });
+
   testWidgets('with animations disabled it is static and manual',
       (tester) async {
     await _pump(tester, disableAnimations: true);
