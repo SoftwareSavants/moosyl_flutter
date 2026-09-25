@@ -252,4 +252,119 @@ class MoosylLocalizationAr extends MoosylLocalization {
   @override
   String get paymentDeclined =>
       ' . قد يكون رصيدك غير كافٍ أو قد يكون حسابك غير نشط';
+
+  @override
+  String get gimtelPhoneTitle => 'من أي رقم ستدفع؟';
+
+  @override
+  String gimtelPhoneLabel(String app) {
+    return 'رقم هاتفك في $app';
+  }
+
+  @override
+  String gimtelPhoneHint(String app) {
+    return 'رقم حسابك في $app. نستخدمه للتعرّف على دفعتك.';
+  }
+
+  @override
+  String get gimtelContinue => 'متابعة';
+
+  @override
+  String get gimtelInvalidPhone => 'أدخل رقماً موريتانياً صحيحاً من 8 أرقام';
+
+  @override
+  String gimtelPayTitle(String app) {
+    return 'ادفع عبر <g>Gimtel</g> في $app';
+  }
+
+  @override
+  String get gimtelViaGimtel => 'عبر Gimtel';
+
+  @override
+  String get gimtelMerchantNumber => 'رقم التاجر';
+
+  @override
+  String get gimtelAmount => 'المبلغ';
+
+  @override
+  String get gimtelTapToCopy => 'اضغط للنسخ';
+
+  @override
+  String get gimtelCopied => 'تم النسخ';
+
+  @override
+  String gimtelBankilyS1(String app) {
+    return 'في $app، اضغط <g>Gimtel</g>';
+  }
+
+  @override
+  String get gimtelBankilyS2 => 'اضغط <b>Pay Merchant</b>';
+
+  @override
+  String get gimtelBankilyS3 => 'املأ الحقول المحددة، ثم اضغط <b>Next</b>';
+
+  @override
+  String get gimtelBankilyS4 => 'اضغط <b>Continue</b>، ثم أدخل رمزك السري';
+
+  @override
+  String gimtelBciPayS1(String app) {
+    return 'في $app، اضغط <b>Payments</b>';
+  }
+
+  @override
+  String get gimtelBciPayS2 => 'انتقل إلى <g>GIMTEL</g>';
+
+  @override
+  String get gimtelBciPayS3 =>
+      'اختر <b>BIMBANK</b>، وأدخل الرقم، ثم <b>Continue</b>';
+
+  @override
+  String get gimtelBciPayS4 => 'أدخل المبلغ، ثم اضغط <b>Pay</b>';
+
+  @override
+  String gimtelGenericStep1(String app) {
+    return 'افتح $app ← <g>Gimtel</g> ← <b>Pay Merchant</b>';
+  }
+
+  @override
+  String gimtelGenericStep2(String phone, String amount) {
+    return 'اختر <b>BIMBANK</b>، وأدخل <n>$phone</n> و<n>$amount</n>';
+  }
+
+  @override
+  String get gimtelGenericStep3 => 'أكّد برمزك السري';
+
+  @override
+  String get gimtelWaitingTitle => 'في انتظار دفعتك';
+
+  @override
+  String gimtelWaitingHint(String phone) {
+    return 'ادفع من الرقم <n>$phone</n> بالمبلغ الصحيح. أبقِ هذه الصفحة مفتوحة.';
+  }
+
+  @override
+  String get gimtelSimulate => 'محاكاة التحويل (sandbox)';
+
+  @override
+  String get gimtelChangeNumber => 'تغيير الرقم';
+
+  @override
+  String get gimtelOtherMethod => 'طريقة دفع أخرى';
+
+  @override
+  String get gimtelExpiredTitle => 'انتهت صلاحية هذا الدفع';
+
+  @override
+  String get gimtelExpiredDescription =>
+      'إذا كنت قد أرسلت المال بالفعل، فسيتم استرداده.';
+
+  @override
+  String get gimtelInactiveTitle => 'لم يعد هذا الدفع نشطًا';
+
+  @override
+  String get gimtelInactiveDescription =>
+      'ابدأ من جديد للحصول على تعليمات دفع جديدة.';
+
+  @override
+  String get gimtelStartAgain => 'ابدأ من جديد';
 }

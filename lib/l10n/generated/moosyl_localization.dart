@@ -157,7 +157,7 @@ abstract class MoosylLocalization {
   /// No description provided for @payUsing.
   ///
   /// In en, this message translates to:
-  /// **'Pay using'**
+  /// **'Pay using {method}'**
   String payUsing(Object method);
 
   /// No description provided for @copyTheCodeBPayAndHeadToBankilyToPayTheAmount.
@@ -562,6 +562,198 @@ abstract class MoosylLocalization {
   /// In en, this message translates to:
   /// **'Your balance may be insufficient or your account may not be active.'**
   String get paymentDeclined;
+
+  /// No description provided for @gimtelPhoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which number will you pay from?'**
+  String get gimtelPhoneTitle;
+
+  /// No description provided for @gimtelPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {app} phone number'**
+  String gimtelPhoneLabel(String app);
+
+  /// No description provided for @gimtelPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The number of your {app} account. We use it to recognize your payment.'**
+  String gimtelPhoneHint(String app);
+
+  /// No description provided for @gimtelContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get gimtelContinue;
+
+  /// No description provided for @gimtelInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 8-digit Mauritanian number'**
+  String get gimtelInvalidPhone;
+
+  /// No description provided for @gimtelPayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay via <g>Gimtel</g> in {app}'**
+  String gimtelPayTitle(String app);
+
+  /// No description provided for @gimtelViaGimtel.
+  ///
+  /// In en, this message translates to:
+  /// **'Via Gimtel'**
+  String get gimtelViaGimtel;
+
+  /// No description provided for @gimtelMerchantNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant number'**
+  String get gimtelMerchantNumber;
+
+  /// No description provided for @gimtelAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get gimtelAmount;
+
+  /// No description provided for @gimtelTapToCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to copy'**
+  String get gimtelTapToCopy;
+
+  /// No description provided for @gimtelCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get gimtelCopied;
+
+  /// No description provided for @gimtelBankilyS1.
+  ///
+  /// In en, this message translates to:
+  /// **'In {app}, tap <g>Gimtel</g>'**
+  String gimtelBankilyS1(String app);
+
+  /// No description provided for @gimtelBankilyS2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap <b>Pay Merchant</b>'**
+  String get gimtelBankilyS2;
+
+  /// No description provided for @gimtelBankilyS3.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the highlighted fields, then tap <b>Next</b>'**
+  String get gimtelBankilyS3;
+
+  /// No description provided for @gimtelBankilyS4.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap <b>Continue</b>, then enter your PIN'**
+  String get gimtelBankilyS4;
+
+  /// No description provided for @gimtelBciPayS1.
+  ///
+  /// In en, this message translates to:
+  /// **'In {app}, tap <b>Payments</b>'**
+  String gimtelBciPayS1(String app);
+
+  /// No description provided for @gimtelBciPayS2.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to <g>GIMTEL</g>'**
+  String get gimtelBciPayS2;
+
+  /// No description provided for @gimtelBciPayS3.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose <b>BIMBANK</b>, enter the number, tap <b>Continue</b>'**
+  String get gimtelBciPayS3;
+
+  /// No description provided for @gimtelBciPayS4.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the amount, then tap <b>Pay</b>'**
+  String get gimtelBciPayS4;
+
+  /// No description provided for @gimtelGenericStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {app} → <g>Gimtel</g> → <b>Pay Merchant</b>'**
+  String gimtelGenericStep1(String app);
+
+  /// No description provided for @gimtelGenericStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose <b>BIMBANK</b>, enter <n>{phone}</n> and <n>{amount}</n>'**
+  String gimtelGenericStep2(String phone, String amount);
+
+  /// No description provided for @gimtelGenericStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm with your PIN'**
+  String get gimtelGenericStep3;
+
+  /// No description provided for @gimtelWaitingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your payment'**
+  String get gimtelWaitingTitle;
+
+  /// No description provided for @gimtelWaitingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay from <n>{phone}</n>, exact amount. Keep this page open.'**
+  String gimtelWaitingHint(String phone);
+
+  /// No description provided for @gimtelSimulate.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate transfer (sandbox)'**
+  String get gimtelSimulate;
+
+  /// No description provided for @gimtelChangeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change number'**
+  String get gimtelChangeNumber;
+
+  /// No description provided for @gimtelOtherMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Use another method'**
+  String get gimtelOtherMethod;
+
+  /// No description provided for @gimtelExpiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This payment expired'**
+  String get gimtelExpiredTitle;
+
+  /// No description provided for @gimtelExpiredDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'If you already sent the money, it will be refunded.'**
+  String get gimtelExpiredDescription;
+
+  /// No description provided for @gimtelInactiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This payment is no longer active'**
+  String get gimtelInactiveTitle;
+
+  /// No description provided for @gimtelInactiveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start again to get new payment instructions.'**
+  String get gimtelInactiveDescription;
+
+  /// No description provided for @gimtelStartAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Start again'**
+  String get gimtelStartAgain;
 }
 
 class _MoosylLocalizationDelegate

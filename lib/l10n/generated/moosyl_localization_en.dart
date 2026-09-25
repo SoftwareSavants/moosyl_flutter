@@ -37,7 +37,7 @@ class MoosylLocalizationEn extends MoosylLocalization {
 
   @override
   String payUsing(Object method) {
-    return 'Pay using';
+    return 'Pay using $method';
   }
 
   @override
@@ -253,4 +253,120 @@ class MoosylLocalizationEn extends MoosylLocalization {
   @override
   String get paymentDeclined =>
       'Your balance may be insufficient or your account may not be active.';
+
+  @override
+  String get gimtelPhoneTitle => 'Which number will you pay from?';
+
+  @override
+  String gimtelPhoneLabel(String app) {
+    return 'Your $app phone number';
+  }
+
+  @override
+  String gimtelPhoneHint(String app) {
+    return 'The number of your $app account. We use it to recognize your payment.';
+  }
+
+  @override
+  String get gimtelContinue => 'Continue';
+
+  @override
+  String get gimtelInvalidPhone => 'Enter a valid 8-digit Mauritanian number';
+
+  @override
+  String gimtelPayTitle(String app) {
+    return 'Pay via <g>Gimtel</g> in $app';
+  }
+
+  @override
+  String get gimtelViaGimtel => 'Via Gimtel';
+
+  @override
+  String get gimtelMerchantNumber => 'Merchant number';
+
+  @override
+  String get gimtelAmount => 'Amount';
+
+  @override
+  String get gimtelTapToCopy => 'Tap to copy';
+
+  @override
+  String get gimtelCopied => 'Copied';
+
+  @override
+  String gimtelBankilyS1(String app) {
+    return 'In $app, tap <g>Gimtel</g>';
+  }
+
+  @override
+  String get gimtelBankilyS2 => 'Tap <b>Pay Merchant</b>';
+
+  @override
+  String get gimtelBankilyS3 =>
+      'Fill in the highlighted fields, then tap <b>Next</b>';
+
+  @override
+  String get gimtelBankilyS4 => 'Tap <b>Continue</b>, then enter your PIN';
+
+  @override
+  String gimtelBciPayS1(String app) {
+    return 'In $app, tap <b>Payments</b>';
+  }
+
+  @override
+  String get gimtelBciPayS2 => 'Switch to <g>GIMTEL</g>';
+
+  @override
+  String get gimtelBciPayS3 =>
+      'Choose <b>BIMBANK</b>, enter the number, tap <b>Continue</b>';
+
+  @override
+  String get gimtelBciPayS4 => 'Enter the amount, then tap <b>Pay</b>';
+
+  @override
+  String gimtelGenericStep1(String app) {
+    return 'Open $app → <g>Gimtel</g> → <b>Pay Merchant</b>';
+  }
+
+  @override
+  String gimtelGenericStep2(String phone, String amount) {
+    return 'Choose <b>BIMBANK</b>, enter <n>$phone</n> and <n>$amount</n>';
+  }
+
+  @override
+  String get gimtelGenericStep3 => 'Confirm with your PIN';
+
+  @override
+  String get gimtelWaitingTitle => 'Waiting for your payment';
+
+  @override
+  String gimtelWaitingHint(String phone) {
+    return 'Pay from <n>$phone</n>, exact amount. Keep this page open.';
+  }
+
+  @override
+  String get gimtelSimulate => 'Simulate transfer (sandbox)';
+
+  @override
+  String get gimtelChangeNumber => 'Change number';
+
+  @override
+  String get gimtelOtherMethod => 'Use another method';
+
+  @override
+  String get gimtelExpiredTitle => 'This payment expired';
+
+  @override
+  String get gimtelExpiredDescription =>
+      'If you already sent the money, it will be refunded.';
+
+  @override
+  String get gimtelInactiveTitle => 'This payment is no longer active';
+
+  @override
+  String get gimtelInactiveDescription =>
+      'Start again to get new payment instructions.';
+
+  @override
+  String get gimtelStartAgain => 'Start again';
 }

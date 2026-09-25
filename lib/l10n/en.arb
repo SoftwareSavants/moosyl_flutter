@@ -9,7 +9,7 @@
   "masrivi": "Masrivi",
   "amanty": "Amanty",
   "bCIpay": "BCI Pay",
-  "payUsing": "Pay using",
+  "payUsing": "Pay using {method}",
   "copyTheCodeBPayAndHeadToBankilyToPayTheAmount": "Copy the code, BPay and head to Bankily to pay the amount",
   "afterPayment": "After payment",
   "afterMakingThePaymentFillTheFollowingInformation": "After making the payment, fill the following information",
@@ -76,5 +76,96 @@
   "status": "Status",
   "tryAgain": "Try again",
   "paymentFailed": "Payment failed",
-  "paymentDeclined": "Your balance may be insufficient or your account may not be active."
+  "paymentDeclined": "Your balance may be insufficient or your account may not be active.",
+  "gimtelPhoneTitle": "Which number will you pay from?",
+  "gimtelPhoneLabel": "Your {app} phone number",
+  "@gimtelPhoneLabel": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelPhoneHint": "The number of your {app} account. We use it to recognize your payment.",
+  "@gimtelPhoneHint": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelContinue": "Continue",
+  "gimtelInvalidPhone": "Enter a valid 8-digit Mauritanian number",
+  "gimtelPayTitle": "Pay via <g>Gimtel</g> in {app}",
+  "@gimtelPayTitle": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelViaGimtel": "Via Gimtel",
+  "gimtelMerchantNumber": "Merchant number",
+  "gimtelAmount": "Amount",
+  "gimtelTapToCopy": "Tap to copy",
+  "gimtelCopied": "Copied",
+  "gimtelBankilyS1": "In {app}, tap <g>Gimtel</g>",
+  "@gimtelBankilyS1": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelBankilyS2": "Tap <b>Pay Merchant</b>",
+  "gimtelBankilyS3": "Fill in the highlighted fields, then tap <b>Next</b>",
+  "gimtelBankilyS4": "Tap <b>Continue</b>, then enter your PIN",
+  "gimtelBciPayS1": "In {app}, tap <b>Payments</b>",
+  "@gimtelBciPayS1": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelBciPayS2": "Switch to <g>GIMTEL</g>",
+  "gimtelBciPayS3": "Choose <b>BIMBANK</b>, enter the number, tap <b>Continue</b>",
+  "gimtelBciPayS4": "Enter the amount, then tap <b>Pay</b>",
+  "gimtelGenericStep1": "Open {app} → <g>Gimtel</g> → <b>Pay Merchant</b>",
+  "@gimtelGenericStep1": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelGenericStep2": "Choose <b>BIMBANK</b>, enter <n>{phone}</n> and <n>{amount}</n>",
+  "@gimtelGenericStep2": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelGenericStep3": "Confirm with your PIN",
+  "gimtelWaitingTitle": "Waiting for your payment",
+  "gimtelWaitingHint": "Pay from <n>{phone}</n>, exact amount. Keep this page open.",
+  "@gimtelWaitingHint": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "gimtelSimulate": "Simulate transfer (sandbox)",
+  "gimtelChangeNumber": "Change number",
+  "gimtelOtherMethod": "Use another method",
+  "gimtelExpiredTitle": "This payment expired",
+  "gimtelExpiredDescription": "If you already sent the money, it will be refunded.",
+  "gimtelInactiveTitle": "This payment is no longer active",
+  "gimtelInactiveDescription": "Start again to get new payment instructions.",
+  "gimtelStartAgain": "Start again"
 }
