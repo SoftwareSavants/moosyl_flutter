@@ -65,8 +65,13 @@ class FakeApi implements GimtelApi {
 
   int simulateCalls = 0;
 
+  /// When set, `simulateTransfer` throws this.
+  Object? simulateError;
+
   @override
   Future<void> simulateTransfer(String paymentId) async {
     simulateCalls++;
+    final e = simulateError;
+    if (e != null) throw e;
   }
 }

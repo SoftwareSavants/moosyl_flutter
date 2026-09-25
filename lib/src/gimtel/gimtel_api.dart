@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 // wire shape); hide it so our own domain type (below) is unambiguous.
 import 'package:moosyl/moosyl.dart' hide GimtelInstructions;
 import 'package:moosyl_flutter/src/gimtel/gimtel_models.dart';
+import 'package:moosyl_flutter/src/helpers/exception_handling/exceptions.dart';
 
 const String _defaultBaseUrl = 'https://moosyl.moosyl.workers.dev';
 
@@ -48,12 +49,17 @@ class MoosylGimtelApi implements GimtelApi {
     required String transactionId,
     required String phoneNumber,
   }) async {
-    final response = await _client.getPaymentApi().postPayment(
-          paymentCreate: PaymentCreate((b) => b
-            ..configurationId = configurationId
-            ..transactionId = transactionId
-            ..phoneNumber = phoneNumber),
-        );
+    final Response<PostPayment200Response> response;
+    try {
+      response = await _client.getPaymentApi().postPayment(
+            paymentCreate: PaymentCreate((b) => b
+              ..configurationId = configurationId
+              ..transactionId = transactionId
+              ..phoneNumber = phoneNumber),
+          );
+    } on DioException catch (e) {
+      throw backendError(e) ?? e;
+    }
     final i = response.data?.instructions;
     if (i == null) {
       throw StateError('Gimtel instructions missing from the payment response');
@@ -97,8 +103,27 @@ class MoosylGimtelApi implements GimtelApi {
 
   @override
   Future<void> simulateTransfer(String paymentId) async {
-    await _client
-        .getPaymentApi()
-        .postPaymentByIdSimulateTransfer(id: paymentId);
+    try {
+      await _client
+          .getPaymentApi()
+          .postPaymentByIdSimulateTransfer(id: paymentId);
+    } on DioException catch (e) {
+      throw backendError(e) ?? e;
+    }
+  }
+
+  /// The backend's `{ message }` error body as an [AppException] (so
+  /// `ExceptionMapper` can localize known messages), or `null` when the
+  /// response carries no message (network error, timeout, empty body, ...).
+  @visibleForTesting
+  static AppException? backendError(DioException e) {
+    final data = e.response?.data;
+    final message = data is Map ? data['message'] : null;
+    if (message is! String || message.trim().isEmpty) return null;
+    return AppException(
+      code: AppExceptionCode(message),
+      message: message,
+      stackTrace: e.stackTrace,
+    );
   }
 }

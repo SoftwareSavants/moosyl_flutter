@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:moosyl/moosyl.dart' show ConfigurationListDataInner;
+import 'package:moosyl/moosyl.dart' show ConfigurationListDataInner, Moosyl;
+import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart'
+    show lookupMoosylLocalization;
 import 'package:moosyl_flutter/l10n/moosyl_localization.dart';
+import 'package:moosyl_flutter/src/gimtel/gimtel_api.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_models.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_sheet.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_walkthrough.dart';
@@ -27,6 +31,18 @@ const _simulate = ValueKey('gimtel-simulate');
 const _otherMethod = ValueKey('gimtel-other-method');
 const _terminal = ValueKey('gimtel-terminal');
 const _startAgain = ValueKey('gimtel-start-again');
+const _payError = ValueKey('gimtel-error');
+
+/// The real [MoosylGimtelApi], over a [Dio] whose every request fails with
+/// the [DioException] built by [fail] (nothing hits the network).
+MoosylGimtelApi _failingApi(DioException Function(RequestOptions) fail) {
+  final dio = Dio(BaseOptions(baseUrl: 'https://fake.test'));
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) => handler.reject(fail(options)),
+  ));
+  return MoosylGimtelApi('pk_test',
+      client: Moosyl(dio: dio, interceptors: const []));
+}
 
 ConfigurationListDataInner _method(
         {String type = 'bankily', bool testing = false}) =>
@@ -40,7 +56,7 @@ ConfigurationListDataInner _method(
 /// and opens the sheet from it. Returns every value the sheet resolved with.
 Future<List<bool>> _open(
   WidgetTester tester,
-  FakeApi api, {
+  GimtelApi api, {
   String type = 'bankily',
   bool testing = false,
   String initialPhone = '',
@@ -220,6 +236,33 @@ void main() {
     expect(find.byKey(_host), findsOneWidget);
   });
 
+  testWidgets(
+      'a completion while a route covers the sheet resolves true and removes '
+      'only the sheet', (tester) async {
+    final status = Completer<GimtelStatus>();
+    final api = FakeApi()..pendingFor['p1'] = status;
+    final results = await _open(tester, api);
+    await _submit(tester, '36551929');
+
+    const covering = ValueKey('covering-route');
+    unawaited(Navigator.of(tester.element(find.byKey(_payStep))).push(
+      MaterialPageRoute<void>(
+          builder: (_) => const Scaffold(key: covering, body: SizedBox())),
+    ));
+    await tester.pumpAndSettle();
+
+    status.complete(GimtelStatus.completed);
+    await tester.pumpAndSettle();
+
+    expect(results, [true]);
+    expect(find.byKey(covering), findsOneWidget);
+    expect(find.byKey(_payStep), findsNothing);
+    Navigator.of(tester.element(find.byKey(covering))).pop();
+    await tester.pumpAndSettle();
+    expect(find.byKey(_host), findsOneWidget);
+    expect(find.byKey(_payStep), findsNothing);
+  });
+
   testWidgets('an expired payment offers Start again, which re-creates it',
       (tester) async {
     final api = FakeApi()..statuses.add(GimtelStatus.expired);
@@ -248,6 +291,60 @@ void main() {
     final calls = api.statusCalls;
     await tester.pump(const Duration(seconds: 20));
     expect(api.statusCalls, calls);
+  });
+
+  testWidgets(
+      'a failed POST /payment shows the backend message, not the exception',
+      (tester) async {
+    await _open(
+      tester,
+      _failingApi((options) => DioException(
+            requestOptions: options,
+            type: DioExceptionType.badResponse,
+            response: Response(
+              requestOptions: options,
+              statusCode: 400,
+              data: {'message': 'Payment request is already paid'},
+            ),
+          )),
+    );
+    await _submit(tester, '36551929');
+    expect(_text(tester, _phoneError), 'Payment request is already paid');
+    expect(find.byKey(_payStep), findsNothing);
+  });
+
+  testWidgets(
+      'a network failure on POST /payment shows the localized generic error',
+      (tester) async {
+    await _open(
+      tester,
+      _failingApi((options) => DioException(
+            requestOptions: options,
+            type: DioExceptionType.connectionError,
+            error: 'SocketException: Failed host lookup',
+          )),
+      locale: const Locale('fr'),
+    );
+    await _submit(tester, '36551929');
+    final shown = _text(tester, _phoneError);
+    expect(shown, lookupMoosylLocalization(const Locale('fr')).unknownError);
+    expect(shown, isNot(contains('DioException')));
+    expect(shown, isNot(contains('SocketException')));
+  });
+
+  testWidgets('a failed simulate shows the generic error, not the exception',
+      (tester) async {
+    final api = FakeApi()
+      ..simulateError = DioException(
+        requestOptions: RequestOptions(path: '/payment/p1/simulate-transfer'),
+        type: DioExceptionType.connectionTimeout,
+      );
+    await _open(tester, api, testing: true);
+    await _submit(tester, '36551929');
+    await _tap(tester, _simulate);
+    final shown = _text(tester, _payError);
+    expect(shown, lookupMoosylLocalization(const Locale('en')).unknownError);
+    expect(shown, isNot(contains('DioException')));
   });
 
   testWidgets('the phone step can be left with a visible button',

@@ -57,8 +57,9 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
   /// Whether a `submitPhone()`/`startAgain()` call is in flight.
   bool submitting = false;
 
-  /// `'invalidPhone'`, the server's error message, or `null`.
-  String? error;
+  /// `'invalidPhone'`, the error thrown by [api] (render it with
+  /// `gimtelErrorMessage`, never `toString()`), or `null`.
+  Object? error;
 
   /// What the payer needs to complete the transfer, once created.
   GimtelInstructions? instructions;
@@ -116,7 +117,7 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
     } catch (e) {
       if (_disposed || token != _createToken) return;
       submitting = false;
-      error = e.toString();
+      error = e;
       notifyListeners();
       return;
     }
@@ -159,7 +160,7 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
       await api.simulateTransfer(id);
     } catch (e) {
       if (_disposed) return;
-      error = e.toString();
+      error = e;
       notifyListeners();
       return;
     }

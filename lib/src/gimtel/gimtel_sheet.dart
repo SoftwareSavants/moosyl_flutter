@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'gimtel_api.dart';
 import 'gimtel_controller.dart';
+import 'gimtel_error.dart';
 import 'gimtel_models.dart';
 import 'gimtel_phone.dart';
 import 'gimtel_rich_text.dart';
@@ -45,8 +46,17 @@ Future<bool> showGimtelSheet(
   required num amount,
   required String initialPhone,
   required Color accent,
-}) async {
-  final completed = await showModalBottomSheet<bool>(
+}) {
+  // The sheet reports its outcome here rather than only through the route's
+  // result: when something is pushed above the sheet it is removed with
+  // `Navigator.removeRoute`, which (before Flutter 3.32) takes no result and
+  // never completes the route's future.
+  final outcome = Completer<bool>();
+  void report(bool result) {
+    if (!outcome.isCompleted) outcome.complete(result);
+  }
+
+  unawaited(showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
@@ -68,10 +78,11 @@ Future<bool> showGimtelSheet(
         methodLabel: methodLabel,
         amount: amount,
         accent: accent,
+        onResult: report,
       ),
     ),
-  );
-  return completed ?? false;
+  ).then((result) => report(result ?? false)));
+  return outcome.future;
 }
 
 /// `100` -> "100 MRU", `1234.5` -> "1,234.5 MRU".
@@ -94,12 +105,16 @@ class _GimtelSheet extends StatefulWidget {
     required this.methodLabel,
     required this.amount,
     required this.accent,
+    required this.onResult,
   });
 
   final ConfigurationListDataInner method;
   final String methodLabel;
   final num amount;
   final Color accent;
+
+  /// Receives the sheet's outcome when it closes itself.
+  final ValueChanged<bool> onResult;
 
   @override
   State<_GimtelSheet> createState() => _GimtelSheetState();
@@ -121,11 +136,13 @@ class _GimtelSheetState extends State<_GimtelSheet> {
     final route = ModalRoute.of(context);
     if (route == null || !route.isActive) return;
     _closed = true;
+    widget.onResult(result);
     final navigator = Navigator.of(context);
     if (route.isCurrent) {
       navigator.pop(result);
     } else {
-      navigator.removeRoute(route, result);
+      // No `result` argument: it only exists from Flutter 3.32.
+      navigator.removeRoute(route);
     }
   }
 
@@ -136,9 +153,7 @@ class _GimtelSheetState extends State<_GimtelSheet> {
     final instructions = controller.instructions;
     final onPhoneStep =
         controller.step == GimtelStep.phone || instructions == null;
-    final error = controller.error == 'invalidPhone'
-        ? l10n.gimtelInvalidPhone
-        : controller.error;
+    final error = gimtelErrorMessage(controller.error, context);
 
     Widget body = SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(

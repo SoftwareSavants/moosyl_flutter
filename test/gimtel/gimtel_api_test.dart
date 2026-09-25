@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_api.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_models.dart';
+import 'package:moosyl_flutter/src/helpers/exception_handling/exceptions.dart';
 
 /// Builds a [Moosyl] client whose [Dio] never hits the network: a request
 /// interceptor answers `/payment` and `/payment/{id}/status` calls directly,
@@ -112,6 +113,50 @@ void main() {
       );
 
       expect(await api.status('pay_1'), GimtelStatus.pending);
+    });
+  });
+
+  group('MoosylGimtelApi errors', () {
+    MoosylGimtelApi failing(DioException Function(RequestOptions) fail) {
+      final dio = Dio(BaseOptions(baseUrl: 'https://fake.test'));
+      dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) => handler.reject(fail(options)),
+      ));
+      return MoosylGimtelApi('pk_test',
+          client: Moosyl(dio: dio, interceptors: const []));
+    }
+
+    Future<void> create(MoosylGimtelApi api) => api.createPayment(
+        configurationId: 'c', transactionId: 't', phoneNumber: '36551929');
+
+    test('a backend { message } body becomes an AppException with it',
+        () async {
+      final api = failing((o) => DioException(
+            requestOptions: o,
+            type: DioExceptionType.badResponse,
+            response: Response(
+                requestOptions: o,
+                statusCode: 404,
+                data: {'message': 'Payment not found'}),
+          ));
+      await expectLater(
+        create(api),
+        throwsA(isA<AppException>()
+            .having((e) => e.message, 'message', 'Payment not found')
+            // Known backend messages keep their code, so ExceptionMapper
+            // can localize them.
+            .having((e) => e.code, 'code', AppExceptionCode.paymentNotFound)),
+      );
+      await expectLater(api.simulateTransfer('p1'),
+          throwsA(isA<AppException>()));
+    });
+
+    test('an error without a backend message is rethrown unchanged', () async {
+      final api = failing((o) => DioException(
+            requestOptions: o,
+            type: DioExceptionType.connectionError,
+          ));
+      await expectLater(create(api), throwsA(isA<DioException>()));
     });
   });
 }
