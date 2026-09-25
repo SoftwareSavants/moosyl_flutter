@@ -68,8 +68,12 @@ class FakeApi implements GimtelApi {
     return statuses.isEmpty ? GimtelStatus.pending : statuses.removeAt(0);
   }
 
+  int simulateCalls = 0;
+
   @override
-  Future<void> simulateTransfer(String paymentId) async {}
+  Future<void> simulateTransfer(String paymentId) async {
+    simulateCalls++;
+  }
 }
 
 void main() {
@@ -161,8 +165,46 @@ void main() {
       expect(c.status, GimtelStatus.pending,
           reason: 'sanity check: still pending, not yet terminal, at dispose time');
       c.dispose();
+      final callsAtDispose = api.statusCalls;
       async.elapse(const Duration(seconds: 20));
+      expect(api.statusCalls, callsAtDispose,
+          reason: 'dispose() must actually cancel the polling timer');
       expect(completed, 0);
+    });
+  });
+
+  test(
+      'onCompleted fires only once: lifecycle resume and simulate() after '
+      'completion do not re-poll or re-fire it', () {
+    fakeAsync((async) {
+      final api = FakeApi()..statuses.addAll([GimtelStatus.completed]);
+      final c = make(api);
+      var completed = 0;
+      c.onCompleted(() => completed++);
+
+      c.submitPhone('36551929');
+      async.flushMicrotasks();
+      expect(c.status, GimtelStatus.completed);
+      expect(completed, 1);
+      final callsAtCompletion = api.statusCalls;
+
+      // A background/foreground cycle after completion must not re-poll or
+      // re-fire onCompleted.
+      c.didChangeAppLifecycleState(AppLifecycleState.inactive);
+      c.didChangeAppLifecycleState(AppLifecycleState.resumed);
+      async.flushMicrotasks();
+      async.elapse(const Duration(seconds: 30));
+      expect(api.statusCalls, callsAtCompletion);
+      expect(completed, 1);
+
+      // simulate() after completion must be a no-op too.
+      c.simulate();
+      async.flushMicrotasks();
+      expect(api.simulateCalls, 0);
+      expect(api.statusCalls, callsAtCompletion);
+      expect(completed, 1);
+
+      c.dispose();
     });
   });
 

@@ -150,17 +150,28 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
   /// Creates a fresh payment for the same [phone] (e.g. after expiry).
   Future<void> startAgain() => _create();
 
-  /// Sandbox-only: simulates the payer's bank transfer, then polls once.
+  /// Sandbox-only: simulates the payer's bank transfer, then polls once. A
+  /// no-op once the payment has already reached a terminal status.
   Future<void> simulate() async {
     final id = instructions?.paymentId;
-    if (id == null) return;
-    await api.simulateTransfer(id);
+    if (id == null || status != GimtelStatus.pending) return;
+    try {
+      await api.simulateTransfer(id);
+    } catch (e) {
+      if (_disposed) return;
+      error = e.toString();
+      notifyListeners();
+      return;
+    }
     await _poll(id);
   }
 
   void _startPolling(String paymentId) {
     _stopPolling();
-    if (!_foreground) return;
+    // Never (re)start polling for a payment that's already terminal: e.g. a
+    // background/foreground cycle (or a stray simulate()) after completion
+    // must not re-poll and re-fire onCompleted.
+    if (!_foreground || status != GimtelStatus.pending) return;
     unawaited(_poll(paymentId));
     _timer = Timer.periodic(pollInterval, (_) => _poll(paymentId));
   }
@@ -173,26 +184,36 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> _poll(String paymentId) async {
     if (_inFlightFor == paymentId) return;
     _inFlightFor = paymentId;
+    GimtelStatus? next;
     try {
-      final next = await api.status(paymentId);
-      if (_disposed) return;
-      if (paymentId != instructions?.paymentId || step != GimtelStep.pay) {
-        // Stale: this response was for a payment we've since moved on from
-        // (changeNumber(), a newer create, ...). Ignore it entirely.
-        return;
-      }
-      if (next != status) {
-        status = next;
-        notifyListeners();
-      }
-      if (next != GimtelStatus.pending) {
-        _stopPolling();
-        if (next == GimtelStatus.completed) _onCompleted?.call();
-      }
+      next = await api.status(paymentId);
     } catch (_) {
-      // Network blip: the next tick retries.
+      // Network blip: the next tick retries. Only the network call itself is
+      // guarded here - a throw from notifyListeners()/onCompleted() below
+      // must propagate normally, not be swallowed as a "blip".
     } finally {
       if (_inFlightFor == paymentId) _inFlightFor = null;
+    }
+    if (next == null || _disposed) return;
+    if (paymentId != instructions?.paymentId || step != GimtelStep.pay) {
+      // Stale: this response was for a payment we've since moved on from
+      // (changeNumber(), a newer create, ...). Ignore it entirely.
+      return;
+    }
+    final previous = status;
+    if (next != previous) {
+      status = next;
+      notifyListeners();
+    }
+    if (next != GimtelStatus.pending) {
+      _stopPolling();
+      // Only fire on the pending -> completed transition, so a redundant
+      // poll of an already-terminal payment (e.g. via simulate(), or a
+      // lifecycle resume that slips in before polling is fully stopped)
+      // never calls onCompleted more than once.
+      if (next == GimtelStatus.completed && previous == GimtelStatus.pending) {
+        _onCompleted?.call();
+      }
     }
   }
 
