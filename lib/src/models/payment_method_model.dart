@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:moosyl/moosyl.dart' show ConfigurationListDataInner;
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
 
 import 'package:moosyl_flutter/src/widgets/icons.dart';
@@ -69,14 +70,29 @@ enum PaymentMethodTypes {
     };
   }
 
+  /// Parses the API's method type (e.g. `bci_pay`); `null` when this SDK
+  /// version does not know the type, so callers can skip it.
+  static PaymentMethodTypes? tryParse(String method) {
+    for (final value in PaymentMethodTypes.values) {
+      if (value.toStr == method) return value;
+    }
+    return null;
+  }
+
   /// Creates a [PaymentMethodTypes] instance from its string representation.
   ///
-  /// Throws an [UnimplementedError] if the provided method is not supported.
+  /// Throws an [UnimplementedError] if the provided method is not supported;
+  /// prefer [tryParse].
   static PaymentMethodTypes fromString(String method) {
-    return PaymentMethodTypes.values.firstWhere(
-      (value) => value.toStr == method,
-      orElse: () =>
-          throw UnimplementedError('This payment method is not supported'),
-    );
+    return tryParse(method) ??
+        (throw UnimplementedError('This payment method is not supported'));
   }
 }
+
+/// Whether [method] is paid through a Gimtel transfer (the Gimtel sheet)
+/// rather than the method's native flow. BCI Pay and Amanty are only offered
+/// through Gimtel; Bankily is when its integration is `gimtel`.
+bool isGimtelMethod(ConfigurationListDataInner method) =>
+    method.integration == 'gimtel' ||
+    method.type == PaymentMethodTypes.bCIpay.toStr ||
+    method.type == PaymentMethodTypes.amanty.toStr;

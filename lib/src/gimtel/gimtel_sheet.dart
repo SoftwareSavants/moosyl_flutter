@@ -63,6 +63,7 @@ Future<bool> showGimtelSheet(
         initialPhone: initialPhone,
       ),
       child: _GimtelSheet(
+        key: const ValueKey('gimtel-sheet'),
         method: method,
         methodLabel: methodLabel,
         amount: amount,
@@ -88,6 +89,7 @@ String _plainAmount(num amount) => amount == amount.truncateToDouble()
 
 class _GimtelSheet extends StatefulWidget {
   const _GimtelSheet({
+    super.key,
     required this.method,
     required this.methodLabel,
     required this.amount,

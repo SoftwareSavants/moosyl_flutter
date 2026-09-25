@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:moosyl/moosyl.dart';
+import 'package:moosyl_flutter/src/gimtel/gimtel_api.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/error_handlers.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
 import 'package:moosyl_flutter/src/services/get_payment_methods_service.dart';
 import 'package:moosyl_flutter/src/services/get_payment_request_service.dart';
+import 'package:moosyl_flutter/src/services/pay_service.dart';
 
 /// A provider class for managing and retrieving payment methods.
 ///
@@ -28,12 +30,36 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// Error to show on payment method selection when validation fails.
   String? selectionError;
 
+  /// Fetches the configured payment methods.
+  final GetPaymentMethodsService methodsService;
+
+  /// Fetches the payment request being paid.
+  final GetPaymentRequestService requestService;
+
+  /// Submits native (passcode / payment code) payments.
+  final PayService payService;
+
+  /// Backend of the Gimtel payment sheet.
+  final GimtelApi gimtelApi;
+
   /// Constructs a [GetPaymentMethodsProvider].
+  ///
+  /// The services default to the live Moosyl API; pass them only to
+  /// substitute the network (e.g. in tests).
   GetPaymentMethodsProvider({
     required this.publishableApiKey,
     this.transactionId = '',
     required this.totalAmount,
-  }) {
+    GetPaymentMethodsService? methodsService,
+    GetPaymentRequestService? requestService,
+    PayService? payService,
+    GimtelApi? gimtelApi,
+  })  : methodsService =
+            methodsService ?? GetPaymentMethodsService(publishableApiKey),
+        requestService =
+            requestService ?? GetPaymentRequestService(publishableApiKey),
+        payService = payService ?? PayService(publishableApiKey),
+        gimtelApi = gimtelApi ?? MoosylGimtelApi(publishableApiKey) {
     getMethods();
     if (transactionId.isNotEmpty) {
       getPaymentRequest();
@@ -64,7 +90,8 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   }
 
   /// Validates payment request and sets or returns the payment method.
-  /// For Sedad/Bankily: returns the method to show dialog (caller shows dialog).
+  /// For Gimtel methods, Sedad, BIM Bank and native Bankily: returns the
+  /// method so the caller shows its sheet/dialog.
   /// For Masrivi etc: calls setPaymentMethod and returns null.
   /// On validation error: returns null and sets selectionError.
   Future<ConfigurationListDataInner?> setPaymentMethodWithValidation(
@@ -74,7 +101,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
+      () => requestService.get(transactionId),
       showFlashBar: false,
     );
 
@@ -101,12 +128,13 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
       return null;
     }
 
-    final isDialogMethod = PaymentMethodTypes.fromString(method.type) ==
-            PaymentMethodTypes.sedad ||
-        PaymentMethodTypes.fromString(method.type) ==
-            PaymentMethodTypes.bimBank ||
-        PaymentMethodTypes.fromString(method.type) ==
-            PaymentMethodTypes.bankily;
+    // Gimtel methods open the Gimtel sheet; Sedad/BIM Bank/native Bankily
+    // open their dialogs. The caller shows either.
+    final type = PaymentMethodTypes.tryParse(method.type);
+    final isDialogMethod = isGimtelMethod(method) ||
+        type == PaymentMethodTypes.sedad ||
+        type == PaymentMethodTypes.bimBank ||
+        type == PaymentMethodTypes.bankily;
 
     if (isDialogMethod) {
       return method;
@@ -119,13 +147,15 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
   /// Retrieves the list of supported payment method types.
   List<PaymentMethodTypes> get supportedTypes {
     return [
-      ...methods.map((method) => PaymentMethodTypes.fromString(method.type))
+      ...methods
+          .map((method) => PaymentMethodTypes.tryParse(method.type))
+          .whereType<PaymentMethodTypes>()
     ];
   }
 
   /// Retrieves the list of valid payment method types, including custom handlers.
   List<PaymentMethodTypes> get validMethods =>
-      [...methods.map((e) => PaymentMethodTypes.fromString(e.type))];
+      [...methods.map((e) => PaymentMethodTypes.tryParse(e.type)).whereType()];
 
   /// Asynchronously fetches available payment methods from the service.
   ///
@@ -137,7 +167,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentMethodsService(publishableApiKey).get(),
+      () => methodsService.get(),
       showFlashBar: false,
     );
 
@@ -149,8 +179,10 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
       return notifyListeners();
     }
 
-    // Add the retrieved methods to the methods list.
-    methods.addAll(result.result!);
+    // Add the retrieved methods, skipping types this SDK version doesn't
+    // know (a newer backend may offer methods an older app can't render).
+    methods.addAll(result.result!
+        .where((method) => PaymentMethodTypes.tryParse(method.type) != null));
     // Notify listeners of the change in payment methods.
     notifyListeners();
   }
@@ -164,7 +196,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     // Find and select the payment method from the list.
 
     final selected = methods.firstWhere(
-        (element) => PaymentMethodTypes.fromString(element.type) == type);
+        (element) => PaymentMethodTypes.tryParse(element.type) == type);
 
     setPaymentMethod(selected);
   }
@@ -197,7 +229,7 @@ class GetPaymentMethodsProvider extends ChangeNotifier {
     }
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
+      () => requestService.get(transactionId),
       showFlashBar: false,
     );
 
