@@ -27,8 +27,7 @@ class FakeMethodsService extends GetPaymentMethodsService {
 
 /// Returns an unpaid payment request of [amount] instead of calling the API.
 class FakeRequestService extends GetPaymentRequestService {
-  FakeRequestService({this.amount = 100, this.phoneNumber})
-      : super('pk_test');
+  FakeRequestService({this.amount = 100, this.phoneNumber}) : super('pk_test');
 
   final int amount;
   final String? phoneNumber;

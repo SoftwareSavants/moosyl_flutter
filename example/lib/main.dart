@@ -47,6 +47,7 @@ enum DemoMode {
   menu,
   embeddedPlatforms,
   customPlatforms,
+  gimtelSandbox,
 }
 
 class DemoHomePage extends StatefulWidget {
@@ -114,6 +115,15 @@ class _DemoHomePageState extends State<DemoHomePage> {
               _demoMode = DemoMode.customPlatforms;
             });
           },
+          onOpenGimtelSandbox: () {
+            setState(() {
+              _demoMode = DemoMode.gimtelSandbox;
+            });
+          },
+        ),
+      DemoMode.gimtelSandbox => _GimtelSandboxScreen(
+          onBack: _showMenu,
+          onPaymentSuccess: _showSuccess,
         ),
       DemoMode.embeddedPlatforms => _EmbeddedPlatformsScreen(
           controller: _embeddedController,
@@ -158,11 +168,13 @@ class _MenuScreen extends StatelessWidget {
     required this.onOpenMoosylView,
     required this.onOpenEmbeddedPlatforms,
     required this.onOpenCustomPlatforms,
+    required this.onOpenGimtelSandbox,
   });
 
   final VoidCallback onOpenMoosylView;
   final VoidCallback onOpenEmbeddedPlatforms;
   final VoidCallback onOpenCustomPlatforms;
+  final VoidCallback onOpenGimtelSandbox;
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +202,107 @@ class _MenuScreen extends StatelessWidget {
                 onPressed: onOpenCustomPlatforms,
                 outlined: true,
               ),
+              _DemoButton(
+                label: 'Gimtel (sandbox)',
+                onPressed: onOpenGimtelSandbox,
+                outlined: true,
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Pays a sandbox payment request with Bankily (Gimtel), BCI Pay or Amanty.
+///
+/// Create the payment request with your sandbox secret key, then paste its
+/// transaction id and your sandbox publishable key here. In the Gimtel sheet,
+/// "Simulate transfer" completes the payment without a real bank transfer.
+class _GimtelSandboxScreen extends StatefulWidget {
+  const _GimtelSandboxScreen({
+    required this.onBack,
+    required this.onPaymentSuccess,
+  });
+
+  final VoidCallback onBack;
+  final Future<void> Function(bool isSuccess) onPaymentSuccess;
+
+  @override
+  State<_GimtelSandboxScreen> createState() => _GimtelSandboxScreenState();
+}
+
+class _GimtelSandboxScreenState extends State<_GimtelSandboxScreen> {
+  final _apiKeyController = TextEditingController();
+  final _transactionIdController = TextEditingController();
+
+  @override
+  void dispose() {
+    _apiKeyController.dispose();
+    _transactionIdController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pay() async {
+    final isSuccess = await MoosylFlutter.show(
+      context,
+      publishableApiKey: _apiKeyController.text.trim(),
+      transactionId: _transactionIdController.text.trim(),
+      isFullPage: false,
+    );
+    if (!mounted || isSuccess == null) return;
+    await widget.onPaymentSuccess(isSuccess);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Gimtel (sandbox)'),
+        leading: IconButton(
+          onPressed: widget.onBack,
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          Text(
+            'Create a payment request with your sandbox secret key, then pay '
+            'it here with Bankily, BCI Pay or Amanty. Tap "Simulate transfer" '
+            'in the sheet to complete it.',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _apiKeyController,
+            decoration: const InputDecoration(
+              labelText: 'Sandbox publishable key',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _transactionIdController,
+            decoration: const InputDecoration(
+              labelText: 'Transaction id',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 20),
+          ListenableBuilder(
+            listenable:
+                Listenable.merge([_apiKeyController, _transactionIdController]),
+            builder: (context, _) => _DemoButton(
+              label: 'Pay',
+              onPressed: _apiKeyController.text.trim().isEmpty ||
+                      _transactionIdController.text.trim().isEmpty
+                  ? null
+                  : _pay,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -453,11 +563,13 @@ class _CustomMethodRow extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      data.type == PaymentMethodTypes.bankily
-                          ? 'Confirm with passcode'
-                          : data.type == PaymentMethodTypes.masrivi
-                              ? 'Mauritel Money'
-                              : 'Payment wallet',
+                      isGimtelMethod(data.method)
+                          ? 'Bank transfer via Gimtel'
+                          : data.type == PaymentMethodTypes.bankily
+                              ? 'Confirm with passcode'
+                              : data.type == PaymentMethodTypes.masrivi
+                                  ? 'Mauritel Money'
+                                  : 'Payment wallet',
                       textAlign: TextAlign.right,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),

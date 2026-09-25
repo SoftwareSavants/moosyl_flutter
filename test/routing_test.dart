@@ -31,8 +31,8 @@ void main() {
     cases.forEach((input, expected) {
       final (type, integration) = input;
       test('$type/$integration -> $expected', () {
-        expect(isGimtelMethod(method(type, integration: integration)),
-            expected);
+        expect(
+            isGimtelMethod(method(type, integration: integration)), expected);
       });
     });
   });
@@ -135,8 +135,8 @@ void main() {
       ('amanty', 'native', 'Amanty'),
     ]) {
       testWidgets('$type/$integration opens the Gimtel sheet', (tester) async {
-        final controller = await pumpMethods(
-            tester, [method(type, integration: integration)]);
+        final controller =
+            await pumpMethods(tester, [method(type, integration: integration)]);
 
         await selectAndContinue(tester, controller, title);
 
