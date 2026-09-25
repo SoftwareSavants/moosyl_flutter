@@ -1,0 +1,6 @@
+# TEMPORARY: mirrors the root package's dependency_overrides so `flutter pub get`
+# can resolve the example app while moosyl 1.2.0 is unpublished (see ../pubspec.yaml).
+# Remove together with the root override once 1.2.0 ships to pub.dev.
+dependency_overrides:
+  moosyl:
+    path: ../../moosyl-dart
