@@ -1,3 +1,13 @@
+## 2.1.0
+
+- Add Gimtel payments for Bankily (Gimtel integration), BCI Pay and Amanty: the payer enters the number they pay from, sees where to send the money with an animated walkthrough of their bank app, and the SDK polls for the payment's status while the sheet is open (pausing in the background). Success is reported only once the payment is completed. Sandbox methods show a "Simulate transfer" button. Localized in English, French and Arabic. See "Gimtel payments" in the README.
+- Gimtel method rows show a "Via Gimtel" subtitle.
+- Payment method types this SDK version does not know are now skipped instead of throwing.
+- Fix native Bankily: a payment that is not completed now shows "Payment not completed" (it showed an unknown error) and never reports success; a response without a payment code no longer displays the text "null".
+- The English `payUsing` string now includes the method name ("Pay using {method}"), matching French and Arabic.
+- Add `PaymentMethodTypes.tryParse` and `isGimtelMethod`.
+- Requires `moosyl` ^1.2.0.
+
 ## 2.0.4
 
 -Fix MoosylView UI

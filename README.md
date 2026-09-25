@@ -130,6 +130,26 @@ class PaymentScreen extends StatelessWidget {
 
 ---
 
+## Gimtel payments (Bankily, BCI Pay, Amanty)
+
+When a payment method is set up through Gimtel in your Moosyl dashboard (Bankily with the Gimtel integration, BCI Pay and Amanty), the SDK pays it with a bank transfer instead of a passcode or a payment code. You don't need extra code: `MoosylFlutter.show()` and `MoosylPaymentMethods` both route these methods to the Gimtel sheet, and their rows show a "Via Gimtel" subtitle.
+
+What the payer sees:
+
+1. **Their number**: the phone number they pay from (prefilled from the payment request when it has one).
+2. **Where to send the money**: the number to transfer to and the exact amount, each with a copy button, plus an animated walkthrough of the transfer in their bank app. They can change their number or pick another method from here.
+3. **Waiting**: while the sheet is open the SDK polls Moosyl for the payment's status. Polling pauses while your app is in the background (the payer is in their bank app) and resumes, with an immediate check, when they come back.
+
+`onPaymentSuccess(true)` (or `MoosylFlutter.show()` resolving `true`) fires only once the payment is **completed**. If the payer leaves the sheet ("Use another method", or dismissing it at the number step) nothing is reported and they are back on the method list.
+
+**Sandbox**: when the method is in testing mode (your sandbox environment), the payment step shows a **Simulate transfer (sandbox)** button that completes the payment without a real transfer. Use your sandbox publishable key in the app and create the payment request with your sandbox secret key. The example app has a "Gimtel (sandbox)" entry for this.
+
+The Gimtel sheet is localized in English, French and Arabic, like the rest of the SDK. Your `MaterialApp` must still register `MoosylLocalization.localizationsDelegates` and `MoosylLocalization.supportedLocales` (see Step 2).
+
+> Payment method types that this SDK version does not know are skipped, so a newer backend never breaks an older app.
+
+---
+
 ## Embedded Payment Methods
 
 Use `MoosylPaymentMethods` when your app owns the checkout screen and you only want Moosyl to load, display, select, and continue with payment methods.
