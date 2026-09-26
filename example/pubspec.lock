@@ -267,7 +267,7 @@ packages:
       path: "../../moosyl-dart"
       relative: true
     source: path
-    version: "1.2.0"
+    version: "1.1.2"
   moosyl_flutter:
     dependency: "direct main"
     description:

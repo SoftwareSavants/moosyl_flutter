@@ -23,16 +23,16 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   file_picker: ^8.1.2
   mime: ^2.0.0
-  moosyl: ^1.2.0
+  moosyl: ^2.0.0
   webview_flutter: ^4.10.0
   built_value: '>=8.4.0 <9.0.0'
   dio: ^5.7.0
   meta: ^1.15.0
 
 dependency_overrides:
-  # TEMPORARY: moosyl 1.2.0 is not published yet; points at the local, committed
+  # TEMPORARY: moosyl 2.0.0 is not published yet; points at the local, committed
   # regeneration in moosyl-dart (branch sdk/auto-update). Remove before release
-  # (see Task 8 Step 9) once 1.2.0 is published to pub.dev.
+  # (see Task 8 Step 9) once 2.0.0 is published to pub.dev.
   moosyl:
     path: ../moosyl-dart
 

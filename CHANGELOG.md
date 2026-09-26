@@ -6,7 +6,7 @@
 - Fix native Bankily: a payment that is not completed now shows "Payment not completed" (it showed an unknown error) and never reports success; a response without a payment code no longer displays the text "null".
 - The English `payUsing` string now includes the method name ("Pay using {method}"), matching French and Arabic.
 - Add `PaymentMethodTypes.tryParse` and `isGimtelMethod`.
-- Requires `moosyl` ^1.2.0.
+- Requires `moosyl` ^2.0.0.
 
 ## 2.0.4
 
