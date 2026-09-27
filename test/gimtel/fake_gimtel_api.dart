@@ -18,7 +18,21 @@ class FakeApi implements GimtelApi {
   /// payment id only (mimics a single stale/hung request rather than every
   /// call for that payment hanging forever).
   final pendingOnceFor = <String, Completer<GimtelStatus>>{};
+
+  /// A per-payment FIFO queue of completers, one consumed per `status()`
+  /// call for that payment id (falls back to the other sources once empty).
+  /// Lets a test hold open several *distinct* calls independently (e.g. a
+  /// stale pre-background call and the resume poll that follows it) to
+  /// control exactly when each settles relative to the other.
+  final queuedGatesFor = <String, List<Completer<GimtelStatus>>>{};
   final paymentIds = <String>['p1'];
+
+  /// How many `status()` calls are concurrently awaiting a response right
+  /// now, and the highest value that has ever reached. A controller/hook
+  /// that never lets two real requests for the same payment overlap should
+  /// keep [maxConcurrentStatusCalls] at 1.
+  int _activeStatusCalls = 0;
+  int maxConcurrentStatusCalls = 0;
 
   /// When set, the *next* `createPayment` call awaits this instead of
   /// resolving immediately (consumed on use, so later calls fall back to the
@@ -59,15 +73,27 @@ class FakeApi implements GimtelApi {
   @override
   Future<GimtelStatus> status(String paymentId) async {
     statusCalls++;
-    final once = pendingOnceFor.remove(paymentId);
-    if (once != null) return once.future;
-    final pending = pendingFor[paymentId];
-    if (pending != null) return pending.future;
-    final queue = statusesFor[paymentId];
-    if (queue != null) {
-      return queue.isEmpty ? GimtelStatus.pending : queue.removeAt(0);
+    _activeStatusCalls++;
+    if (_activeStatusCalls > maxConcurrentStatusCalls) {
+      maxConcurrentStatusCalls = _activeStatusCalls;
     }
-    return statuses.isEmpty ? GimtelStatus.pending : statuses.removeAt(0);
+    try {
+      final once = pendingOnceFor.remove(paymentId);
+      if (once != null) return await once.future;
+      final gates = queuedGatesFor[paymentId];
+      if (gates != null && gates.isNotEmpty) {
+        return await gates.removeAt(0).future;
+      }
+      final pending = pendingFor[paymentId];
+      if (pending != null) return await pending.future;
+      final queue = statusesFor[paymentId];
+      if (queue != null) {
+        return queue.isEmpty ? GimtelStatus.pending : queue.removeAt(0);
+      }
+      return statuses.isEmpty ? GimtelStatus.pending : statuses.removeAt(0);
+    } finally {
+      _activeStatusCalls--;
+    }
   }
 
   int simulateCalls = 0;

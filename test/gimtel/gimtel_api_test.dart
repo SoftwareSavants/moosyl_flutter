@@ -117,25 +117,33 @@ Moosyl _fakeClient({
 void main() {
   group('MoosylGimtelApi timeouts', () {
     test(
-        'the real (non-injected) Dio client is configured with longer '
-        'timeouts than the moosyl-dart default, so a status call that runs '
-        "the backend's inline bank sync (bounded to ~4s) doesn't time out",
-        () {
+        'createPayment keeps the moosyl-dart default timeouts (it never '
+        'runs the inline bank sync)', () {
       final api = MoosylGimtelApi('pk_test');
       final options = api.client.dio.options;
+      expect(options.receiveTimeout, const Duration(milliseconds: 3000));
+      expect(options.connectTimeout, const Duration(milliseconds: 5000));
+    });
+
+    test(
+        'status/simulateTransfer use longer timeouts than the moosyl-dart '
+        "default, so a call that runs the backend's inline bank sync "
+        '(bounded to ~4s) does not time out', () {
+      final api = MoosylGimtelApi('pk_test');
+      final options = api.statusClient.dio.options;
       expect(options.receiveTimeout, const Duration(seconds: 15));
       expect(options.connectTimeout, const Duration(seconds: 10));
     });
 
     test(
         'a status response arriving after 4s still succeeds on the real '
-        "client's configured timeouts (would fail at the old 3s default)",
-        () {
+        "statusClient's configured timeouts (would fail at the old 3s "
+        'default)', () {
       fakeAsync((async) {
-        // The production (non-injected) client, so this exercises the same
-        // `receiveTimeout`/`connectTimeout` set in the constructor above.
+        // The production (non-injected) statusClient, so this exercises the
+        // same `receiveTimeout`/`connectTimeout` set in the constructor.
         final api = MoosylGimtelApi('pk_test');
-        api.client.dio.httpClientAdapter = _DelayedAdapter(
+        api.statusClient.dio.httpClientAdapter = _DelayedAdapter(
           delay: const Duration(seconds: 4),
           statusCode: 200,
           data: {'id': 'pay_1', 'status': 'completed'},
@@ -169,7 +177,7 @@ void main() {
         );
         final api = MoosylGimtelApi(
           'pk_test',
-          client: Moosyl(dio: dio, interceptors: const [])
+          statusClient: Moosyl(dio: dio, interceptors: const [])
             ..setApiKey('ApiKey', 'pk_test'),
         );
 
@@ -221,19 +229,22 @@ void main() {
 
   group('MoosylGimtelApi.status', () {
     test('maps a known wire status to its GimtelStatus', () async {
+      final fakeClient =
+          _fakeClient(onCreatePayment: (_) {}, statusToReturn: 'completed');
       final api = MoosylGimtelApi(
         'pk_test',
-        client:
-            _fakeClient(onCreatePayment: (_) {}, statusToReturn: 'completed'),
+        statusClient: fakeClient,
       );
 
       expect(await api.status('pay_1'), GimtelStatus.completed);
     });
 
     test('maps an unrecognized wire status to pending', () async {
+      final fakeClient =
+          _fakeClient(onCreatePayment: (_) {}, statusToReturn: '???');
       final api = MoosylGimtelApi(
         'pk_test',
-        client: _fakeClient(onCreatePayment: (_) {}, statusToReturn: '???'),
+        statusClient: fakeClient,
       );
 
       expect(await api.status('pay_1'), GimtelStatus.pending);
@@ -246,8 +257,12 @@ void main() {
       dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) => handler.reject(fail(options)),
       ));
-      return MoosylGimtelApi('pk_test',
-          client: Moosyl(dio: dio, interceptors: const []));
+      final fakeClient = Moosyl(dio: dio, interceptors: const []);
+      return MoosylGimtelApi(
+        'pk_test',
+        client: fakeClient,
+        statusClient: fakeClient,
+      );
     }
 
     Future<void> create(MoosylGimtelApi api) => api.createPayment(

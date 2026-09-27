@@ -277,6 +277,91 @@ void main() {
     });
   });
 
+  test(
+      'a stale poll resolving pending after the resume poll already '
+      'completed the payment does not move status backwards, and does not '
+      're-fire onCompleted', () {
+    fakeAsync((async) {
+      final api = FakeApi();
+      final stale = Completer<GimtelStatus>();
+      api.pendingOnceFor['p1'] = stale; // pre-background poll: hangs.
+      api.statuses.add(GimtelStatus.completed); // resume poll: completed.
+
+      final c = make(api);
+      var completed = 0;
+      c.onCompleted(() => completed++);
+
+      c.submitPhone('36551929');
+      async.flushMicrotasks();
+      expect(api.statusCalls, 1);
+
+      c.didChangeAppLifecycleState(AppLifecycleState.paused);
+      c.didChangeAppLifecycleState(AppLifecycleState.resumed);
+      async.flushMicrotasks();
+
+      expect(c.status, GimtelStatus.completed);
+      expect(completed, 1);
+
+      // The stale request finally resolves 'pending' (e.g. a cached value
+      // from before the resume poll completed the payment): it must not
+      // move `status` backwards, nor re-fire `onCompleted`.
+      stale.complete(GimtelStatus.pending);
+      async.flushMicrotasks();
+      expect(c.status, GimtelStatus.completed,
+          reason: "a stale 'pending' response must not undo completion");
+      expect(completed, 1);
+
+      c.dispose();
+    });
+  });
+
+  test(
+      'the stale request resolving while the resume poll is still in flight '
+      'does not let a third, overlapping request go out', () {
+    fakeAsync((async) {
+      final api = FakeApi();
+      final stale = Completer<GimtelStatus>(); // pre-background poll.
+      final resumePoll = Completer<GimtelStatus>(); // the resume poll.
+      api.queuedGatesFor['p1'] = [stale, resumePoll];
+
+      final c = make(api);
+      c.submitPhone('36551929');
+      async.flushMicrotasks();
+      expect(api.statusCalls, 1); // `stale` is in flight.
+
+      c.didChangeAppLifecycleState(AppLifecycleState.paused);
+      c.didChangeAppLifecycleState(AppLifecycleState.resumed);
+      async.flushMicrotasks();
+      expect(api.statusCalls, 2); // the resume poll went out immediately.
+
+      // `stale` finally resolves *while the resume poll is still pending*.
+      stale.complete(GimtelStatus.pending);
+      async.flushMicrotasks();
+
+      // The next periodic tick must not be let through: `resumePoll` is
+      // still the one legitimately in flight, so the in-flight guard must
+      // still block a third request, leaving `resumePoll` the only
+      // outstanding request from here on.
+      async.elapse(const Duration(seconds: 4));
+      expect(api.statusCalls, 2,
+          reason:
+              "stale's late resolution must not have freed the in-flight "
+              'marker that belongs to the still-pending resume poll');
+      // `stale` and `resumePoll` briefly overlapping (2) is expected and
+      // intentional (that's what lets the resume poll go out immediately);
+      // what must never happen is a *third* request piling on once `stale`
+      // settles while `resumePoll` is still outstanding.
+      expect(api.maxConcurrentStatusCalls, 2,
+          reason: 'only the resume poll and the stale request ever overlap; '
+              'no third concurrent request is ever created');
+
+      resumePoll.complete(GimtelStatus.pending);
+      async.flushMicrotasks();
+
+      c.dispose();
+    });
+  });
+
   test('changeNumber while createPayment is pending discards the stale result',
       () {
     fakeAsync((async) {

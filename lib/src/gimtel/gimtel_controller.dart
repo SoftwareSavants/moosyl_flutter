@@ -74,6 +74,16 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
   /// a superseded payment can't block the new payment's first poll.
   String? _inFlightFor;
 
+  /// Identifies *which* `_poll()` invocation currently owns `_inFlightFor`.
+  /// Bumped on every `_poll()` call; a call only clears `_inFlightFor` in its
+  /// `finally` if this still matches the token it captured. Without this, a
+  /// stale request for the same payment id (e.g. one still in flight when
+  /// `didChangeAppLifecycleState` force-clears `_inFlightFor` for a resume
+  /// poll) would clear the *new* poll's in-flight marker when it finally
+  /// settles, letting a third, overlapping request go out on the next tick.
+  int _pollToken = 0;
+  int? _inFlightToken;
+
   bool _foreground = true;
   bool _disposed = false;
   VoidCallback? _onCompleted;
@@ -184,7 +194,9 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> _poll(String paymentId) async {
     if (_inFlightFor == paymentId) return;
+    final token = ++_pollToken;
     _inFlightFor = paymentId;
+    _inFlightToken = token;
     GimtelStatus? next;
     try {
       next = await api.status(paymentId);
@@ -193,7 +205,14 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
       // guarded here - a throw from notifyListeners()/onCompleted() below
       // must propagate normally, not be swallowed as a "blip".
     } finally {
-      if (_inFlightFor == paymentId) _inFlightFor = null;
+      // Only clear the marker if it's still ours: a resume poll may have
+      // force-cleared and re-set `_inFlightFor`/`_inFlightToken` for the same
+      // paymentId while this (stale) call was in flight, and this call must
+      // not clear the newer poll's marker out from under it.
+      if (_inFlightFor == paymentId && _inFlightToken == token) {
+        _inFlightFor = null;
+        _inFlightToken = null;
+      }
     }
     if (next == null || _disposed) return;
     if (paymentId != instructions?.paymentId || step != GimtelStep.pay) {
@@ -201,18 +220,19 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
       // (changeNumber(), a newer create, ...). Ignore it entirely.
       return;
     }
-    final previous = status;
-    if (next != previous) {
-      status = next;
-      notifyListeners();
+    if (status != GimtelStatus.pending) {
+      // Already terminal: a stale request (e.g. one still in flight from
+      // before the app was backgrounded) resolving after a newer poll
+      // already completed this payment must not move `status` backwards or
+      // re-fire `onCompleted`. `startAgain()` resets `status` to `pending`
+      // for the next attempt, so this never blocks a genuinely new payment.
+      return;
     }
     if (next != GimtelStatus.pending) {
+      status = next;
+      notifyListeners();
       _stopPolling();
-      // Only fire on the pending -> completed transition, so a redundant
-      // poll of an already-terminal payment (e.g. via simulate(), or a
-      // lifecycle resume that slips in before polling is fully stopped)
-      // never calls onCompleted more than once.
-      if (next == GimtelStatus.completed && previous == GimtelStatus.pending) {
+      if (next == GimtelStatus.completed) {
         _onCompleted?.call();
       }
     }
@@ -228,11 +248,15 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
       // A status request started before backgrounding may still be in
       // flight (hung, or slow to fail/succeed on the OS side) - without
       // this, the per-payment in-flight guard in `_poll` would silently
-      // drop the resume poll. Clearing it here lets a fresh poll go out
-      // immediately; a late response from the stale request is still
-      // harmless (same payment id => same status semantics, and the
-      // terminal/stale-payment-id guards in `_poll` still apply).
-      if (_inFlightFor == id) _inFlightFor = null;
+      // drop the resume poll. Force-clearing both fields lets a fresh poll
+      // go out immediately; `_poll`'s token check then keeps that stale
+      // request's eventual `finally` from clobbering the new poll's marker,
+      // and its result (if it arrives) is dropped by the paymentId/step
+      // check or the terminal-status check above.
+      if (_inFlightFor == id) {
+        _inFlightFor = null;
+        _inFlightToken = null;
+      }
       _startPolling(id);
     } else {
       _stopPolling();

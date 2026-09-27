@@ -7,7 +7,7 @@
 - The English `payUsing` string now includes the method name ("Pay using {method}"), matching French and Arabic.
 - Add `PaymentMethodTypes.tryParse` and `isGimtelMethod`.
 - Requires `moosyl` ^2.0.0.
-- Fix Gimtel status polling: the client now uses a 15 s receive / 10 s connect timeout (was 3 s/5 s) so a status call that runs the backend's inline bank sync doesn't time out, and resuming from the background always sends an immediate poll even if a pre-background status request is still in flight.
+- Fix Gimtel status polling: `status`/`simulateTransfer` now use a dedicated client with a 15 s receive / 10 s connect timeout (was 3 s/5 s) so a call that runs the backend's inline bank sync doesn't time out; `createPayment` is unaffected and keeps the default 3 s/5 s timeout. Resuming from the background always sends an immediate poll even if a pre-background status request is still in flight, and a stale response arriving late can no longer move the payment's status backwards or double-report completion.
 
 ## 2.0.4
 
