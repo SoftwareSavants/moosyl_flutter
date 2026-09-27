@@ -233,6 +233,50 @@ void main() {
     });
   });
 
+  test(
+      'a stale in-flight status request does not block the resume poll; its '
+      'late completion does not re-fire onCompleted', () {
+    fakeAsync((async) {
+      final api = FakeApi();
+      final stale = Completer<GimtelStatus>();
+      // Gates only the first status() call for p1 (the pre-background poll);
+      // it never resolves during the test, simulating a request that hung
+      // while the app was backgrounded.
+      api.pendingOnceFor['p1'] = stale;
+      // The resume poll (the second status() call) resolves normally.
+      api.statuses.add(GimtelStatus.completed);
+
+      final c = make(api);
+      var completed = 0;
+      c.onCompleted(() => completed++);
+
+      c.submitPhone('36551929');
+      async.flushMicrotasks(); // first poll goes out and hangs on `stale`.
+      expect(api.statusCalls, 1);
+      expect(c.status, GimtelStatus.pending);
+
+      c.didChangeAppLifecycleState(AppLifecycleState.paused);
+      c.didChangeAppLifecycleState(AppLifecycleState.resumed);
+      async.flushMicrotasks();
+
+      // The resume poll must go out immediately despite the still-in-flight
+      // stale request, and must be the one that resolves the payment.
+      expect(api.statusCalls, 2,
+          reason:
+              'resume poll is sent immediately despite a stale in-flight request');
+      expect(c.status, GimtelStatus.completed);
+      expect(completed, 1);
+
+      // The stale request finally resolves 'completed' too: it must not
+      // double-fire onCompleted.
+      stale.complete(GimtelStatus.completed);
+      async.flushMicrotasks();
+      expect(completed, 1);
+
+      c.dispose();
+    });
+  });
+
   test('changeNumber while createPayment is pending discards the stale result',
       () {
     fakeAsync((async) {

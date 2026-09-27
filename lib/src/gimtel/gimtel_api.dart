@@ -9,6 +9,13 @@ import 'package:moosyl_flutter/src/helpers/exception_handling/exceptions.dart';
 
 const String _defaultBaseUrl = 'https://moosyl.moosyl.workers.dev';
 
+/// The generated `moosyl` client defaults to a 3 s receive / 5 s connect
+/// timeout, which is too tight for `GET /payment/{id}/status`: the backend
+/// may run an inline bank sync there (bounded to ~4 s server-side) before
+/// responding. Give Gimtel's client more headroom for that.
+const Duration _receiveTimeout = Duration(seconds: 15);
+const Duration _connectTimeout = Duration(seconds: 10);
+
 /// The three calls the Gimtel flow needs. An interface so tests can use a fake.
 abstract class GimtelApi {
   /// Creates a Gimtel payment and returns what the payer needs to complete it.
@@ -35,13 +42,23 @@ class MoosylGimtelApi implements GimtelApi {
     String? baseUrl,
     @visibleForTesting Moosyl? client,
   }) : _client = client ??
-            (Moosyl(basePathOverride: baseUrl ?? _defaultBaseUrl)
-              ..setApiKey('ApiKey', publishableApiKey));
+            (Moosyl(
+              dio: Dio(BaseOptions(
+                baseUrl: baseUrl ?? _defaultBaseUrl,
+                connectTimeout: _connectTimeout,
+                receiveTimeout: _receiveTimeout,
+              )),
+            )..setApiKey('ApiKey', publishableApiKey));
 
   /// The API key used for authentication with the backend.
   final String publishableApiKey;
 
   final Moosyl _client;
+
+  /// The underlying generated client, exposed only so tests can assert on
+  /// its configuration (e.g. `client.dio.options`).
+  @visibleForTesting
+  Moosyl get client => _client;
 
   @override
   Future<GimtelInstructions> createPayment({

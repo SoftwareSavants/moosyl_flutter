@@ -225,6 +225,14 @@ class GimtelController extends ChangeNotifier with WidgetsBindingObserver {
     final id = instructions?.paymentId;
     if (id == null) return;
     if (_foreground) {
+      // A status request started before backgrounding may still be in
+      // flight (hung, or slow to fail/succeed on the OS side) - without
+      // this, the per-payment in-flight guard in `_poll` would silently
+      // drop the resume poll. Clearing it here lets a fresh poll go out
+      // immediately; a late response from the stale request is still
+      // harmless (same payment id => same status semantics, and the
+      // terminal/stale-payment-id guards in `_poll` still apply).
+      if (_inFlightFor == id) _inFlightFor = null;
       _startPolling(id);
     } else {
       _stopPolling();

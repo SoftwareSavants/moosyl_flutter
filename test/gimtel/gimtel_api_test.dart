@@ -1,9 +1,61 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_api.dart';
 import 'package:moosyl_flutter/src/gimtel/gimtel_models.dart';
 import 'package:moosyl_flutter/src/helpers/exception_handling/exceptions.dart';
+
+/// A fake [HttpClientAdapter] that waits [delay] before responding with
+/// [statusCode]/[data] - unless the request's own `receiveTimeout` is
+/// shorter than [delay], in which case it raises the same
+/// [DioException.receiveTimeout] the real (`IOHttpClientAdapter`-backed)
+/// stack would once that timeout elapses. This lets a test prove that a
+/// slow (e.g. inline-bank-sync) response only succeeds because the client is
+/// configured with a long enough `receiveTimeout` - it fails the same way
+/// the old, too-short default would.
+class _DelayedAdapter implements HttpClientAdapter {
+  _DelayedAdapter({
+    required this.delay,
+    required this.statusCode,
+    required this.data,
+  });
+
+  final Duration delay;
+  final int statusCode;
+  final Map<String, dynamic> data;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    final receiveTimeout = options.receiveTimeout;
+    if (receiveTimeout != null && receiveTimeout < delay) {
+      await Future<void>.delayed(receiveTimeout);
+      throw DioException.receiveTimeout(
+        timeout: receiveTimeout,
+        requestOptions: options,
+      );
+    }
+    await Future<void>.delayed(delay);
+    return ResponseBody.fromString(
+      jsonEncode(data),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
 
 /// Builds a [Moosyl] client whose [Dio] never hits the network: a request
 /// interceptor answers `/payment` and `/payment/{id}/status` calls directly,
@@ -63,6 +115,78 @@ Moosyl _fakeClient({
 }
 
 void main() {
+  group('MoosylGimtelApi timeouts', () {
+    test(
+        'the real (non-injected) Dio client is configured with longer '
+        'timeouts than the moosyl-dart default, so a status call that runs '
+        "the backend's inline bank sync (bounded to ~4s) doesn't time out",
+        () {
+      final api = MoosylGimtelApi('pk_test');
+      final options = api.client.dio.options;
+      expect(options.receiveTimeout, const Duration(seconds: 15));
+      expect(options.connectTimeout, const Duration(seconds: 10));
+    });
+
+    test(
+        'a status response arriving after 4s still succeeds on the real '
+        "client's configured timeouts (would fail at the old 3s default)",
+        () {
+      fakeAsync((async) {
+        // The production (non-injected) client, so this exercises the same
+        // `receiveTimeout`/`connectTimeout` set in the constructor above.
+        final api = MoosylGimtelApi('pk_test');
+        api.client.dio.httpClientAdapter = _DelayedAdapter(
+          delay: const Duration(seconds: 4),
+          statusCode: 200,
+          data: {'id': 'pay_1', 'status': 'completed'},
+        );
+
+        GimtelStatus? result;
+        Object? error;
+        unawaited(api.status('pay_1').then(
+              (r) => result = r,
+              onError: (Object e) => error = e,
+            ));
+        async.elapse(const Duration(seconds: 5));
+
+        expect(error, isNull);
+        expect(result, GimtelStatus.completed);
+      });
+    });
+
+    test(
+        'sanity check: the same delayed response times out under the old '
+        '3s receiveTimeout, proving the fake adapter enforces it', () {
+      fakeAsync((async) {
+        final dio = Dio(BaseOptions(
+          baseUrl: 'https://fake.test',
+          receiveTimeout: const Duration(seconds: 3),
+        ));
+        dio.httpClientAdapter = _DelayedAdapter(
+          delay: const Duration(seconds: 4),
+          statusCode: 200,
+          data: {'id': 'pay_1', 'status': 'completed'},
+        );
+        final api = MoosylGimtelApi(
+          'pk_test',
+          client: Moosyl(dio: dio, interceptors: const [])
+            ..setApiKey('ApiKey', 'pk_test'),
+        );
+
+        Object? error;
+        unawaited(
+          api.status('pay_1').catchError((Object e) {
+            error = e;
+            return GimtelStatus.pending;
+          }),
+        );
+        async.elapse(const Duration(seconds: 5));
+
+        expect(error, isA<DioException>());
+      });
+    });
+  });
+
   group('MoosylGimtelApi.createPayment', () {
     test('sends no passCode and maps instructions', () async {
       Map<String, dynamic>? sentBody;

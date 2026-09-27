@@ -13,6 +13,11 @@ class FakeApi implements GimtelApi {
   final statuses = <GimtelStatus>[];
   final statusesFor = <String, List<GimtelStatus>>{};
   final pendingFor = <String, Completer<GimtelStatus>>{};
+
+  /// Like [pendingFor], but consumed on the *next* `status()` call for that
+  /// payment id only (mimics a single stale/hung request rather than every
+  /// call for that payment hanging forever).
+  final pendingOnceFor = <String, Completer<GimtelStatus>>{};
   final paymentIds = <String>['p1'];
 
   /// When set, the *next* `createPayment` call awaits this instead of
@@ -54,6 +59,8 @@ class FakeApi implements GimtelApi {
   @override
   Future<GimtelStatus> status(String paymentId) async {
     statusCalls++;
+    final once = pendingOnceFor.remove(paymentId);
+    if (once != null) return once.future;
     final pending = pendingFor[paymentId];
     if (pending != null) return pending.future;
     final queue = statusesFor[paymentId];
