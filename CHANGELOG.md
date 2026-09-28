@@ -1,3 +1,15 @@
+## 2.1.0
+
+- The declared minimum is now `flutter: '>=3.32.0'` / `sdk: '>=3.8.0 <4.0.0'` (previously `>=3.4.4`/Flutter `>=2.0.0`, which was inaccurate: `intl ^0.20.2`, `meta ^1.15` and `webview_flutter ^4.10` don't resolve below Flutter 3.32).
+- Add Gimtel payments for Bankily (Gimtel integration), BCI Pay and Amanty: the payer enters the number they pay from, sees where to send the money with an animated walkthrough of their bank app, and the SDK polls for the payment's status while the sheet is open (pausing in the background). Success is reported only once the payment is completed. Sandbox methods show a "Simulate transfer" button. Localized in English, French and Arabic. See "Gimtel payments" in the README.
+- Gimtel method rows show a "Via Gimtel" subtitle.
+- Payment method types this SDK version does not know are now skipped instead of throwing.
+- Fix native Bankily: a payment that is not completed now shows "Payment not completed" (it showed an unknown error) and never reports success; a response without a payment code no longer displays the text "null".
+- The English `payUsing` string now includes the method name ("Pay using {method}"), matching French and Arabic.
+- Add `PaymentMethodTypes.tryParse` and `isGimtelMethod`.
+- Requires `moosyl` ^2.0.0.
+- Fix Gimtel status polling: `status`/`simulateTransfer` now use a dedicated client with a 15 s receive / 10 s connect timeout (was 3 s/5 s) so a call that runs the backend's inline bank sync doesn't time out; `createPayment` is unaffected and keeps the default 3 s/5 s timeout. Resuming from the background always sends an immediate poll even if a pre-background status request is still in flight, and a stale response arriving late can no longer move the payment's status backwards or double-report completion.
+
 ## 2.0.4
 
 -Fix MoosylView UI

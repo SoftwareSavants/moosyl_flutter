@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show NumberFormat;
 import 'package:moosyl/moosyl.dart';
 import 'package:moosyl_flutter/l10n/generated/moosyl_localization.dart';
+import 'package:moosyl_flutter/src/gimtel/gimtel_sheet.dart'
+    show showGimtelSheet;
 import 'package:moosyl_flutter/src/helpers/exception_handling/exception_mapper.dart';
 import 'package:moosyl_flutter/src/models/payment_method_model.dart';
 import 'package:moosyl_flutter/src/models/payment_summary_item.dart';

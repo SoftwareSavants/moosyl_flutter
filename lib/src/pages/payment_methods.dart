@@ -472,8 +472,10 @@ class _MoosylPaymentMethodsContentState
           ),
           const SizedBox(height: 10),
         ],
-        ...provider.methods.map((method) {
-          final type = PaymentMethodTypes.fromString(method.type);
+        ...provider.methods
+            .where((method) => PaymentMethodTypes.tryParse(method.type) != null)
+            .map((method) {
+          final type = PaymentMethodTypes.tryParse(method.type)!;
           final isSelected = selectedId == method.id;
           final methodData = MoosylPaymentMethodRenderData(
             method: method,
@@ -497,6 +499,7 @@ class _MoosylPaymentMethodsContentState
 
           return _MethodRow(
             method: method,
+            type: type,
             isSelected: isSelected,
             onTap: methodData.onSelect,
             primaryColor: primaryColor,
@@ -634,12 +637,14 @@ class _LoadingShimmerBlock extends StatelessWidget {
 class _MethodRow extends StatelessWidget {
   const _MethodRow({
     required this.method,
+    required this.type,
     required this.isSelected,
     required this.onTap,
     this.primaryColor,
   });
 
   final ConfigurationListDataInner method;
+  final PaymentMethodTypes type;
   final bool isSelected;
   final VoidCallback onTap;
   final Color? primaryColor;
@@ -715,24 +720,32 @@ class _MethodRow extends StatelessWidget {
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: Center(
-                              child: PaymentMethodTypes.fromString(method.type)
-                                  .icon
-                                  .apply(size: 40),
+                              child: type.icon.apply(size: 40),
                             ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: Align(
-                              alignment: AlignmentDirectional.centerStart,
-                              child: Text(
-                                PaymentMethodTypes.fromString(method.type)
-                                    .title(context),
-                                style: textTheme.titleMedium?.copyWith(
-                                  color: const Color(0xFF111111),
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  type.title(context),
+                                  style: textTheme.titleMedium?.copyWith(
+                                    color: const Color(0xFF111111),
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
+                                if (isGimtelMethod(method))
+                                  Text(
+                                    MoosylLocalization.of(context)!
+                                        .gimtelViaGimtel,
+                                    style: textTheme.bodySmall?.copyWith(
+                                      color: const Color(0xFF6B7280),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                           const SizedBox(width: 12),

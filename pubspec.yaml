@@ -2,13 +2,13 @@ name: moosyl_flutter
 description: "The Moosyl Flutter SDK is a powerful tool for integrating payment solutions with Mauritania's popular banking apps, such as Bankily, Sedad, and Masrivi"
 
 homepage: https://github.com/SoftwareSavants/moosyl_flutter
-version: 2.0.4
+version: 2.1.0
 
 license: MIT
 
 environment:
-  sdk: ">=3.4.4 <4.0.0"
-  flutter: ">=2.0.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   flutter:
@@ -23,8 +23,18 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   file_picker: ^8.1.2
   mime: ^2.0.0
-  moosyl: ^1.1.2
+  moosyl: ^2.0.0
   webview_flutter: ^4.10.0
+  built_value: '>=8.4.0 <9.0.0'
+  dio: ^5.7.0
+  meta: ^1.15.0
+
+dependency_overrides:
+  # TEMPORARY: moosyl 2.0.0 is not published yet; points at the local, committed
+  # regeneration in moosyl-dart (branch sdk/auto-update). Remove before release
+  # (see Task 8 Step 9) once 2.0.0 is published to pub.dev.
+  moosyl:
+    path: ../moosyl-dart
 
 dev_dependencies:
   flutter_test:
@@ -33,11 +43,13 @@ dev_dependencies:
   flutter_gen: ^5.7.0
   build_runner: ^2.4.11
   custom_lint: ^0.7.0
+  fake_async: ^1.3.1
 
 flutter:
   generate: true
   assets:
     - assets/icons/
+    - assets/gimtel_guide/
 
 repository: https://github.com/SoftwareSavants/moosyl_flutter.git
 

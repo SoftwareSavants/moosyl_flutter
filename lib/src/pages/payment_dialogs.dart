@@ -8,7 +8,25 @@ Future<void> _showPaymentDialogForMethod(
   required Color primaryColor,
   required FutureOr<void> Function(bool isSuccess)? onPaymentSuccess,
 }) async {
-  final type = PaymentMethodTypes.fromString(method.type);
+  final type = PaymentMethodTypes.tryParse(method.type);
+
+  if (isGimtelMethod(method)) {
+    final provider = context.read<GetPaymentMethodsProvider>();
+    final completed = await showGimtelSheet(
+      context,
+      api: provider.gimtelApi,
+      method: method,
+      methodLabel: type?.title(context) ?? method.type,
+      transactionId: transactionId,
+      amount: provider.paymentRequest?.amount ?? 0,
+      initialPhone: provider.paymentRequest?.phoneNumber ?? '',
+      accent: primaryColor,
+    );
+    provider.setPaymentMethod(null);
+    // The sheet resolves true only once the payment is completed.
+    if (completed) await onPaymentSuccess?.call(true);
+    return;
+  }
 
   if (type == PaymentMethodTypes.bankily) {
     _showBankilyDialog(
@@ -37,13 +55,15 @@ Future<void> _showSedadDialog(
   required ConfigurationListDataInner method,
   required FutureOr<void> Function(bool isSuccess)? onPaymentSuccess,
 }) async {
+  final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
   final payProvider = PayProvider(
     publishableApiKey: publishableApiKey,
     transactionId: transactionId,
     method: method,
     onPaymentSuccess: (payment) async => await onPaymentSuccess?.call(payment),
+    service: getPaymentMethodsProvider.payService,
+    requestService: getPaymentMethodsProvider.requestService,
   );
-  final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
 
   showDialog<void>(
     context: context,
@@ -106,13 +126,15 @@ void _showBankilyDialog(
   required ConfigurationListDataInner method,
   required FutureOr<void> Function(bool isSuccess)? onPaymentSuccess,
 }) {
+  final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
   final payProvider = PayProvider(
     publishableApiKey: publishableApiKey,
     transactionId: transactionId,
     method: method,
     onPaymentSuccess: (payment) async => await onPaymentSuccess?.call(payment),
+    service: getPaymentMethodsProvider.payService,
+    requestService: getPaymentMethodsProvider.requestService,
   );
-  final getPaymentMethodsProvider = context.read<GetPaymentMethodsProvider>();
 
   showDialog<void>(
     context: context,

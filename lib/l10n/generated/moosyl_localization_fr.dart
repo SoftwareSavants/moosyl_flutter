@@ -259,4 +259,122 @@ class MoosylLocalizationFr extends MoosylLocalization {
   @override
   String get paymentDeclined =>
       'Votre solde est peut-être insuffisant ou votre compte n\'est peut-être pas actif.';
+
+  @override
+  String get gimtelPhoneTitle => 'Depuis quel numéro allez-vous payer ?';
+
+  @override
+  String gimtelPhoneLabel(String app) {
+    return 'Votre numéro $app';
+  }
+
+  @override
+  String gimtelPhoneHint(String app) {
+    return 'Le numéro de votre compte $app. Il nous permet de reconnaître votre paiement.';
+  }
+
+  @override
+  String get gimtelContinue => 'Continuer';
+
+  @override
+  String get gimtelInvalidPhone =>
+      'Saisissez un numéro mauritanien valide à 8 chiffres';
+
+  @override
+  String gimtelPayTitle(String app) {
+    return 'Payez via <g>Gimtel</g> dans $app';
+  }
+
+  @override
+  String get gimtelViaGimtel => 'Via Gimtel';
+
+  @override
+  String get gimtelMerchantNumber => 'Numéro marchand';
+
+  @override
+  String get gimtelAmount => 'Montant';
+
+  @override
+  String get gimtelTapToCopy => 'Touchez pour copier';
+
+  @override
+  String get gimtelCopied => 'Copié';
+
+  @override
+  String gimtelBankilyS1(String app) {
+    return 'Dans $app, touchez <g>Gimtel</g>';
+  }
+
+  @override
+  String get gimtelBankilyS2 => 'Touchez <b>Pay Merchant</b>';
+
+  @override
+  String get gimtelBankilyS3 =>
+      'Remplissez les champs en surbrillance, puis <b>Next</b>';
+
+  @override
+  String get gimtelBankilyS4 =>
+      'Touchez <b>Continue</b>, puis saisissez votre PIN';
+
+  @override
+  String gimtelBciPayS1(String app) {
+    return 'Dans $app, touchez <b>Payments</b>';
+  }
+
+  @override
+  String get gimtelBciPayS2 => 'Passez à <g>GIMTEL</g>';
+
+  @override
+  String get gimtelBciPayS3 =>
+      'Choisissez <b>BIMBANK</b>, saisissez le numéro, puis <b>Continue</b>';
+
+  @override
+  String get gimtelBciPayS4 => 'Saisissez le montant, puis <b>Pay</b>';
+
+  @override
+  String gimtelGenericStep1(String app) {
+    return 'Ouvrez $app → <g>Gimtel</g> → <b>Pay Merchant</b>';
+  }
+
+  @override
+  String gimtelGenericStep2(String phone, String amount) {
+    return 'Choisissez <b>BIMBANK</b>, saisissez <n>$phone</n> et <n>$amount</n>';
+  }
+
+  @override
+  String get gimtelGenericStep3 => 'Confirmez avec votre code PIN';
+
+  @override
+  String get gimtelWaitingTitle => 'En attente de votre paiement';
+
+  @override
+  String gimtelWaitingHint(String phone) {
+    return 'Payez depuis le <n>$phone</n>, montant exact. Gardez cette page ouverte.';
+  }
+
+  @override
+  String get gimtelSimulate => 'Simuler le virement (sandbox)';
+
+  @override
+  String get gimtelChangeNumber => 'Changer de numéro';
+
+  @override
+  String get gimtelOtherMethod => 'Autre moyen de paiement';
+
+  @override
+  String get gimtelExpiredTitle => 'Ce paiement a expiré';
+
+  @override
+  String get gimtelExpiredDescription =>
+      'Si vous avez déjà envoyé l\'argent, il vous sera remboursé.';
+
+  @override
+  String get gimtelInactiveTitle => 'Ce paiement n\'est plus actif';
+
+  @override
+  String get gimtelInactiveDescription =>
+      'Recommencez pour obtenir de nouvelles instructions de paiement.';
+
+  @override
+  String get gimtelStartAgain => 'Recommencer';
 }

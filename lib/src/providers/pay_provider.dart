@@ -29,12 +29,19 @@ class PayProvider extends ChangeNotifier {
   /// Constructs a [PayProvider].
   ///
   /// Initiates fetching the payment request details upon creation.
+  ///
+  /// [service] and [requestService] default to the live Moosyl API; pass
+  /// them only to substitute the network (e.g. in tests).
   PayProvider({
     required this.publishableApiKey,
     required this.transactionId,
     this.onPaymentSuccess,
     required this.method,
-  }) : service = PayService(publishableApiKey) {
+    PayService? service,
+    GetPaymentRequestService? requestService,
+  })  : service = service ?? PayService(publishableApiKey),
+        requestService =
+            requestService ?? GetPaymentRequestService(publishableApiKey) {
     getPaymentRequest();
   }
 
@@ -59,6 +66,9 @@ class PayProvider extends ChangeNotifier {
   /// The payment service used for processing payments.
   final PayService service;
 
+  /// The service used to fetch the payment request.
+  final GetPaymentRequestService requestService;
+
   /// Cached future for getPaymentRequest to avoid duplicate fetches.
   Future<void>? _getPaymentRequestFuture;
 
@@ -81,7 +91,7 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
+      () => requestService.get(transactionId),
       showFlashBar: false,
     );
 
@@ -131,8 +141,7 @@ class PayProvider extends ChangeNotifier {
       error = result.error;
       return notifyListeners();
     }
-    paymentCode =
-        result.result?.metadata?.asMap['paymentCode'].toString() ?? '';
+    paymentCode = result.result?.metadata?.asMap['paymentCode']?.toString();
     notifyListeners();
     if (result.result?.metadata?.asMap['provider'] == 'bankily') {
       if (result.result!.status == 'completed') {
@@ -140,7 +149,7 @@ class PayProvider extends ChangeNotifier {
         onBeforePaymentSuccess?.call();
         onPaymentSuccess?.call(isSuccess);
       } else {
-        error = 'PaymentNotCompleted';
+        error = 'paymentNotCompleted';
         return notifyListeners();
       }
     }
@@ -163,7 +172,7 @@ class PayProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await ErrorHandlers.catchErrors(
-      () => GetPaymentRequestService(publishableApiKey).get(transactionId),
+      () => requestService.get(transactionId),
     );
 
     if (result.isError) {
@@ -177,7 +186,7 @@ class PayProvider extends ChangeNotifier {
       onBeforePaymentSuccess?.call();
       onPaymentSuccess?.call(isSuccess);
     } else {
-      error = 'PaymentNotCompleted';
+      error = 'paymentNotCompleted';
       return notifyListeners();
     }
     notifyListeners();
