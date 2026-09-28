@@ -18,6 +18,14 @@ The **Moosyl Flutter SDK** is a powerful tool for integrating payment solutions 
 
 ## 🚀 Getting Started
 
+### Requirements
+
+- Flutter **3.32.0** or later
+- Dart **3.8.0** or later
+
+(driven by this package's dependencies: `intl ^0.20.2`, `meta ^1.15`, and
+`webview_flutter ^4.10` don't resolve on older Flutter/Dart releases.)
+
 ### Installation
 
 Add the **Moosyl Flutter** package to your `pubspec.yaml`:

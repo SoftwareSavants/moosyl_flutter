@@ -1,5 +1,6 @@
 ## 2.1.0
 
+- The declared minimum is now `flutter: '>=3.32.0'` / `sdk: '>=3.8.0 <4.0.0'` (previously `>=3.4.4`/Flutter `>=2.0.0`, which was inaccurate: `intl ^0.20.2`, `meta ^1.15` and `webview_flutter ^4.10` don't resolve below Flutter 3.32).
 - Add Gimtel payments for Bankily (Gimtel integration), BCI Pay and Amanty: the payer enters the number they pay from, sees where to send the money with an animated walkthrough of their bank app, and the SDK polls for the payment's status while the sheet is open (pausing in the background). Success is reported only once the payment is completed. Sandbox methods show a "Simulate transfer" button. Localized in English, French and Arabic. See "Gimtel payments" in the README.
 - Gimtel method rows show a "Via Gimtel" subtitle.
 - Payment method types this SDK version does not know are now skipped instead of throwing.
